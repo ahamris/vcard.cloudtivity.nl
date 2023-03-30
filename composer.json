@@ -9,7 +9,7 @@
     "license": "MIT",
     "version": "7.1.0-patch-1",
     "require": {
-        "php": "^8.0",
+        "php": "^8.2",
         "doctrine/dbal": "^3.3",
         "gerardojbaez/money": "^0.3.1",
         "guzzlehttp/guzzle": "^7.2",
