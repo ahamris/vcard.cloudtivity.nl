@@ -697,3 +697,15 @@ form {
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+.lb-data .lb-number {
+    display: none !important;
+}
+
+.social-icon {
+    img {
+        width: 31px !important;
+        height: 31px !important;
+        border-radius: 50% !important;
+    }
+}

@@ -68,7 +68,7 @@ class VcardController extends AppBaseController
      */
     public function download($id): JsonResponse
     {
-        $data = Vcard::find($id);
+        $data = Vcard::with('socialLink')->find($id);
 
         return $this->sendResponse($data, __('messages.flash.vcard_retrieve'));
     }
@@ -246,6 +246,7 @@ class VcardController extends AppBaseController
     public function update(UpdateVcardRequest $request, Vcard $vcard)
     {
         $input = $request->all();
+
 
         $vcard = $this->vcardRepository->update($input, $vcard);
 
@@ -449,5 +450,20 @@ class VcardController extends AppBaseController
         } catch (Exception $e) {
             throw new UnprocessableEntityHttpException($e->getMessage());
         }
+    }
+
+    public function getUniqueUrlAlias(){
+        return getUniqueVcardUrlAlias();
+    }
+
+    public function checkUniqueUrlAlias($urlAlias){
+        $isUniqueUrl = isUniqueVcardUrlAlias($urlAlias);
+        if($isUniqueUrl === true){
+            return $this->sendResponse(['isUnique' => true],'URL Alias is available to use.');
+        }
+
+        $response = ['isUnique' => false,'usedInVcard' => $isUniqueUrl];
+        return $this->sendResponse($response,'This URL Alias is already in use');
+
     }
 }

@@ -54,7 +54,7 @@
 <x-livewire-tables::table.cell>
 	<div class="justify-content-center d-flex">
 		<div class="qr-code-image d-none">
-			{!! QrCode::size(130)->format('svg')->generate(route('vcard.show', ['alias' => $row->url_alias])); !!}
+			{!! QrCode::size($row->qr_code_download_size)->format('svg')->generate(route('vcard.show', ['alias' => $row->url_alias])); !!}
 		</div>
 		<a title="{{ __('messages.vcard.qr_code') }}"
 		   class="btn px-1 text-info fs-3 vcard-qr-code-btn" download="qr_code.png">

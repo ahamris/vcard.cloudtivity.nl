@@ -1,6 +1,8 @@
 <?php ?>
 @if($partName == 'basics')
-
+	@if(isset($vcard))
+		<input type="hidden" id="vcardId" value="{{ $vcard->id }}">
+	@endif
     <div class="row" id="basic">
         <div class="col-lg-12 mb-7">
             {{ Form::label('url_alias', __('messages.vcard.url_alias').':', ['class' => 'form-label required']) }}
@@ -10,8 +12,12 @@
                                 <i class="fas fa-question-circle ml-1 mt-1 general-question-mark" ></i>
                         </span>
             <div class="d-sm-flex">
-                {{ Form::text('url_alias', isset($vcard) ? $vcard->url_alias : null, ['class' => 'form-control ms-1', 'placeholder' => __('messages.form.my_vcard_url'), 'onkeypress' => 'return (event.charCode > 64 && event.charCode < 91 ) || (event.charCode >= 47 && event.charCode <= 57 ) || (event.charCode > 96 && event.charCode < 123) || (event.charCode == 45)']) }}
+	            <div class="input-group">
+		            {{ Form::text('url_alias', isset($vcard) ? $vcard->url_alias : null, ['class' => 'form-control ms-1 vcard-url-alias', 'id'=>'vcard-url-alias','placeholder' => __('messages.form.my_vcard_url')]) }}
+		            <button class="btn btn-secondary" type="button" id="generate-url-alias"><i class="fa-solid fa-arrows-rotate"></i></button>
+	            </div>
             </div>
+	        <div id="error-url-alias-msg" class="text-danger ms-2 fs-6 d-none fw-light">This URL Alias is already in use</div>
         </div>
         <div class="col-lg-6 mb-7">
             {{ Form::label('name', __('messages.vcard.vcard_name').':', ['class' => 'form-label required']) }}
@@ -171,6 +177,37 @@
                         </div>
                     </div>
                 </div>
+	            <div class="col-lg-6 mb-7">
+		            <div class="d-flex">
+			            {{ Form::label('enable_enquiry_form', __('messages.vcard.enable_enquiry_form').':', ['class' => 'form-label']) }}
+			            <div class="mx-4">
+				            <div class="form-check form-switch form-check-custom form-check-solid form-switch-sm col-6">
+					            <div class="fv-row d-flex align-items-center">
+						            {{ Form::checkbox('enable_enquiry_form', 1, $vcard['enable_enquiry_form'] ?? 0 , ['class' => 'form-check-input mt-0 ', 'id' => 'enableEnquiryForm']) }}
+					            </div>
+				            </div>
+			            </div>
+		            </div>
+	            </div>
+	            <div class="col-lg-6 mb-7">
+                    <div class="d-flex">
+                        {{ Form::label('enable_download_qr_code', __('messages.vcard.enable_download_qr_code').':', ['class' => 'form-label']) }}
+                        <div class="mx-4">
+                            <div class="form-check form-switch form-check-custom form-check-solid form-switch-sm col-6">
+                                <div class="fv-row d-flex align-items-center">
+                                    {{ Form::checkbox('enable_download_qr_code', 1, $vcard['enable_download_qr_code'] ?? 0 , ['class' => 'form-check-input mt-0 ', 'id' => 'enableDownloadQrCode']) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+	            <div class="col-lg-6 mb-7">
+	                    <label for="qrCodeDownloadSize" class="form-label">{{ __('messages.vcard.qr_code_download_size').':' }}</label>
+	                    <div class="d-flex align-items-center">
+		                    <input type="range" name="qr_code_download_size" class="form-range w-50 mx-2" value="{{ $vcard['qr_code_download_size'] }}" min="100" max="500" step="100" id="qrCodeDownloadSize" oninput="document.getElementById('download-result').innerText = this.value+'px'"> <span id="download-result">{{ $vcard['qr_code_download_size'] .'px' }}</span>
+	                    </div>
+                </div>
             </div>
         @endif
         <div class="d-flex">
@@ -329,129 +366,174 @@
                        class="btn btn-secondary">{{__('messages.common.discard')}}</a>
                 </div>
             </div>
-@endif
+        @endif
 
-@if($partName == 'social-links')
-    <div class="row">
-        <div class="col-lg-6 mb-7">
-            <div class="row">
-                <div class="col-sm-1 mb-3 mb-sm-0">
-                    <i class="fa fa-globe-africa fa-2x text-dark mt-3 me-3"></i>
+        @if($partName == 'social-links')
+            <input type="hidden" name="part" value="{{$partName}}">
+            <div class="row social-links-add">
+                <div class="col-12 mb-7 d-flex justify-content-end">
+                    <button type="button" class="btn btn-primary social-links">Add</button>
                 </div>
-                <div class="col-sm-11">
-                    {!! Form::text('website', isset($socialLink) ? $socialLink->website : null, ['class' => 'form-control', 'placeholder' => __('messages.form.website')]) !!}
+                <div class="col-lg-6 mb-7">
+                    <div class="row">
+                        <div class="col-sm-1 mb-3 mb-sm-0">
+                            <i class="fas fa-globe fa-2x text-primary mt-3 me-3"></i>
+                        </div>
+                        <div class="col-sm-11">
+                            {!! Form::text('website', isset($socialLink) ? $socialLink->website : null, ['class' => 'form-control', 'placeholder' => __('messages.form.website')]) !!}
+                        </div>
+                    </div>
                 </div>
+                <div class="col-lg-6 mb-7">
+                    <div class="row">
+                        <div class="col-sm-1 mb-3 mb-sm-0">
+                            <i class="fab fa-twitter fa-2x text-primary mt-3 me-3"></i>
+                        </div>
+                        <div class="col-sm-11">
+                            {!! Form::text('twitter', isset($socialLink) ? $socialLink->twitter : null, ['class' => 'form-control', 'placeholder' => __('messages.form.twitter')]) !!}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-7">
+                    <div class="row">
+                        <div class="col-sm-1 mb-3 mb-sm-0">
+                            <i class="fab fa-facebook-square fa-2x text-primary mt-3 me-3"></i>
+                        </div>
+                        <div class="col-sm-11">
+                            {!! Form::text('facebook', isset($socialLink) ? $socialLink->facebook : null, ['class' => 'form-control', 'placeholder' => __('messages.form.facebook')]) !!}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-7">
+                    <div class="row">
+                        <div class="col-sm-1 mb-3 mb-sm-0">
+                            <i class="fab fa-instagram fa-2x text-danger mt-3 me-3"></i>
+                        </div>
+                        <div class="col-sm-11">
+                            {!! Form::text('instagram', isset($socialLink) ? $socialLink->instagram : null, ['class' => 'form-control', 'placeholder' => __('messages.form.instagram')]) !!}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-7">
+                    <div class="row">
+                        <div class="col-sm-1 mb-3 mb-sm-0">
+                            <i class="fab fa-reddit-alien fa-2x text-danger mt-3 me-3"></i>
+                        </div>
+                        <div class="col-sm-11">
+                            {!! Form::text('reddit', isset($socialLink) ? $socialLink->reddit : null, ['class' => 'form-control', 'placeholder' => __('messages.form.reddit')]) !!}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-7">
+                    <div class="row">
+                        <div class="col-sm-1 mb-3 mb-sm-0">
+                            <i class="fab fa-tumblr-square fa-2x text-dark mt-3 me-3"></i>
+                        </div>
+                        <div class="col-sm-11">
+                            {!! Form::text('tumblr', isset($socialLink) ? $socialLink->tumblr : null, ['class' => 'form-control', 'placeholder' => __('messages.form.tumblr')]) !!}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-7">
+                    <div class="row">
+                        <div class="col-sm-1 mb-3 mb-sm-0">
+                            <i class="fab fa-youtube fa-2x text-danger mt-3 me-3"></i>
+                        </div>
+                        <div class="col-sm-11">
+                            {!! Form::text('youtube', isset($socialLink) ? $socialLink->youtube : null, ['class' => 'form-control', 'placeholder' => __('messages.form.youtube')]) !!}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-7">
+                    <div class="row">
+                        <div class="col-sm-1 mb-3 mb-sm-0">
+                            <i class="fab fa-linkedin fa-2x text-primary mt-3 me-3"></i>
+                        </div>
+                        <div class="col-sm-11">
+                            {!! Form::text('linkedin', isset($socialLink->linkedin) ? $socialLink->linkedin : null, ['class' => 'form-control', 'placeholder' => __('messages.form.linkedin')]) !!}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-7">
+                    <div class="row">
+                        <div class="col-sm-1 mb-3 mb-sm-0">
+                            <i class="fab fa-whatsapp fa-2x text-success mt-3 me-3"></i>
+                        </div>
+                        <div class="col-sm-11">
+                            {!! Form::text('whatsapp', isset($socialLink) ? $socialLink->whatsapp : null, ['class' => 'form-control', 'placeholder' => __('messages.form.whatsapp')]) !!}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-7">
+                    <div class="row">
+                        <div class="col-sm-1 mb-3 mb-sm-0">
+                            <i class="fab fa-pinterest fa-2x text-danger mt-3 me-3"></i>
+                        </div>
+                        <div class="col-sm-11">
+                            {!! Form::text('pinterest', isset($socialLink) ? $socialLink->pinterest : null, ['class' => 'form-control', 'placeholder' => __('messages.form.pinterest')]) !!}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-7">
+                    <div class="row">
+                        <div class="col-sm-1 mb-3 mb-sm-0">
+                            <i class="fab fa-tiktok fa-2x text-danger mt-3 me-3"></i>
+                        </div>
+                        <div class="col-sm-11">
+                            {!! Form::text('tiktok', isset($socialLink) ? $socialLink->tiktok : null, ['class' => 'form-control', 'placeholder' => __('messages.form.tiktok')]) !!}
+                        </div>
+                    </div>
+                </div>
+
+                @foreach($socialLink->icon as $key => $link)
+                    <div class="col-lg-6 mb-7 social-links-div">
+                        <div class="d-flex">
+                            <div class="mb-3 mb-sm-0 me-3">
+                                <div class="" io-image-input="true">
+                                    <div class="    ">
+                                        <div class="image-picker">
+                                            <div class="image previewImage " id="exampleInputImage"
+                                                 style="background-image: url('{!! $link->social_icon ?? 'https://cdn-icons-png.flaticon.com/512/87/87390.png' !!} ') ;width: 40px; height: 40px"></div>
+                                            <span class="picker-edit rounded-circle text-gray-500 fs-small"
+                                                  data-bs-toggle="tooltip"
+                                                  data-placement="top"
+                                                  data-bs-original-title="{{__('messages.tooltip.profile')}}"
+                                                  style="width: 22px; height: 22px">
+                                            <label>
+                                            <i class="fa-solid fa-pen" id="profileImageIcon"></i>
+                                                <input type="file" id="profile_image"
+                                                       name="social_links_image[{{$key}}]"
+                                                       class="image-upload d-none social_links_image" accept="image/*"
+                                                       value="{{$link->social_icon}}"/>
+                                            </label>
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex ml-2 w-100">
+                                <input type="text" class="form-control social_links" name="social_links[{{$key}}]"
+                                       value="{{$link->link}}">
+                                <input type="hidden" name="social_link_id[{{$key}}]" class="socialLinkId"
+                                   value="{{ $link->id }}">
+                            <a href="javascript:void(0)" title="{{ __('messages.common.delete') }}"
+                               class="btn px-1 text-danger fs-3 social-links-delete-btn">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
             </div>
-        </div>
-        <div class="col-lg-6 mb-7">
-            <div class="row">
-                <div class="col-sm-1 mb-3 mb-sm-0">
-                    <i class="fab fa-twitter fa-2x text-primary mt-3 me-3"></i>
-                </div>
-                <div class="col-sm-11">
-                    {!! Form::text('twitter', isset($socialLink) ? $socialLink->twitter : null, ['class' => 'form-control', 'placeholder' => __('messages.form.twitter')]) !!}
-                </div>
+            <div class="col-lg-12 d-flex">
+                <button type="button" class="btn btn-primary me-3 social_link_save">
+                    {{ __('messages.common.save') }}
+                </button>
+                <a href="{{ route('vcards.index') }}"
+                   class="btn btn-secondary">{{__('messages.common.discard')}}</a>
             </div>
-        </div>
-        <div class="col-lg-6 mb-7">
-            <div class="row">
-                <div class="col-sm-1 mb-3 mb-sm-0">
-                    <i class="fab fa-facebook-square fa-2x text-primary mt-3 me-3"></i>
-                </div>
-                <div class="col-sm-11">
-                    {!! Form::text('facebook', isset($socialLink) ? $socialLink->facebook : null, ['class' => 'form-control', 'placeholder' => __('messages.form.facebook')]) !!}
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mb-7">
-            <div class="row">
-                <div class="col-sm-1 mb-3 mb-sm-0">
-                    <i class="fab fa-instagram fa-2x text-danger mt-3 me-3"></i>
-                </div>
-                <div class="col-sm-11">
-                    {!! Form::text('instagram', isset($socialLink) ? $socialLink->instagram : null, ['class' => 'form-control', 'placeholder' => __('messages.form.instagram')]) !!}
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mb-7">
-            <div class="row">
-                <div class="col-sm-1 mb-3 mb-sm-0">
-                    <i class="fab fa-reddit-alien fa-2x text-danger mt-3 me-3"></i>
-                </div>
-                <div class="col-sm-11">
-                    {!! Form::text('reddit', isset($socialLink) ? $socialLink->reddit : null, ['class' => 'form-control', 'placeholder' => __('messages.form.reddit')]) !!}
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mb-7">
-            <div class="row">
-                <div class="col-sm-1 mb-3 mb-sm-0">
-                    <i class="fab fa-tumblr-square fa-2x text-dark mt-3 me-3"></i>
-                </div>
-                <div class="col-sm-11">
-                    {!! Form::text('tumblr', isset($socialLink) ? $socialLink->tumblr : null, ['class' => 'form-control', 'placeholder' => __('messages.form.tumblr')]) !!}
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mb-7">
-            <div class="row">
-                <div class="col-sm-1 mb-3 mb-sm-0">
-                    <i class="fab fa-youtube fa-2x text-danger mt-3 me-3"></i>
-                </div>
-                <div class="col-sm-11">
-                    {!! Form::text('youtube', isset($socialLink) ? $socialLink->youtube : null, ['class' => 'form-control', 'placeholder' => __('messages.form.youtube')]) !!}
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mb-7">
-            <div class="row">
-                <div class="col-sm-1 mb-3 mb-sm-0">
-                    <i class="fab fa-linkedin fa-2x text-primary mt-3 me-3"></i>
-                </div>
-                <div class="col-sm-11">
-                    {!! Form::text('linkedin', isset($socialLink->linkedin) ? $socialLink->linkedin : null, ['class' => 'form-control', 'placeholder' => __('messages.form.linkedin')]) !!}
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mb-7">
-            <div class="row">
-                <div class="col-sm-1 mb-3 mb-sm-0">
-                    <i class="fab fa-whatsapp fa-2x text-success mt-3 me-3"></i>
-                </div>
-                <div class="col-sm-11">
-                    {!! Form::text('whatsapp', isset($socialLink) ? $socialLink->whatsapp : null, ['class' => 'form-control', 'placeholder' => __('messages.form.whatsapp')]) !!}
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mb-7">
-            <div class="row">
-                <div class="col-sm-1 mb-3 mb-sm-0">
-                    <i class="fab fa-pinterest fa-2x text-danger mt-3 me-3"></i>
-                </div>
-                <div class="col-sm-11">
-                    {!! Form::text('pinterest', isset($socialLink) ? $socialLink->pinterest : null, ['class' => 'form-control', 'placeholder' => __('messages.form.pinterest')]) !!}
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mb-7">
-            <div class="row">
-                <div class="col-sm-1 mb-3 mb-sm-0">
-                    <i class="fab fa-tiktok fa-2x text-danger mt-3 me-3"></i>
-                </div>
-                <div class="col-sm-11">
-                    {!! Form::text('tiktok', isset($socialLink) ? $socialLink->tiktok : null, ['class' => 'form-control', 'placeholder' => __('messages.form.tiktok')]) !!}
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-12 d-flex">
-            <button type="submit" class="btn btn-primary me-3">
-                {{ __('messages.common.save') }}
-            </button>
-            <a href="{{ route('vcards.index') }}"
-               class="btn btn-secondary">{{__('messages.common.discard')}}</a>
-        </div>
-    </div>
-@endif
+
+        @endif
 
 @if($partName == 'advanced')
     <div class="row">

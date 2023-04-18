@@ -22,7 +22,7 @@
                                         <h2 class="fw-bolder text-white">{{ __('messages.affiliation.total_affiliation_amount')}}</h2>
                                     </div>
                                     <div class="text-end text-white">
-                                        <h3 class="mb-0 fs-3 ">{{ currencyFormat($totalAmount) }}</h3>
+                                        <h3 class="mb-0 fs-3 ">{{ currencyFormat($totalAmount,2) }}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -34,7 +34,7 @@
                                         <h2 class="fw-bolder text-white">{{ __('messages.affiliation.current_amount') }}</h2>
                                     </div>
                                     <div class="text-end text-white">
-                                        <h3 class="mb-0 fs-3"> {{ currencyFormat($currentAmount) }}</h3>
+                                        <h3 class="mb-0 fs-3"> {{ currencyFormat($currentAmount,2) }}</h3>
                                     </div>
                                 </div>
                             </div>

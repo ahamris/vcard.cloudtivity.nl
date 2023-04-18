@@ -12,7 +12,7 @@
                         class="far fa-envelope me-2"></i> {{__('messages.vcard_11.get_in_touch')}}</a>
             @if(!empty($userSetting['enable_affiliation']))
                 <button type="button"
-                        class="sharedropbtn btn btn-primary d-lg-inline-block fs-14 ms-sm-4 copy-clipboard copy-referral-btn "
+                        class="sharedropbtn btn btn-primary d-xl-inline-block fs-14 ms-sm-4 copy-clipboard copy-referral-btn "
                         data-id="{{ $vcard->user->affiliate_code }}">
                     <a class="text-white text-decoration-none">
                         <i class="text-white fa-regular fa-copy me-2 vcard11-referral-icon"></i><span
@@ -22,9 +22,9 @@
             @endif
             @if($vcard->language_enable == \App\Models\Vcard::LANGUAGE_ENABLE)
                 <div class="dropdown">
-                    <button class="dropbtn btn btn-primary d-lg-none d-block fs-14 ms-sm-4 ms-3"><i
+                    <button class="dropbtn btn btn-primary d-xl-none d-block fs-14 ms-sm-4 ms-3"><i
                                 class="fa-solid fa-language "></i></button>
-                    <button class="dropbtn btn btn-primary d-lg-block d-none fs-14 ms-sm-4 ms-3 "><i
+                    <button class="dropbtn btn btn-primary d-xl-block d-none fs-14 ms-sm-4 ms-3 "><i
                                 class="fa-solid fa-language me-2"></i>{{__('messages.language')}}<i
                                 class="ps-1 fa-solid fa-sort-down"></i>
                     </button>
@@ -203,95 +203,105 @@
     <div class="hero-img position-relative br-15 mb-15">
         <img src="{{ $vcard->profile_url }}" class="w-100 custom-border-radius h-100 object-fit-cover br-15">
     </div>
-    @if(checkFeature('social_links') && $vcard->socialLink)
+    @if(checkFeature('social_links') && isset($vcard->socialLink) && getSocialLink($vcard))
         <div class=" d-flex icon-box justify-content-center flex-wrap custom-social-position mt-3">
-            @if($vcard->socialLink->facebook)
+            @foreach(getSocialLink($vcard) as $value)
                 <div class="social-icon mb-2 me-2 border-gradient border-gradient-orange d-flex justify-content-center align-items-center">
-                    <a href="{{$vcard->socialLink->facebook}}" target="_blank"><i
-                                class="fa-brands fa-facebook-f d-flex justify-content-center align-items-center"></i></a>
+                    {!! $value !!}
                 </div>
-            @endif
-            @if($vcard->socialLink->instagram)
-                <div class="social-icon me-2 d-flex justify-content-center align-items-center">
-                    <a href="{{ $vcard->socialLink->instagram }}" target="_blank"><i
-                            class="fa-brands fa-instagram d-flex justify-content-center align-items-center"></i></a>
-                </div>
-            @endif
-            @if($vcard->socialLink->twitter)
-                <div class="social-icon me-2 d-flex justify-content-center align-items-center">
-                    <a href="{{ $vcard->socialLink->twitter }}" target="_blank"><i
-                            class="fa-brands fa-twitter d-flex justify-content-center align-items-center"></i></a>
-                </div>
-            @endif
-            @if($vcard->socialLink->pinterest)
-                <div class="social-icon me-2 d-flex justify-content-center align-items-center">
-                    <a href="{{ $vcard->socialLink->pinterest }}" target="_blank"> <i
-                            class="fa-brands fa-pinterest-p d-flex justify-content-center align-items-center"></i>
-                    </a>
-                </div>
-            @endif
-            @if($vcard->socialLink->reddit)
-                <div class="social-icon me-2 d-flex justify-content-center align-items-center">
-                    <a href="{{ $vcard->socialLink->reddit }}" target="_blank"> <i
-                            class="fa-brands fa-reddit d-flex justify-content-center align-items-center"></i>
-                    </a>
-                </div>
-            @endif
-            @if($vcard->socialLink->youtube)
-                <div class="social-icon me-2  mb-2  d-flex justify-content-center align-items-center">
-                    <a href="{{ $vcard->socialLink->youtube }}" target="_blank"> <i
-                            class="fa-brands fa-youtube d-flex justify-content-center align-items-center"></i>
-                    </a>
-                </div>
-            @endif
-            @if($vcard->socialLink->tumblr)
-                <div class="social-icon me-2 d-flex justify-content-center align-items-center">
-                    <a href="{{ $vcard->socialLink->tumblr }}" target="_blank"> <i
-                            class="fa-brands fa-tumblr d-flex justify-content-center align-items-center"></i>
-                    </a>
-                </div>
-            @endif
-            @if($vcard->socialLink->linkedin)
-                <div class="social-icon me-2 d-flex justify-content-center align-items-center">
-                    <a href="{{ $vcard->socialLink->linkedin }}" target="_blank"> <i
-                            class="fa-brands fa-linkedin d-flex justify-content-center align-items-center"></i>
-                    </a>
-                </div>
-            @endif
-            @if($vcard->socialLink->whatsapp)
-                <div class="social-icon me-2 d-flex justify-content-center align-items-center">
-                    <a href="{{ $vcard->socialLink->whatsapp }}" target="_blank"> <i
-                            class="fa-brands fa-whatsapp d-flex justify-content-center align-items-center"></i>
-                    </a>
-                </div>
-            @endif
-            @if($vcard->socialLink->tiktok)
-                <div class="social-icon me-2 d-flex justify-content-center align-items-center">
-                    <a href="{{ $vcard->socialLink->tiktok }}" target="_blank"> <i
-                            class="fa-brands fa-tiktok d-flex justify-content-center align-items-center"></i>
-                    </a>
-                </div>
-            @endif
-            @if($vcard->socialLink->website)
-                <div class="social-icon me-2 d-flex justify-content-center align-items-center">
-                    <a href="{{ $vcard->socialLink->website }}" target="_blank"> <i
-                            class="fa-brands fa-solid fa-globe  d-flex  justify-content-center align-items-center"
-                            aria-hidden="true"></i>
-                    </a>
-                </div>
-            @endif
+            @endforeach
         </div>
     @endif
+    {{--    @if(checkFeature('social_links') && $vcard->socialLink)--}}
+    {{--        <div class=" d-flex icon-box justify-content-center flex-wrap custom-social-position mt-3">--}}
+    {{--            --}}
+    {{--            @if($vcard->socialLink->facebook)--}}
+    {{--                <div class="social-icon mb-2 me-2 border-gradient border-gradient-orange d-flex justify-content-center align-items-center">--}}
+    {{--                    <a href="{{$vcard->socialLink->facebook}}" target="_blank"><i--}}
+    {{--                                class="fa-brands fa-facebook-f d-flex justify-content-center align-items-center"></i></a>--}}
+    {{--                </div>--}}
+    {{--            @endif--}}
+    {{--            @if($vcard->socialLink->instagram)--}}
+    {{--                <div class="social-icon me-2 d-flex justify-content-center align-items-center">--}}
+    {{--                    <a href="{{ $vcard->socialLink->instagram }}" target="_blank"><i--}}
+    {{--                            class="fa-brands fa-instagram d-flex justify-content-center align-items-center"></i></a>--}}
+    {{--                </div>--}}
+    {{--            @endif--}}
+    {{--            @if($vcard->socialLink->twitter)--}}
+    {{--                <div class="social-icon me-2 d-flex justify-content-center align-items-center">--}}
+    {{--                    <a href="{{ $vcard->socialLink->twitter }}" target="_blank"><i--}}
+    {{--                            class="fa-brands fa-twitter d-flex justify-content-center align-items-center"></i></a>--}}
+    {{--                </div>--}}
+    {{--            @endif--}}
+    {{--            @if($vcard->socialLink->pinterest)--}}
+    {{--                <div class="social-icon me-2 d-flex justify-content-center align-items-center">--}}
+    {{--                    <a href="{{ $vcard->socialLink->pinterest }}" target="_blank"> <i--}}
+    {{--                            class="fa-brands fa-pinterest-p d-flex justify-content-center align-items-center"></i>--}}
+    {{--                    </a>--}}
+    {{--                </div>--}}
+    {{--            @endif--}}
+    {{--            @if($vcard->socialLink->reddit)--}}
+    {{--                <div class="social-icon me-2 d-flex justify-content-center align-items-center">--}}
+    {{--                    <a href="{{ $vcard->socialLink->reddit }}" target="_blank"> <i--}}
+    {{--                            class="fa-brands fa-reddit d-flex justify-content-center align-items-center"></i>--}}
+    {{--                    </a>--}}
+    {{--                </div>--}}
+    {{--            @endif--}}
+    {{--            @if($vcard->socialLink->youtube)--}}
+    {{--                <div class="social-icon me-2  mb-2  d-flex justify-content-center align-items-center">--}}
+    {{--                    <a href="{{ $vcard->socialLink->youtube }}" target="_blank"> <i--}}
+    {{--                            class="fa-brands fa-youtube d-flex justify-content-center align-items-center"></i>--}}
+    {{--                    </a>--}}
+    {{--                </div>--}}
+    {{--            @endif--}}
+    {{--            @if($vcard->socialLink->tumblr)--}}
+    {{--                <div class="social-icon me-2 d-flex justify-content-center align-items-center">--}}
+    {{--                    <a href="{{ $vcard->socialLink->tumblr }}" target="_blank"> <i--}}
+    {{--                            class="fa-brands fa-tumblr d-flex justify-content-center align-items-center"></i>--}}
+    {{--                    </a>--}}
+    {{--                </div>--}}
+    {{--            @endif--}}
+    {{--            @if($vcard->socialLink->linkedin)--}}
+    {{--                <div class="social-icon me-2 d-flex justify-content-center align-items-center">--}}
+    {{--                    <a href="{{ $vcard->socialLink->linkedin }}" target="_blank"> <i--}}
+    {{--                            class="fa-brands fa-linkedin d-flex justify-content-center align-items-center"></i>--}}
+    {{--                    </a>--}}
+    {{--                </div>--}}
+    {{--            @endif--}}
+    {{--            @if($vcard->socialLink->whatsapp)--}}
+    {{--                <div class="social-icon me-2 d-flex justify-content-center align-items-center">--}}
+    {{--                    <a href="{{ $vcard->socialLink->whatsapp }}" target="_blank"> <i--}}
+    {{--                            class="fa-brands fa-whatsapp d-flex justify-content-center align-items-center"></i>--}}
+    {{--                    </a>--}}
+    {{--                </div>--}}
+    {{--            @endif--}}
+    {{--            @if($vcard->socialLink->tiktok)--}}
+    {{--                <div class="social-icon me-2 d-flex justify-content-center align-items-center">--}}
+    {{--                    <a href="{{ $vcard->socialLink->tiktok }}" target="_blank"> <i--}}
+    {{--                            class="fa-brands fa-tiktok d-flex justify-content-center align-items-center"></i>--}}
+    {{--                    </a>--}}
+    {{--                </div>--}}
+    {{--            @endif--}}
+    {{--            @if($vcard->socialLink->website)--}}
+    {{--                <div class="social-icon me-2 d-flex justify-content-center align-items-center">--}}
+    {{--                    <a href="{{ $vcard->socialLink->website }}" target="_blank"> <i--}}
+    {{--                            class="fa-brands fa-solid fa-globe  d-flex  justify-content-center align-items-center"--}}
+    {{--                            aria-hidden="true"></i>--}}
+    {{--                    </a>--}}
+    {{--                </div>--}}
+    {{--            @endif--}}
+    {{--        </div>--}}
+    {{--    @endif--}}
     <div class="nav-tabs nav flex-column nav-pills mb-7 mt-3" id="v-pills-tab" role="tablist"
          aria-orientation="vertical">
         <a href="{{ route('vcard.show',$vcard->url_alias) }}"
            class="nav-link {{ Request::is($vcard->url_alias) ? 'active' : '' }}"><i
                     class="fa-solid fa-house me-3"></i>{{__('auth.home')}}</a>
-            <a href="{{ route('vcard.show.contact',$vcard->url_alias) }}"
-               class="nav-link {{ Request::is($vcard->url_alias.'/contact*') ? 'active' : '' }}"><i
-                        class="fa-solid fa-envelope me-3"></i>{{__('auth.contact')}}</a>
-            @if($vcard->blogs->count())
-                <a href="{{ route('vcard.show.blog',$vcard->url_alias) }}"
+        <a href="{{ route('vcard.show.contact',$vcard->url_alias) }}"
+           class="nav-link {{ Request::is($vcard->url_alias.'/contact*') ? 'active' : '' }}"><i
+                    class="fa-solid fa-envelope me-3"></i>{{__('auth.contact')}}</a>
+        @if($vcard->blogs->count())
+            <a href="{{ route('vcard.show.blog',$vcard->url_alias) }}"
                    class="nav-link {{ Request::is($vcard->url_alias.'/blog*') ? 'active' : '' }}"><i
                             class="fa-solid fa-book me-3"></i>{{__('messages.feature.blog')}}</a>
             @endif

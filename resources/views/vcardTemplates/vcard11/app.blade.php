@@ -29,6 +29,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/third-party.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/plugins.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/custom-vcard.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/lightbox.css') }}">
 
 	@yield('page_css')
 	{{--google font--}}
@@ -184,28 +185,27 @@
     @endif
 </script>
 <script>
-    // const svg = document.getElementsByTagName('svg')[0]
-    // const { x, y, width, height } = svg.viewBox.baseVal
-    // const blob = new Blob([svg.outerHTML], { type: 'image/svg+xml' })
-    // const url = URL.createObjectURL(blob)
-    // const image = document.createElement('img')
-    // image.src = url
-    // image.addEventListener('load', () => {
-    //     const canvas = document.createElement('canvas')
-    //     canvas.width = width
-    //     canvas.height = height
-    //     const context = canvas.getContext('2d')
-    //     context.drawImage(image, x, y, width, height)
-    //     const link = document.getElementById('qr-code-btn')
-    //     link.href = canvas.toDataURL()
-    //     URL.revokeObjectURL(url)
-    // })
+    const svg = document.getElementsByTagName('svg')[0]
+    const blob = new Blob([svg.outerHTML], { type: 'image/svg+xml' })
+    const url = URL.createObjectURL(blob)
+    const image = document.createElement('img')
+    image.src = url
+    image.addEventListener('load', () => {
+        const canvas = document.createElement('canvas')
+        canvas.width = canvas.height = {{ $vcard->qr_code_download_size }};
+        const context = canvas.getContext('2d')
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+        const link = document.getElementById('qr-code-btn')
+        link.href = canvas.toDataURL()
+        URL.revokeObjectURL(url)
+    })
 </script>
 @routes
 <script src="{{ asset('assets/js/messages.js') }}"></script>
 <script src="{{ mix('assets/js/custom/helpers.js') }}"></script>
 <script src="{{ mix('assets/js/custom/custom.js') }}"></script>
 <script src="{{ mix('assets/js/vcards/vcard-view.js') }}"></script>
+<script src="{{ mix('assets/js/lightbox.js') }}"></script>
 </body>
 
 </html>

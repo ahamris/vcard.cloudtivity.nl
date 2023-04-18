@@ -110,21 +110,27 @@
 
 <li class="nav-item {{ Request::is('sadmin/front-cms*') || Request::is('sadmin/email-subscription*') || Request::is('sadmin/features*') ||
      Request::is('sadmin/about-us*') || Request::is('sadmin/frontTestimonial*') || Request::is('sadmin/contactUs*') ? 'active' : '' }}">
-    <a class="nav-link d-flex align-items-center py-3" aria-current="page" href="{{ route('setting.front.cms') }}">
-        <span class="aside-menu-icon pe-3"><i class="fa fa-home"></i></span>
-        <span class="aside-menu-title">{{ __('messages.front_cms.front_cms') }}</span>
-    </a>
+	<a class="nav-link d-flex align-items-center py-3" aria-current="page" href="{{ route('setting.front.cms') }}">
+		<span class="aside-menu-icon pe-3"><i class="fa fa-home"></i></span>
+		<span class="aside-menu-title">{{ __('messages.front_cms.front_cms') }}</span>
+	</a>
+</li>
+
+<li class="nav-item {{ Request::is('sadmin/coupon-codes*') ? 'active' : '' }}">
+	<a class="nav-link d-flex align-items-center py-3" aria-current="page" href="{{ route('coupon-codes.index') }}">
+		<span class="aside-menu-icon pe-3"><i class="fa-solid fa-tags"></i></span>
+		<span class="aside-menu-title">{{ __('messages.coupon_code.coupon_codes') }}</span>
+	</a>
 </li>
 @endrole
 
 
-
 @role(App\Models\Role::ROLE_ADMIN)
 <li class="nav-item {{ Request::is('admin/dashboard*') ? 'active' : '' }}">
-    <a class="nav-link d-flex align-items-center py-3" aria-current="page" href="{{ route('admin.dashboard') }}">
-        <span class="aside-menu-icon pe-3"><i class="fas fa-chart-pie"></i></span>
-        <span class="aside-menu-title">{{ __('messages.dashboard') }}</span>
-    </a>
+	<a class="nav-link d-flex align-items-center py-3" aria-current="page" href="{{ route('admin.dashboard') }}">
+		<span class="aside-menu-icon pe-3"><i class="fas fa-chart-pie"></i></span>
+		<span class="aside-menu-title">{{ __('messages.dashboard') }}</span>
+	</a>
 </li>
 
 <li class="nav-item {{ Request::is('admin/vcard*') ? 'active' : '' }}">

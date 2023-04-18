@@ -3,30 +3,31 @@
     {{__('messages.subscription.manage_subscription')}}
 @endsection
 @section('content')
-    <div class="container-fluid">
-        <div class="d-flex flex-column">
-            @include('flash::message')
-            @include('layouts.errors')
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-7">
-                            <h2>{{ $currentPlan->plan->name }}</h2>
-                            <h5 class="mb-12">
+	<div class="container-fluid">
+		<div class="d-flex flex-column">
+			@include('flash::message')
+			@include('layouts.errors')
+			<div class="card">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-lg-7">
+							<h2>{{ $currentPlan->plan->name }}</h2>
+							<h4>{{ __('messages.plan.no_of_vcards').': '.$currentPlan->no_of_vcards }}</h4>
+							<h5 class="mb-12">
 
-                                @if( \Carbon\Carbon::now() > $currentPlan->ends_at)
-                                    <span class="text-danger">
+								@if( \Carbon\Carbon::now() > $currentPlan->ends_at)
+									<span class="text-danger">
                                     {{ __('messages.subscription.expired').' '.\Carbon\Carbon::parse($currentPlan->ends_at)->format('dS M, Y') }}
                                 </span>
-                                @else
-                                    <span class="text-success">
+								@else
+									<span class="text-success">
                                      {{ __('messages.subscription.active_until').' '.\Carbon\Carbon::parse($currentPlan->ends_at)->format('dS M, Y') }}
                                 </span>
                                 @endif
                             </h5>
                             <div class="fs-5 mb-2">
                                 <div class="text-gray-800 fw-bolder me-1">
-                                    {{ currencyFormat($currentPlan->plan_amount, $currentPlan->plan->currency->currency_code,) .'/ '.\App\Models\Plan::DURATION[$currentPlan->plan_frequency] }}
+                                    {{ currencyFormat($currentPlan->plan_amount,2, $currentPlan->plan->currency->currency_code,) .'/ '.\App\Models\Plan::DURATION[$currentPlan->plan_frequency] }}
                                     {{--                                    {{ $currentPlan->plan->currency->currency_icon.' '.number_format($currentPlan->plan_amount).'/ '.\App\Models\Plan::DURATION[$currentPlan->plan_frequency] }}--}}
                                 </div>
                                 @if(!empty($currentPlan->trial_ends_at))

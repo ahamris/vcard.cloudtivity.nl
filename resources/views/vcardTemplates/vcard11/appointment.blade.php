@@ -13,8 +13,7 @@
                 <div class="mb-3"> {{ Form::label('phone',__('messages.common.phone').(' :'), ['class' => 'form-label']) }} {{ Form::text('phone', null, ['class' => 'form-control custom-placeholder', 'placeholder' => __('messages.form.enter_phone'),'id'=>'paypalIntUserPhone']) }} </div> @if(isset($appointmentDetail->is_paid) && ($appointmentDetail->is_paid == 1) && (getUserSettingValue('stripe_enable',$vcard->user->id) || getUserSettingValue('paypal_enable',$vcard->user->id)))
                     <div class="mb-3"> {{ Form::label('payment_method',__('messages.common.payment_methods').(' :'), ['class' => 'form-label required']) }} {{ Form::select('payment_method', $appointmentDetail->is_paid == 0 ? \App\Models\Appointment::PAYMENT_METHOD :$paymentMethod , null,['class' => 'form-control custom-placeholder  form-select form-select-solid select2Selector','data-control' => 'select2', 'required', 'id' => 'appointmentPaymentMethod','placeholder'=>__('messages.common.payment_methods')]) }} </div>
                     <div class="mt-3"> {{ Form::label('phone',__('Price').(':'), ['class' => 'form-label']) }} <span
-                                class="form-label" id="paymentCurrencyCode">{{ $currency->currency_icon}}</span><span
-                                id="payablePrice">{{number_format($appointmentDetail->price)}}</span> <input
+                                class="form-label" id="paymentCurrencyCode">{{ getCurrencyAmount(number_format($appointmentDetail->price),$currency->currency_icon) }}</span> <input
                                 type="hidden" id="currencyCode" name="currency_code"
                                 value="{{ $currency->currency_code }}"> <input type="hidden" id="amount" name="amount"
                                                                                value="{{ $appointmentDetail->price }}">

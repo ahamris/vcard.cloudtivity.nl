@@ -53,10 +53,12 @@
         let getLoggedInUserdata = "{{ getLogInUser() }}"
         window.getLoggedInUserLang = "{{getCurrentLanguageName()}}"
         let lang = "{{ Illuminate\Support\Facades\Auth::user()->language ?? 'en' }}"
-        let getCurrencyCode = "{{getMaximumCurrencyCode()}}"
+        let getCurrencyCode = "{{getMaximumCurrencyCode($getIcon = true)}}"
         let sweetAlertIcon = "{{ asset('images/remove.png') }}"
         let sweetCompletedAlertIcon = "{{ asset('images/Alert.png') }}"
         let defaultCountryCodeValue = "{{ getSuperAdminSettingValue('default_country_code')}}"
+        let getUniqueVcardUrlAlias = "{{ getUniqueVcardUrlAlias()}}"
+        let currencyAfterAmount = "{{ getSuperAdminSettingValue('currency_after_amount')}}"
         let options = {
             'key': "{{ getSelectedPaymentGateway('razorpay_key') }}",
             'amount': 0, //  100 refers to 1

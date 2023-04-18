@@ -442,11 +442,7 @@ const dashboardPlanIncomeChart = (data) => {
                                 label += ': ';
                             }
                             if (context.parsed.y !== null) {
-                                label += new Intl.NumberFormat(
-                                    'en-US', {
-                                        style: 'currency',
-                                        currency: getCurrencyCode,
-                                    }).format(context.parsed.y);
+                                label += getCurrencyAmount(context.parsed.y.toFixed(2),getCurrencyCode);
                             }
                             return label;
                         }

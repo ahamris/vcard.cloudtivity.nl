@@ -11,7 +11,7 @@
     {{-- Body --}}
     <div>
 	    <h2>{{ __('messages.mail.hello') }} <b>{{ $toName }}</b></h2>
-	    <p><b>Your Withdrawal Request of amount {{ currencyFormat($amount) }} is Rejected.</b></p>
+	    <p><b>Your Withdrawal Request of amount {{ currencyFormat($amount,2) }} is Rejected.</b></p>
 	    @if(!empty($rejectionNote))
 		    <p><b>Reason :</b></p>
 		    <p style="text-align: justify">{{ $rejectionNote }}</p>

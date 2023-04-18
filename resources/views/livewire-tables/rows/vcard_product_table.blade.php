@@ -23,8 +23,8 @@
 
 <x-livewire-tables::table.cell>
     @if($row->currency_id && $row->price != null)
-        {{$row->currency->currency_icon . ' ' . number_format($row->price)}}
-    @elseif($row->price != null){
+		{{ currencyFormat($row->price,0,$row->currency->currency_code) }}
+    @elseif($row->price != null)
     {{number_format($row->price)}}
     @else
         N/A

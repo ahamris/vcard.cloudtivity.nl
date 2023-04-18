@@ -256,8 +256,8 @@
                                 <div class="client-box w-100 h-100 py-3">
                                     <div class="client-img">
                                         @if($file->type == App\Models\Gallery::TYPE_IMAGE)
-                                            <img src="{{ $file->gallery_image }}"
-                                                 class="w-100 h-100 object-fit-cover rounded">
+		                                    <a href="{{$file->gallery_image}}" data-lightbox="gallery-images"><img src="{{ $file->gallery_image }}"
+		                                                                                                           class="w-100 h-100 object-fit-cover rounded"></a>
                                         @elseif($file->type == App\Models\Gallery::TYPE_FILE)
                                             <a id="file_url" href="{{$file->gallery_image}}"
                                                class="gallery-link gallery-file-link" target="_blank">

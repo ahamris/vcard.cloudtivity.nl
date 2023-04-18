@@ -27,6 +27,11 @@ $yellow: #FFCA2C;
 $grey: #969696;
 $dark: #010101;
 
+
+.vcard2-sticky-btn {
+    background: $red;
+    color:white;
+}
 body {
     background-color: #E5E5E5 !important;
     font-family: 'Outfit', sans-serif;
@@ -973,6 +978,16 @@ button{
 .vcard-two__blog .blog-slider .slick-list{
     margin-bottom:30px !important;
 }
-.vcard-two__blog .blog-slider .slick-dots{
+.vcard-two__blog .blog-slider .slick-dots {
     bottom: 20px !important;
+}
+
+.lb-data .lb-number {
+    display: none !important;
+}
+
+.social-icons {
+    img {
+        border-radius: 50% !important;
+    }
 }

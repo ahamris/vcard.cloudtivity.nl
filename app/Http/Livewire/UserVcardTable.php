@@ -34,8 +34,7 @@ class UserVcardTable extends LivewireTableComponent
             Column::make(__('messages.vcard.stats'), 'stats'),
             Column::make(__('messages.vcard.status'), 'first_name')
                 ->sortable(),
-            Column::make(__('messages.vcard.created_on'), 'created_at')
-                ->sortable(),
+            Column::make(__('messages.vcard.created_at'), 'created_at')->sortable(),
             Column::make(__('messages.common.action'))->addClass('w-150px justify-content-center d-flex'),
         ];
     }

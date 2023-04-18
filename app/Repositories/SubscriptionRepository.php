@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\CouponCode;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\Transaction;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Laracasts\Flash\Flash;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
@@ -48,32 +50,34 @@ class SubscriptionRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $planId
+     * @param $input
      * @return array
      */
-    public function purchaseSubscriptionForStripe($planId)
+    public function purchaseSubscriptionForStripe($input)
     {
-        $data = $this->manageSubscription($planId);
+        $data = $this->manageSubscription($input);
 
-        if (! isset($data['plan'])) { // 0 amount plan or try to switch the plan if it is in trial mode
+        if (!isset($data['plan'])) { // 0 amount plan or try to switch the plan if it is in trial mode
             return $data;
         }
 
         $result = $this->manageStripeData(
             $data['plan'],
-            ['amountToPay' => $data['amountToPay'],
-                'sub_id' => $data['subscription']->id, ]
+            [
+                'amountToPay' => $data['amountToPay'],
+                'sub_id'      => $data['subscription']->id, ]
         );
 
         return $result;
     }
 
     /**
-     * @param  int  $planId
-     * @return array
+     * @param $input
+     * @return bool|array
      */
-    public function manageSubscription($planId): array
+    public function manageSubscription($planData): bool|array
     {
+        $planId = $planData['planId'];
         /** @var Plan $subscriptionPlan */
         $subscriptionPlan = Plan::findOrFail($planId);
         if ($subscriptionPlan->frequency == Plan::MONTHLY) {
@@ -91,6 +95,7 @@ class SubscriptionRepository extends BaseRepository
         $usedTrialBefore = Subscription::whereTenantId(getLogInUser()->tenant_id)->whereNotNull('trial_ends_at')->exists();
 
         // if the user did not have any trial plan then give them a trial
+
         if (! $usedTrialBefore && $subscriptionPlan->trial_days > 0) {
             $endsAt = $startsAt->copy()->addDays($subscriptionPlan->trial_days);
         }
@@ -130,7 +135,8 @@ class SubscriptionRepository extends BaseRepository
                     ? round($subscriptionPlan->price - $remainingBalance)
                     : round($subscriptionPlan->price - $remainingBalance, 2);
             } else {
-                $perDayPriceOfNewPlan = round($subscriptionPlan->price / $newPlanDays, 2);
+
+                $perDayPriceOfNewPlan = round($subscriptionPlan->price / $newPlanDays, 5);
 
                 $totalDays = round($remainingBalance / $perDayPriceOfNewPlan);
                 $endsAt = Carbon::now()->addDays($totalDays);
@@ -150,134 +156,49 @@ class SubscriptionRepository extends BaseRepository
         }
 
         $input = [
-            'user_id' => getLogInUser()->id,
-            'plan_id' => $subscriptionPlan->id,
-            'plan_amount' => $subscriptionPlan->price,
+            'user_id'        => getLogInUser()->id,
+            'plan_id'        => $subscriptionPlan->id,
+            'plan_amount'    => $subscriptionPlan->price,
             'payable_amount' => $amountToPay,
             'plan_frequency' => $subscriptionPlan->frequency,
-            'starts_at' => $startsAt,
-            'ends_at' => $endsAt,
-            'status' => Subscription::INACTIVE,
-            'no_of_vcards' => $subscriptionPlan->no_of_vcards,
+            'starts_at'      => $startsAt,
+            'ends_at'        => $endsAt,
+            'status'         => Subscription::INACTIVE,
+            'no_of_vcards'   => $subscriptionPlan->no_of_vcards,
         ];
 
+        if (isset($planData['notes'])) {
+            $input['notes'] = $planData['notes'];
+        }
+
+        //apply coupon code if exists
+        if (!empty($planData['couponCodeId'])) {
+            $couponCode = CouponCode::whereId($planData['couponCodeId'])
+                ->whereCouponName($planData['couponCode'])
+                ->whereStatus(CouponCode::ACTIVE)
+                ->firstOrFail();
+            if ($couponCode->is_expired) {
+                Flash::error('Invalid Coupon code');
+
+                return [];
+            }
+
+            $couponCodeRepo = App(CouponCodeRepository::class);
+            $data['planId'] = $subscriptionPlan->id;
+            $data['planPrice'] = $subscriptionPlan->price;
+            $data['couponCode'] = $planData['couponCode'];
+            $couponData = $couponCodeRepo->getAfterDiscountData($data);
+            $amountToPay = $input['payable_amount'] = $couponData['afterDiscount']['amountToPay'];
+            $input['coupon_code_meta'] = $couponData['afterDiscount'];
+            $input['coupon_code_meta']['discount'] = $couponCode->discount;
+            unset($input['coupon_code_meta']['amountToPay']);
+            $input['discount'] = $couponData['afterDiscount']['discount'];
+        }
         $subscription = Subscription::create($input);
 
-        if ($subscriptionPlan->price <= 0 || $amountToPay == 0) {
-            // De-Active all other subscription
-            Subscription::whereTenantId(getLogInTenantId())
-                ->where('id', '!=', $subscription->id)
-                ->update([
-                    'status' => Subscription::INACTIVE,
-                ]);
-            Subscription::findOrFail($subscription->id)->update(['status' => Subscription::ACTIVE]);
-
-            return ['status' => true, 'subscriptionPlan' => $subscriptionPlan];
-        }
-
-        session(['subscription_plan_id' => $subscription->id]);
-        session(['from_pricing' => request()->get('from_pricing')]);
-
-        return [
-            'plan' => $subscriptionPlan,
-            'amountToPay' => $amountToPay,
-            'subscription' => $subscription,
-        ];
-    }
-    
-    public function manageSubscriptionForManualPayment($planId, $data) {
-        /** @var Plan $subscriptionPlan */
-        $subscriptionPlan = Plan::findOrFail($planId);
-        if ($subscriptionPlan->frequency == Plan::MONTHLY) {
-            $newPlanDays = 30;
-        } else {
-            if ($subscriptionPlan->frequency == Plan::YEARLY) {
-                $newPlanDays = 365;
-            } else {
-                $newPlanDays = 36500;
-            }
-        }
-        $startsAt = Carbon::now();
-        $endsAt = $startsAt->copy()->addDays($newPlanDays);
-
-        $usedTrialBefore = Subscription::whereTenantId(getLogInUser()->tenant_id)->whereNotNull('trial_ends_at')->exists();
-
-        // if the user did not have any trial plan then give them a trial
-        if (! $usedTrialBefore && $subscriptionPlan->trial_days > 0) {
-            $endsAt = $startsAt->copy()->addDays($subscriptionPlan->trial_days);
-        }
-
-        $amountToPay = $subscriptionPlan->price;
-
-        /** @var Subscription $currentSubscription */
-        $currentSubscription = getCurrentSubscription();
-
-        $usedDays = Carbon::parse($currentSubscription->starts_at)->diffInDays($startsAt);
-        $planIsInTrial = checkIfPlanIsInTrial($currentSubscription);
-        // switching the plan -- Manage the pro-rating
-        if (! $currentSubscription->isExpired() && $amountToPay != 0 && ! $planIsInTrial) {
-            $usedDays = Carbon::parse($currentSubscription->starts_at)->diffInDays($startsAt);
-            $currentSubsTotalDays = Carbon::parse($currentSubscription->starts_at)->diffInDays($currentSubscription->ends_at);
-
-            $currentPlan = $currentSubscription->plan; // TODO: take fields from subscription
-
-            // checking if the current active subscription plan has the same price and frequency in order to process the calculation for the proration
-            $planPrice = $currentPlan->price;
-            $planFrequency = $currentPlan->frequency;
-            if ($planPrice != $currentSubscription->plan_amount || $planFrequency != $currentSubscription->plan_frequency) {
-                $planPrice = $currentSubscription->plan_amount;
-                $planFrequency = $currentSubscription->plan_frequency;
-            }
-
-//            $frequencyDays = $planFrequency == Plan::MONTHLY ? 30 : 365;
-            $perDayPrice = round($planPrice / $currentSubsTotalDays, 2);
-            $isJPYCurrency = ! empty($subscriptionPlan->currency) && isJPYCurrency($subscriptionPlan->currency->currency_code);
-
-            $remainingBalance = $planPrice - ($perDayPrice * $usedDays);
-            $remainingBalance = $isJPYCurrency
-                ? round($remainingBalance) : $remainingBalance;
-
-            if ($remainingBalance < $subscriptionPlan->price) { // adjust the amount in plan i.e. you have to pay for it
-                $amountToPay = $isJPYCurrency
-                    ? round($subscriptionPlan->price - $remainingBalance)
-                    : round($subscriptionPlan->price - $remainingBalance, 2);
-            } else {
-                $perDayPriceOfNewPlan = round($subscriptionPlan->price / $newPlanDays, 2);
-
-                $totalDays = round($remainingBalance / $perDayPriceOfNewPlan);
-                $endsAt = Carbon::now()->addDays($totalDays);
-                $amountToPay = 0;
-            }
-        }
-
-        // check that if try to switch the plan
-        if (! $currentSubscription->isExpired()) {
-            if ((checkIfPlanIsInTrial($currentSubscription) || ! checkIfPlanIsInTrial($currentSubscription)) && $subscriptionPlan->price <= 0) {
-                return ['status' => false, 'subscriptionPlan' => $subscriptionPlan];
-            }
-        }
-
-        if ($usedDays <= 0) {
-            $startsAt = $currentSubscription->starts_at;
-        }
-
-        $input = [
-            'user_id' => getLogInUser()->id,
-            'plan_id' => $subscriptionPlan->id,
-            'plan_amount' => $subscriptionPlan->price,
-            'payable_amount' => $amountToPay,
-            'plan_frequency' => $subscriptionPlan->frequency,
-            'starts_at' => $startsAt,
-            'ends_at' => $endsAt,
-            'status' => Subscription::INACTIVE,
-            'no_of_vcards' => $subscriptionPlan->no_of_vcards,
-            'notes' =>  $data['notes']
-        ];
-
-        $subscription = Subscription::create($input);
-
-        if(isset($data['attachment']) && !empty($data['attachment'])) {
-            $subscription->addMedia($data['attachment'])->toMediaCollection(Subscription::ATTACHMENT_PATH, config('app.media_disc'));
+        if (isset($planData['attachment']) && !empty($planData['attachment'])) {
+            $subscription->addMedia($planData['attachment'])->toMediaCollection(Subscription::ATTACHMENT_PATH,
+                config('app.media_disc'));
         }
 
         if ($subscriptionPlan->price <= 0 || $amountToPay == 0) {
@@ -296,8 +217,8 @@ class SubscriptionRepository extends BaseRepository
         session(['from_pricing' => request()->get('from_pricing')]);
 
         return [
-            'plan' => $subscriptionPlan,
-            'amountToPay' => $amountToPay,
+            'plan'         => $subscriptionPlan,
+            'amountToPay'  => $amountToPay,
             'subscription' => $subscription,
         ];
     }
@@ -317,29 +238,29 @@ class SubscriptionRepository extends BaseRepository
 
         $session = Session::create([
             'payment_method_types' => ['card'],
-            'customer_email' => Auth::user()->email,
-            'line_items' => [
+            'customer_email'       => Auth::user()->email,
+            'line_items'           => [
                 [
                     'price_data' => [
                         'product_data' => [
-                            'name' => $subscriptionPlan->name,
+                            'name'        => $subscriptionPlan->name,
                             'description' => 'Subscribing for the plan named '.$subscriptionPlan->name,
                         ],
-                        'unit_amount' => $planAmount,
-                        'currency' => $subscriptionPlan->currency->currency_code,
+                        'unit_amount'  => $planAmount,
+                        'currency'     => $subscriptionPlan->currency->currency_code,
                     ],
-                    'quantity' => 1,
+                    'quantity'   => 1,
                 ],
             ],
-            'client_reference_id' => $subscriptionID,
-            'metadata' => [
-                'payment_type' => Transaction::STRIPE,
-                'amount' => $planAmount,
+            'client_reference_id'  => $subscriptionID,
+            'metadata'             => [
+                'payment_type'  => Transaction::STRIPE,
+                'amount'        => $planAmount,
                 'plan_currency' => $subscriptionPlan->currency->currency_code,
             ],
-            'mode' => 'payment',
-            'success_url' => url('payment-success').'?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => url('failed-payment?error=payment_cancelled'),
+            'mode'                 => 'payment',
+            'success_url'          => url('payment-success').'?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url'           => url('failed-payment?error=payment_cancelled'),
         ]);
 
         $result = [
@@ -386,11 +307,11 @@ class SubscriptionRepository extends BaseRepository
 
             $transaction = Transaction::create([
                 'transaction_id' => $request->session_id,
-                'type' => $sessionData->metadata->payment_type,
-                'amount' => $paymentAmount,
-                'tenant_id' => getLogInTenantId(),
-                'status' => Transaction::SUCCESS,
-                'meta' => json_encode($sessionData),
+                'type'           => $sessionData->metadata->payment_type,
+                'amount'         => $paymentAmount,
+                'tenant_id'      => getLogInTenantId(),
+                'status'         => Transaction::SUCCESS,
+                'meta'           => json_encode($sessionData),
             ]);
 
             $subscription = Subscription::findOrFail($sessionData->client_reference_id);
@@ -420,18 +341,18 @@ class SubscriptionRepository extends BaseRepository
         try {
             $documentMedia = $subscription->media[0];
             $documentPath = $documentMedia->getPath();
-            
+
             if (config('app.media_disc') === 'public') {
                 $documentPath = (Str::after($documentMedia->getUrl(), '/uploads'));
             }
-            
+
             $file = Storage::disk(config('app.media_disc'))->get($documentPath);
-            
+
             $headers = [
-                'Content-Type' => $subscription->media[0]->mime_type,
+                'Content-Type'        => $subscription->media[0]->mime_type,
                 'Content-Description' => 'File Transfer',
                 'Content-Disposition' => "attachment; filename={$subscription->media[0]->file_name}",
-                'filename' => $subscription->media[0]->file_name,
+                'filename'            => $subscription->media[0]->file_name,
             ];
 
             return [$file, $headers];

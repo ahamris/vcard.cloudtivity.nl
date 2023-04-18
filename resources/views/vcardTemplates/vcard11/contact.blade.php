@@ -139,7 +139,7 @@
 
 
             @php $currentSubs = $vcard->subscriptions()->where('status', \App\Models\Subscription::ACTIVE)->latest()->first() @endphp
-            @if($currentSubs && $currentSubs->plan->planFeature->enquiry_form)
+            @if($currentSubs && $currentSubs->plan->planFeature->enquiry_form && $vcard->enable_enquiry_form)
                 <section class="contact-section mb-sm-5 mb-4">
                     <div class="section-heading mb-40">
                         <h2 class="fs-22 text-white ps-4">{{__('messages.enquiry')}}</h2>
@@ -206,12 +206,14 @@
                             <img src="{{ $vcard->profile_url }}"
                                  class="w-100 h-100 object-fit-cover">
                         </div>
-                        <div class="row mb-sm-0 mb-4">
-                            <div class="col-12 text-center">
-                                <a class="btn btn-primary w-auto qr-code-btn" id="qr-code-btn"
-                                   download="qr_code.png">{{ __('messages.vcard.download_my_qr_code') }}</a>
-                            </div>
-                        </div>
+	                    @if($vcard->enable_download_qr_code)
+		                    <div class="row mb-sm-0 mb-4">
+	                            <div class="col-12 text-center">
+	                                <a class="btn btn-primary w-auto qr-code-btn" id="qr-code-btn"
+	                                   download="qr_code.png">{{ __('messages.vcard.download_my_qr_code') }}</a>
+	                            </div>
+	                        </div>
+						@endif
                     </div>
                     <div class="qr-code qr-code-image">
                         <a>{!! QrCode::size(200)->format('svg')->generate(\Illuminate\Support\Facades\URL::to($vcard->url_alias)); !!}</a>

@@ -78,6 +78,7 @@ class SubscriptionController extends AppBaseController
 
     public function choosePaymentType($planId, $context = null, $fromScreen = null)
     {
+
         // code for checking the current plan is active or not, if active then it should not allow to choose that plan
         $subscriptionsPricingPlan = Plan::findOrFail($planId);
         $paymentTypes = getPaymentGateway();
@@ -140,7 +141,7 @@ class SubscriptionController extends AppBaseController
 
             return $this->sendError('PHP file is not valid type for attachment');
         }
-        $this->subscriptionRepo->manageSubscriptionForManualPayment($request->get('planId'), $input);
+        $this->subscriptionRepo->manageSubscription($input);
         $data = Subscription::whereTenantId(getLogInTenantId())->orderBy('created_at', 'desc')->first();
         Subscription::whereId($data->id)->update(['payment_type' => 'Cash']);
         $is_on = Setting::where('key', 'is_manual_payment_guide_on')->first();
@@ -215,8 +216,8 @@ class SubscriptionController extends AppBaseController
 
     public function purchaseSubscription(Request $request)
     {
-        $subscriptionPlanId = $request->get('plan_id');
-        $result = $this->subscriptionRepo->purchaseSubscriptionForStripe($subscriptionPlanId);
+        $input = $request->all();
+        $result = $this->subscriptionRepo->purchaseSubscriptionForStripe($input);
         // returning from here if the plan is free.
         if (isset($result['status']) && $result['status'] == true) {
             return $this->sendSuccess($result['subscriptionPlan']->name.' '.__('messages.subscription.has_been_subscribed'));
@@ -273,7 +274,9 @@ class SubscriptionController extends AppBaseController
      */
     public function userSubscribedPlanEdit(Request $request): JsonResponse
     {
-        $subscription = Subscription::whereId($request->id)->first();
+        $subscription = Subscription::with([
+            'plan:id,name,currency_id', 'tenant.user', 'plan.currency',
+        ])->whereId($request->id)->first();
 
         return $this->sendResponse($subscription, 'Subscription successfully retrieved.');
     }

@@ -7,7 +7,26 @@
 .content-blur {
     filter: blur(5px);
 }
-
+.whitespace-nowrap {
+    white-space: nowrap !important;
+}
+.btn-group {
+    //width:150px;
+    height:38px;
+    border-radius:50px;
+    overflow:hidden;
+   
+}
+.vcard-btn-group {
+    width:50px;
+    height:38px;
+}
+.sticky-vcard-div {
+    position:fixed;
+    bottom:22px;
+    left:0;
+    z-index:9999;
+}
 .modal {
     .modal-dialog {
         .modal-content {
@@ -212,4 +231,12 @@ input::placeholder {
     @media (max-width: 575px) {
         min-width: 300px !important;
     }
+}
+.lightbox {
+    display:flex;
+    flex-direction: column-reverse;
+}
+.lb-data .lb-number {
+    padding-bottom:0 !important;
+    padding-top:1rem;
 }

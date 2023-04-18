@@ -10,4 +10,5 @@
         </div>
     </div>
     @include('sadmin.subscriptionPlan.edit_modal')
+    @include('sadmin.subscriptionPlan.show_modal')
 @endsection

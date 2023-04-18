@@ -47,6 +47,9 @@ class ProductController extends AppBaseController
     public function edit($id)
     {
         $product = Product::with('currency')->where('id', $id)->first();
+        if($product->currency){
+            $product['formatted_amount'] = getCurrencyAmount($product->price,$product->currency->currency_icon);
+        }
 
         return $this->sendResponse($product, 'Product successfully retrieved.');
     }

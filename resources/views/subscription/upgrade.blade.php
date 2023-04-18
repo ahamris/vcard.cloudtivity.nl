@@ -38,7 +38,7 @@
                                                 <h1>{{ $plan->name }}</h1>
                                                 <h1 class="pricing-amount">
 {{--                                                    {{$plan->currency->currency_icon.number_format($plan->price) }}--}}
-                                                    {{ currencyFormat($plan->price, $plan->currency->currency_code) }}
+                                                    {{ currencyFormat($plan->price,2, $plan->currency->currency_code) }}
                                                 </h1>
                                                 <div class="card-body p-3">
                                                     <div class="pricing-description text-start">
@@ -120,7 +120,8 @@
                                             <div class="card pricing-card bg-light p-5 shadow-lg mb-8">
                                                 <h1>{{ $plan->name }}</h1>
                                                 <h1 class="pricing-amount">
-                                                    {{$plan->currency->currency_icon.number_format($plan->price) }}
+                                                    {{--                                                    {{$plan->currency->currency_icon.number_format($plan->price) }}--}}
+                                                    {{ currencyFormat($plan->price,2, $plan->currency->currency_code) }}
                                                 </h1>
                                                 <div class="card-body p-3">
                                                     <div class="pricing-description text-start">
@@ -159,7 +160,9 @@
                                                         @endif
                                                     @else
                                                         @if(!empty(getCurrentSubscription()) && !getCurrentSubscription()->isExpired() && ($plan->price == 0 || $plan->price != 0))
+
                                                             @if($plan->hasZeroPlan->count() == 0)
+
                                                                 <a data-turbo="false"
                                                                    href="{{ $plan->price != 0 ? route('choose.payment.type', $plan->id) : 'javascript:void(0)' }}"
                                                                    class="btn btn-primary rounded-pill mx-auto {{ $plan->price == 0 ? 'freePayment' : ''}}"
@@ -205,7 +208,8 @@
                                             <div class="card pricing-card bg-light p-5 shadow-lg mb-8">
                                                 <h1>{{ $plan->name }}</h1>
                                                 <h1 class="pricing-amount">
-                                                    {{$plan->currency->currency_icon.number_format($plan->price) }}
+                                                    {{--                                                    {{$plan->currency->currency_icon.number_format($plan->price) }}--}}
+                                                    {{ currencyFormat($plan->price,2, $plan->currency->currency_code) }}
                                                 </h1>
                                                 <div class="card-body p-3">
                                                     <div class="pricing-description text-start">

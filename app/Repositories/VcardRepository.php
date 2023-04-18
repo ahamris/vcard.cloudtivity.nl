@@ -6,13 +6,16 @@ use App\Models\Analytic;
 use App\Models\Appointment;
 use App\Models\AppointmentDetail;
 use App\Models\BusinessHour;
+use App\Models\FrontTestimonial;
 use App\Models\Gallery;
 use App\Models\PrivacyPolicy;
 use App\Models\Product;
+use App\Models\SocialIcon;
 use App\Models\SocialLink;
 use App\Models\Subscription;
 use App\Models\TermCondition;
 use App\Models\Testimonial;
+use App\Models\User;
 use App\Models\Vcard;
 use App\Models\VcardBlog;
 use App\Models\VcardService;
@@ -23,7 +26,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Str;
 use Laracasts\Flash\Flash;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class VcardRepository extends BaseRepository
@@ -71,11 +76,11 @@ class VcardRepository extends BaseRepository
             $input['vcard_id'] = $vcard->id;
             SocialLink::create($input);
 
-            if (isset($input['profile_img']) && ! empty($input['profile_img'])) {
+            if (isset($input['profile_img']) && !empty($input['profile_img'])) {
                 $vcard->addMedia($input['profile_img'])->toMediaCollection(Vcard::PROFILE_PATH,
                     config('app.media_disc'));
             }
-            if (isset($input['cover_img']) && ! empty($input['cover_img'])) {
+            if (isset($input['cover_img']) && !empty($input['cover_img'])) {
                 $vcard->addMedia($input['cover_img'])->toMediaCollection(Vcard::COVER_PATH, config('app.media_disc'));
             }
 
@@ -102,7 +107,7 @@ class VcardRepository extends BaseRepository
         foreach ($businessHours as $hour) {
             $data['hours'][$hour->day_of_week] = [
                 'start_time' => $hour->start_time,
-                'end_time' => $hour->end_time,
+                'end_time'   => $hour->end_time,
             ];
         }
 
@@ -112,12 +117,12 @@ class VcardRepository extends BaseRepository
             foreach ($hours as $hour) {
                 $data['time'][$day][] = [
                     'start_time' => $hour->start_time,
-                    'end_time' => $hour->end_time,
+                    'end_time'   => $hour->end_time,
                 ];
             }
         }
 
-        $data['socialLink'] = SocialLink::whereVcardId($vcard->id)->first();
+        $data['socialLink'] = SocialLink::with('icon')->whereVcardId($vcard->id)->first();
         $currentPlan = getCurrentSubscription();
         if ($currentPlan->plan) {
             $data['templates'] = getTemplateUrls($currentPlan->plan->templates);
@@ -129,8 +134,8 @@ class VcardRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
-     * @param  int  $vcard
+     * @param array $input
+     * @param int $vcard
      * @return Builder|Builder[]|Collection|Model|int
      */
     public function update($input, $vcard)
@@ -145,7 +150,7 @@ class VcardRepository extends BaseRepository
             }
             if (isset($input['part']) && $input['part'] == 'templates') {
                 $planTemplates = getCurrentSubscription()->plan->templates()->pluck('template_id')->toArray();
-                if (! in_array($input['template_id'], $planTemplates)) {
+                if (!in_array($input['template_id'], $planTemplates)) {
                     $input['template_id'] = $planTemplates[array_rand($planTemplates)];
                 }
                 $input['share_btn'] = isset($input['share_btn']);
@@ -156,8 +161,10 @@ class VcardRepository extends BaseRepository
                 $input['branding'] = isset($input['branding']);
             }
 
-            if (! isset($input['part']) || $input['part'] == 'basic') {
+            if (!isset($input['part']) || $input['part'] == 'basic') {
                 $input['language_enable'] = isset($input['language_enable']) ? 1 : 0;
+                $input['enable_enquiry_form'] = isset($input['enable_enquiry_form']) ? 1 : 0;
+                $input['enable_download_qr_code'] = isset($input['enable_download_qr_code']) ? 1 : 0;
             }
             $vcard->update($input);
 
@@ -166,18 +173,19 @@ class VcardRepository extends BaseRepository
                 if (isset($input['days'])) {
                     foreach ($input['days'] as $day) {
                         BusinessHour::create([
-                            'vcard_id' => $vcard->id,
+                            'vcard_id'    => $vcard->id,
                             'day_of_week' => $day,
-                            'start_time' => $input['startTime'][$day],
-                            'end_time' => $input['endTime'][$day],
+                            'start_time'  => $input['startTime'][$day],
+                            'end_time'    => $input['endTime'][$day],
                         ]);
                     }
                 }
             }
 
             if (isset($input['part']) && $input['part'] == 'appointments') {
-                if ($input['is_paid'] == 1){
-                    if (!getUserSettingValue('stripe_enable', getLogInUserId()) && !getUserSettingValue('paypal_enable', getLogInUserId())){
+                if ($input['is_paid'] == 1) {
+                    if (!getUserSettingValue('stripe_enable', getLogInUserId()) && !getUserSettingValue('paypal_enable',
+                            getLogInUserId())) {
                         Flash::error(__('messages.placeholder.please_add_payment_credentials'));
 
                         return false;
@@ -194,53 +202,118 @@ class VcardRepository extends BaseRepository
                 $appointmentDetails = AppointmentDetail::where('vcard_id', $vcard->id)->first();
 
                 if (isset($input['is_paid'])) {
-                    if (! empty($appointmentDetails)) {
+                    if (!empty($appointmentDetails)) {
                         $appointmentDetails->update([
                             'is_paid' => $input['is_paid'],
-                            'price' => $input['price'],
+                            'price'   => $input['price'],
                         ]);
                     } else {
                         AppointmentDetail::create([
                             'vcard_id' => $vcard->id,
-                            'is_paid' => $input['is_paid'],
-                            'price' => $input['price'],
+                            'is_paid'  => $input['is_paid'],
+                            'price'    => $input['price'],
                         ]);
                     }
                 }
             }
+            if (isset($input['part']) && $input['part'] == 'social-links') {
+                $socialLink = SocialLink::whereVcardId($vcard->id)->first();
 
-            $socialLink = SocialLink::whereVcardId($vcard->id)->first();
-            $socialLink->update($input);
+                if (isset($input['social_links'])) {
+                    $iconExists = SocialIcon::where('social_link_id', $socialLink->id)->exists();
+                    if ($iconExists) {
+                        $socialIconIds = SocialIcon::where('social_link_id', $socialLink->id)->pluck('id')->toArray();
+                        $hiddenSocialLinkIds = $input['social_link_id'] ?? [];
 
-            if (isset($input['profile_img']) && ! empty($input['profile_img'])) {
+                        $removeSocialLinks = array_diff($socialIconIds, $hiddenSocialLinkIds);
+                        $socialIcons = SocialIcon::where('social_link_id', $socialLink->id)->get();
+
+                        foreach ($removeSocialLinks as $socialIconID) {
+                            $socialIcon = SocialIcon::where('id', $socialIconID)->first();
+                            $socialIcon->clearMediaCollection(SocialLink::SOCIAL_ICON);
+                            $socialIcon->delete();
+                        }
+                        foreach ($input['social_links'] as $key => $link) {
+                            $socialIconId = $input['social_link_id'][$key];
+                            if (isset($input['social_links_image'][$key])) {
+                                if (!empty($socialIconId)) {
+                                    $socialIcon = SocialIcon::where('id', $socialIconId)->first();
+                                    $socialIcon->clearMediaCollection(SocialLink::SOCIAL_ICON);
+                                    $socialIcon->addMedia($input['social_links_image'][$key])
+                                        ->toMediaCollection(SocialLink::SOCIAL_ICON, config('app.media_disc'));
+                                } else {
+                                    $socialIcon = SocialIcon::create([
+                                        'link'           => $link,
+                                        'social_link_id' => $socialLink->id,
+                                    ]);
+
+                                    $socialIcon->addMedia($input['social_links_image'][$key])
+                                        ->toMediaCollection(SocialLink::SOCIAL_ICON, config('app.media_disc'));
+                                }
+                            }
+                            $socialIcon = SocialIcon::where('id', $socialIconId)->first();
+                            if (!empty($socialIconId)) {
+                                $socialIcon->update([
+                                    'link' => $input['social_links'][$key],
+                                ]);
+                            }
+                        }
+                    } else {
+                        if (isset($input['social_links'])) {
+                            $socialLink = SocialLink::whereVcardId($vcard->id)->first();
+                            foreach ($input['social_links'] as $key => $link) {
+
+                                $socialIcon = SocialIcon::create([
+                                    'link'           => $link,
+                                    'social_link_id' => $socialLink->id,
+                                ]);
+
+                                $socialIcon->addMedia($input['social_links_image'][$key])
+                                    ->toMediaCollection(SocialLink::SOCIAL_ICON, config('app.media_disc'));
+                            }
+                        }
+
+                    }
+                } else {
+                    $socialIcons = SocialIcon::where('social_link_id', $socialLink->id)->get();
+
+                    foreach ($socialIcons as $socialIcon) {
+                        $socialIcon->clearMediaCollection(SocialLink::SOCIAL_ICON);
+                        $socialIcon->delete();
+                    }
+                }
+                $socialLink->update($input);
+            }
+            if (isset($input['profile_img']) && !empty($input['profile_img'])) {
                 $vcard->clearMediaCollection(Vcard::PROFILE_PATH);
                 $vcard->addMedia($input['profile_img'])->toMediaCollection(Vcard::PROFILE_PATH,
                     config('app.media_disc'));
             }
-            if (isset($input['cover_img']) && ! empty($input['cover_img'])) {
+
+            if (isset($input['cover_img']) && !empty($input['cover_img'])) {
                 $vcard->clearMediaCollection(Vcard::COVER_PATH);
                 $vcard->addMedia($input['cover_img'])->toMediaCollection(Vcard::COVER_PATH, config('app.media_disc'));
             }
 
-            if (isset($input['privacy_policy']) && ! empty($input['privacy_policy'])) {
+            if (isset($input['privacy_policy']) && !empty($input['privacy_policy'])) {
                 $privacyPolicy = PrivacyPolicy::where('vcard_id', $vcard->id)->first();
                 if ($privacyPolicy) {
                     $privacyPolicy->update($input);
                 } else {
                     PrivacyPolicy::create([
-                        'vcard_id' => $vcard->id,
+                        'vcard_id'       => $vcard->id,
                         'privacy_policy' => $input['privacy_policy'],
                     ]);
                 }
             }
 
-            if (isset($input['term_condition']) && ! empty($input['term_condition'])) {
+            if (isset($input['term_condition']) && !empty($input['term_condition'])) {
                 $termCondition = TermCondition::where('vcard_id', $vcard->id)->first();
                 if ($termCondition) {
                     $termCondition->update($input);
                 } else {
                     TermCondition::create([
-                        'vcard_id' => $vcard->id,
+                        'vcard_id'       => $vcard->id,
                         'term_condition' => $input['term_condition'],
                     ]);
                 }
@@ -248,7 +321,7 @@ class VcardRepository extends BaseRepository
             DB::commit();
 
             return $vcard;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             throw new UnprocessableEntityHttpException($e->getMessage());
@@ -258,13 +331,14 @@ class VcardRepository extends BaseRepository
     /**
      * @return bool
      */
-    public function checkTotalVcard(): bool
+    public
+    function checkTotalVcard(): bool
     {
         $makeVcard = false;
         $subscription = Subscription::where('tenant_id', getLogInTenantId())->where('status',
             Subscription::ACTIVE)->first();
 
-        if (! empty($subscription)) {
+        if (!empty($subscription)) {
             $totalCards = Vcard::whereTenantId(getLogInTenantId())->count();
             $makeVcard = $subscription->no_of_vcards > $totalCards;
         }
@@ -278,17 +352,21 @@ class VcardRepository extends BaseRepository
      * @param $vcard
      * @return bool
      */
-    public function saveSlots($input, $day, $vcard)
-    {
+    public
+    function saveSlots(
+        $input,
+        $day,
+        $vcard
+    ) {
         $startTimeArr = $input['startTimes'][$day] ?? [];
         $endTimeArr = $input['endTimes'][$day] ?? [];
         if (count($startTimeArr) != 0 && count($endTimeArr) != 0) {
             foreach (array_unique($startTimeArr) as $key => $startTime) {
                 Appointment::create([
-                    'vcard_id' => $vcard->id,
+                    'vcard_id'    => $vcard->id,
                     'day_of_week' => $day,
-                    'start_time' => $startTime,
-                    'end_time' => $endTimeArr[$key],
+                    'start_time'  => $startTime,
+                    'end_time'    => $endTimeArr[$key],
                 ]);
             }
         }
@@ -301,8 +379,11 @@ class VcardRepository extends BaseRepository
      * @param $vcard
      * @return array
      */
-    public function analyticsData($input, $vcard): array
-    {
+    public
+    function analyticsData(
+        $input,
+        $vcard
+    ): array {
         $analytics = Analytic::where('vcard_id', $vcard->id)->get();
         if ($analytics->count() > 0) {
             $DataCount = $analytics->count();
@@ -375,8 +456,10 @@ class VcardRepository extends BaseRepository
      * @param $input
      * @return array
      */
-    public function chartData($input): array
-    {
+    public
+    function chartData(
+        $input
+    ): array {
         $startDate = isset($input['start_date']) ? Carbon::parse($input['start_date']) : '';
         $endDate = isset($input['end_date']) ? Carbon::parse($input['end_date']) : '';
         $data = [];
@@ -398,8 +481,10 @@ class VcardRepository extends BaseRepository
         return $data;
     }
 
-    public function dashboardChartData($input)
-    {
+    public
+    function dashboardChartData(
+        $input
+    ) {
         $startDate = isset($input['start_date']) ? Carbon::parse($input['start_date']) : '';
         $endDate = isset($input['end_date']) ? Carbon::parse($input['end_date']) : '';
         $data = [];
@@ -449,8 +534,14 @@ class VcardRepository extends BaseRepository
         return $data;
     }
 
-    public function getData($vcard, $startDate, $endDate, $color, $visitor = null)
-    {
+    public
+    function getData(
+        $vcard,
+        $startDate,
+        $endDate,
+        $color,
+        $visitor = null
+    ) {
         $period = CarbonPeriod::create($startDate, $endDate);
         $data = [];
         $data['backgroundColor'] = $color.')';
@@ -463,8 +554,12 @@ class VcardRepository extends BaseRepository
         return $data;
     }
 
-    public function getVisitor($period, $vcardId, $visitor)
-    {
+    public
+    function getVisitor(
+        $period,
+        $vcardId,
+        $visitor
+    ) {
         $data = [];
         foreach ($period as $date) {
             try {
@@ -492,8 +587,10 @@ class VcardRepository extends BaseRepository
     /**
      * @param $vcard
      */
-    public function getDuplicateVcard($vcard)
-    {
+    public
+    function getDuplicateVcard(
+        $vcard
+    ) {
         $newVcard = $vcard->replicate();
         $baseAlias = preg_replace('/[0-9]+/', '', $newVcard->url_alias);
         $matchAlias = Vcard::where('url_alias', 'LIKE', '%'.$newVcard->url_alias.'%')->get();

@@ -71,81 +71,100 @@
 					{{ Form::label('affiliation_amount', __('messages.setting.affiliation_amount').':', ['class' => 'form-label required']) }}
 					{{ Form::text('affiliation_amount', $setting['affiliation_amount'], ['class' => 'form-control', 'id' => 'affiliationAmount','placeholder'=> __('messages.setting.affiliation_amount')]) }}
 				</div>
-
-				<div class="col-md-3 col-lg-3 col-sm-6 col-12">
-					<div class="form-group mb-3">
-						{{ Form::label('is_front_page', __('messages.setting.front_page_enable').':', ['class' => 'form-label']) }}
-						<label class="form-check form-switch form-check-solid form-switch-sm d-flex cursor-pointer">
-							<input type="checkbox" name="is_front_page" class="form-check-input"
-							       value="1" {{ $setting['is_front_page'] == '1' ? 'checked' : '' }}>
-							<span class="custom-switch-indicator"></span>
-						</label>
-					</div>
+		<div class="row">
+			<div class="col-lg-6">
+				<div class="row">
+						<div class=" col-sm-6 col-12">
+							<div class="form-group mb-3">
+								{{ Form::label('is_front_page', __('messages.setting.front_page_enable').':', ['class' => 'form-label']) }}
+								<label class="form-check form-switch form-check-solid form-switch-sm d-flex cursor-pointer">
+									<input type="checkbox" name="is_front_page" class="form-check-input"
+									       value="1" {{ $setting['is_front_page'] == '1' ? 'checked' : '' }}>
+									<span class="custom-switch-indicator"></span>
+								</label>
+							</div>
+						</div>
+						<div class="col-sm-6 col-12">
+							<div class="form-group mb-3">
+								{{ Form::label('is_cookie_banner', __('messages.common.cookie_banner_enabled').':', ['class' => 'form-label']) }}
+								<label class="form-check form-switch form-check-solid form-switch-sm d-flex cursor-pointer">
+									<input type="checkbox" name="is_cookie_banner" class="form-check-input"
+									       value="1" {{ $setting['is_cookie_banner'] == '1' ? 'checked' : '' }}>
+									<span class="custom-switch-indicator"></span>
+								</label>
+							</div>
+						</div>
+						<div class=" col-12">
+							<div class="form-group mb-3">
+								{{ Form::label('currency_after_amount', __('messages.common.currency_position').':', ['class' => 'form-label mb-3']) }}
+								<label class="form-check form-switch form-switch-sm cursor-pointer">
+									<input type="checkbox" name="currency_after_amount" class="form-check-input" id="currencyAfterAmount"
+									       value="1" {{ $setting['currency_after_amount'] == '1' ? 'checked' : '' }}>
+									<span class="form-check-label text-gray-600"
+									      for="currencyAfterAmount">{{ __('messages.common.show_currency_behind') }}</span>&nbsp;&nbsp;
+								</label>
+							</div>
+						</div>
 				</div>
-				<div class="col-md-3 col-lg-3 col-sm-6 col-12">
-					<div class="form-group mb-3">
-						{{ Form::label('is_cookie_banner', __('messages.common.cookie_banner_enabled').':', ['class' => 'form-label']) }}
-						<label class="form-check form-switch form-check-solid form-switch-sm d-flex cursor-pointer">
-							<input type="checkbox" name="is_cookie_banner" class="form-check-input"
-							       value="1" {{ $setting['is_cookie_banner'] == '1' ? 'checked' : '' }}>
-							<span class="custom-switch-indicator"></span>
-						</label>
-					</div>
-				</div>
-				<div class="form-group col-lg-3 col-md-3 col-sm-6 mb-3">
-					<div class="mb-3" io-image-input="true">
-						<label for="appLogoPreview"
-						       class="form-label required">{{ __('messages.setting.app_logo').':'}}</label>
-						<span data-bs-toggle="tooltip"
-						      data-placement="top"
-						      data-bs-original-title="{{__('messages.tooltip.app_logo')}}">
-                                <i class="fas fa-question-circle ml-1 mt-1 general-question-mark"></i>
-                        </span>
-						<div class="d-block">
-							<div class="image-picker">
-								<div class="image previewImage" id="appLogoPreview"
-								     style="background-image: url('{{ isset($setting['app_logo']) ? $setting['app_logo'] : asset('assets/images/infyom-logo.png') }}')">
+			</div>				
+			<div class="col-lg-6">
+				<div class="row">
+					<div class="form-group col-sm-6 mb-3">
+						<div class="mb-3" io-image-input="true">
+							<label for="appLogoPreview"
+							       class="form-label required">{{ __('messages.setting.app_logo').':'}}</label>
+							<span data-bs-toggle="tooltip"
+							      data-placement="top"
+							      data-bs-original-title="{{__('messages.tooltip.app_logo')}}">
+		                            <i class="fas fa-question-circle ml-1 mt-1 general-question-mark"></i>
+		                    </span>
+							<div class="d-block">
+								<div class="image-picker">
+									<div class="image previewImage" id="appLogoPreview"
+									     style="background-image: url('{{ isset($setting['app_logo']) ? $setting['app_logo'] : asset('assets/images/infyom-logo.png') }}')">
+									</div>
+									<span class="picker-edit rounded-circle text-gray-500 fs-small" data-bs-toggle="tooltip"
+									      data-placement="top"
+									      data-bs-original-title="{{__('messages.tooltip.change_app_logo')}}">
+		                <label>
+		                    <i class="fa-solid fa-pen" id="profileImageIcon"></i>
+		                    <input type="file" id="appLogo" name="app_logo" class="image-upload d-none" accept="image/*"/>
+		                </label>
+		            </span>
 								</div>
-								<span class="picker-edit rounded-circle text-gray-500 fs-small" data-bs-toggle="tooltip"
-								      data-placement="top"
-								      data-bs-original-title="{{__('messages.tooltip.change_app_logo')}}">
-                    <label>
-                        <i class="fa-solid fa-pen" id="profileImageIcon"></i>
-                        <input type="file" id="appLogo" name="app_logo" class="image-upload d-none" accept="image/*"/>
-                    </label>
-                </span>
 							</div>
 						</div>
 					</div>
-				</div>
-
-				<div class="form-group col-lg-3 col-md-3 col-sm-6 mb-3">
-					<div class="mb-3" io-image-input="true">
-						<label for="faviconPreview"
-						       class="form-label required"> {{__('messages.setting.favicon'). ':'}}</label>
-						<span data-bs-toggle="tooltip"
-						      data-placement="top"
-						      data-bs-original-title="{{__('messages.tooltip.favicon_logo')}}">
-                                <i class="fas fa-question-circle ml-1 mt-1 general-question-mark"></i>
-                        </span>
-						<div class="d-block">
-							<div class="image-picker">
-								<div class="image previewImage" id="faviconPreview"
-								     style="background-image: url('{{ isset($setting['favicon']) ? $setting['favicon'] : asset('web/media/logos/favicon-infyom.png') }}');">
-								</div>
-								<span class="picker-edit rounded-circle text-gray-500 fs-small" data-bs-toggle="tooltip"
-								      data-placement="top"
-								      data-bs-original-title="{{__('messages.tooltip.change_favicon_logo')}}">
-                    <label>
-                        <i class="fa-solid fa-pen" id="profileImageIcon"></i>
-                        <input type="file" id="favicon" name="favicon" class="image-upload d-none" accept="image/*"/>
-                    </label>
-                </span>
+					<div class="form-group col-sm-6 mb-3">
+				<div class="mb-3" io-image-input="true">
+					<label for="faviconPreview"
+					       class="form-label required"> {{__('messages.setting.favicon'). ':'}}</label>
+					<span data-bs-toggle="tooltip"
+					      data-placement="top"
+					      data-bs-original-title="{{__('messages.tooltip.favicon_logo')}}">
+		                    <i class="fas fa-question-circle ml-1 mt-1 general-question-mark"></i>
+		            </span>
+					<div class="d-block">
+						<div class="image-picker">
+							<div class="image previewImage" id="faviconPreview"
+							     style="background-image: url('{{ isset($setting['favicon']) ? $setting['favicon'] : asset('web/media/logos/favicon-infyom.png') }}');">
 							</div>
+							<span class="picker-edit rounded-circle text-gray-500 fs-small" data-bs-toggle="tooltip"
+							      data-placement="top"
+							      data-bs-original-title="{{__('messages.tooltip.change_favicon_logo')}}">
+		        <label>
+		            <i class="fa-solid fa-pen" id="profileImageIcon"></i>
+		            <input type="file" id="favicon" name="favicon" class="image-upload d-none" accept="image/*"/>
+		        </label>
+		    </span>
 						</div>
 					</div>
 				</div>
 			</div>
+				</div>
+			</div>
+		</div>
+	</div>
 			<div class="clearfix"></div>
 			<div class="card-header px-0">
 				<div class="d-flex align-items-center justify-content-center">

@@ -8,6 +8,7 @@ use App\Models\FrontTestimonial;
 use App\Models\Gallery;
 use App\Models\Product;
 use App\Models\Setting;
+use App\Models\SocialLink;
 use App\Models\Subscription;
 use App\Models\Template;
 use App\Models\Testimonial;
@@ -58,6 +59,8 @@ class CustomPathGenerator implements PathGenerator
                 return str_replace('{PARENT_DIR}', VcardBlog::BLOG_PATH, $path);
             case Subscription::ATTACHMENT_PATH:
                 return str_replace('{PARENT_DIR}', Subscription::ATTACHMENT_PATH, $path);
+            case SocialLink::SOCIAL_ICON:
+                return str_replace('{PARENT_DIR}', SocialLink::SOCIAL_ICON, $path);
             case Subscription::NOTES_PATH:
                 return str_replace('{PARENT_DIR}', Subscription::NOTES_PATH, $path);
             case 'default':

@@ -16,11 +16,11 @@
 </x-livewire-tables::bs5.table.cell>
 
 <x-livewire-tables::bs5.table.cell class="text-end">
-    {{ !empty($row->plan->currency) ? $row->plan->currency->currency_icon : '' }} {{ number_format($row->plan_amount)}}
+	{{ currencyFormat($row->plan_amount,0,$row->plan->currency->currency_code) }}
 </x-livewire-tables::bs5.table.cell>
 
 <x-livewire-tables::bs5.table.cell class="text-end">
-    {{ !empty($row->plan->currency) ? $row->plan->currency->currency_icon : '' }} {{number_format($row->payable_amount) ?: 0 }}
+	{{ currencyFormat($row->payable_amount,0,$row->plan->currency->currency_code) }}
 </x-livewire-tables::bs5.table.cell>
 
 <x-livewire-tables::bs5.table.cell class="text-center">
@@ -51,7 +51,7 @@
                    data-tenant="{{$row->tenant_id}}">
         </div>
     @else
-        <span class="badge bg-light-success">Received</span>
+        <span class="badge bg-light-success">Approved</span>
     @endif
 
 </x-livewire-tables::bs5.table.cell>

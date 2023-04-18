@@ -6,6 +6,7 @@ use App\Http\Controllers\AffiliateUserController;
 use App\Http\Controllers\AffiliationWithdrawController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\CouponCodeController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmailSubscriptionController;
@@ -214,7 +215,7 @@ Route::middleware('auth', 'valid.user', 'xss')->group(function () {
         Route::get('/subscribedPlans', [SubscriptionController::class, 'userSubscribedPlan'])->name('subscription.user.plan');
         Route::get('/subscribedPlan/{id}/edit', [SubscriptionController::class, 'userSubscribedPlanEdit'])->name('subscription.user.plan.edit');
         Route::get('/subscribedPlan/{id}/update', [SubscriptionController::class, 'userSubscribedPlanUpdate'])->name('subscription.user.plan.update');
-        Route::get('logs', [LogViewerController::class, 'index']);
+//        Route::get('logs', [LogViewerController::class, 'index']);
         //dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('sadmin.dashboard');
         //user
@@ -303,6 +304,16 @@ Route::middleware('auth', 'valid.user', 'xss')->group(function () {
         Route::post('/setting-payment-guide', [
             SettingController::class, 'updateManualPaymentGuide',
         ])->name('setting.ManualPaymentGuides.update')->withoutMiddleware([XSS::class]);
+
+        Route::get('/coupon-codes', [CouponCodeController::class, 'index'])->name('coupon-codes.index');
+        Route::post('/coupon-codes', [CouponCodeController::class, 'store'])->name('coupon-codes.store');
+        Route::get('/coupon-codes/{couponCodeId}', [CouponCodeController::class, 'edit'])->name('coupon-codes.edit');
+        Route::put('/coupon-codes/{couponCodeId}',
+            [CouponCodeController::class, 'update'])->name('coupon-codes.update');
+        Route::delete('/coupon-codes/{couponCodeId}',
+            [CouponCodeController::class, 'destroy'])->name('coupon-codes.destroy');
+        Route::post('/change-coupon-codes-status/{couponCodeId}',
+            [CouponCodeController::class, 'changeCouponCodeStatus'])->name('coupon-codes.change-status');
     });
 
     //Show Withdrawal data
@@ -317,6 +328,8 @@ Route::prefix('admin')->middleware('subscription', 'auth', 'valid.user', 'role:a
     Route::delete('/vcards/{vcard}/destroy',
         [VcardController::class, 'destroy'])->middleware('checkVcardEdit')->name('vcards.destroy');
     Route::post('/vcards/duplicate/{id}', [VcardController::class, 'duplicateVcard'])->name('duplicate.vcard');
+    Route::get('/get-url-alias',[VcardController::class,'getUniqueUrlAlias'])->name('vcards.get-unique-url-alias');
+    Route::get('/check-url-alias/{urlAlias}',[VcardController::class,'checkUniqueUrlAlias'])->name('vcards.check-unique-url-alias');
 });
 
 Route::get('/v')->name('vcard.defaultIndex');
@@ -353,6 +366,9 @@ Route::get('user-paypal-payment-success', [PaypalController::class, 'userSuccess
 Route::get('user-paypal-payment-failed', [PaypalController::class, 'userFailed'])->name('user.paypal.failed');
 
 Route::get('paypal-payout', [PaypalPayoutController::class, 'payout'])->name('paypal.payout');
+
+Route::post('apply-coupon-code/{couponCode?}',
+    [CouponCodeController::class, 'applyCouponCode'])->name('apply-coupon-code');
 
 Route::middleware('auth', 'valid.user', 'role:super_admin', 'xss')->group(function () {
     Route::get('vcard1', function () {

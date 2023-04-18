@@ -118,23 +118,29 @@
 <li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0
     {{ !Request::is('sadmin/front-cms*', 'sadmin/email-subscription*', 'sadmin/features*',
     'sadmin/about-us*', 'sadmin/frontTestimonial*', 'sadmin/contactUs*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('sadmin/frontTestimonial*') ? 'active' : '' }}"
-       href="{{ route('frontTestimonials.index') }}">{{ __('messages.vcard.testimonials') }}</a>
+	<a class="nav-link p-0 {{ Request::is('sadmin/frontTestimonial*') ? 'active' : '' }}"
+	   href="{{ route('frontTestimonials.index') }}">{{ __('messages.vcard.testimonials') }}</a>
 </li>
 
 <li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0
     {{ !Request::is('sadmin/front-cms*', 'sadmin/email-subscription*', 'sadmin/features*',
     'sadmin/about-us*', 'sadmin/frontTestimonial*', 'sadmin/contactUs*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('sadmin/contactUs*') ? 'active' : '' }}"
-       href="{{ route('contact.contactus') }}">{{ __('messages.contact_us.contact_us') }}</a>
+	<a class="nav-link p-0 {{ Request::is('sadmin/contactUs*') ? 'active' : '' }}"
+	   href="{{ route('contact.contactus') }}">{{ __('messages.contact_us.contact_us') }}</a>
+</li>
+
+<li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0
+    {{ !Request::is('sadmin/coupon-codes*') ? 'd-none' : '' }}">
+	<a class="nav-link p-0 {{ Request::is('sadmin/coupon-codes*') ? 'active' : '' }}"
+	   href="{{ route('coupon-codes.index') }}">{{ __('messages.coupon_code.coupon_codes') }}</a>
 </li>
 @endrole
 
 @role(App\Models\Role::ROLE_ADMIN)
 
 <li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/dashboard*') ? 'd-none' : '' }}">
-    <a class="nav-link p-0 {{ Request::is('admin/dashboard*') ? 'active' : '' }}"
-       href="{{ route('admin.dashboard') }}">{{ __('messages.dashboard') }}</a>
+	<a class="nav-link p-0 {{ Request::is('admin/dashboard*') ? 'active' : '' }}"
+	   href="{{ route('admin.dashboard') }}">{{ __('messages.dashboard') }}</a>
 </li>
 
 <li class="nav-item position-relative mx-xl-3 mb-3 mb-xl-0 {{ !Request::is('admin/vcards*') ? 'd-none' : '' }}">

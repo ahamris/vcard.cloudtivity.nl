@@ -11,7 +11,7 @@
     {{-- Body --}}
     <div>
         <h2>{{ __('messages.mail.hello') }} <b>{{ $toName }}</b></h2>
-        <p><b>Your Withdrawal request of amount {{ currencyFormat($amount) }} is Approved.</b></p>
+        <p><b>Your Withdrawal request of amount {{ currencyFormat($amount,2) }} is Approved.</b></p>
         <p>{{ getAppName() }}</p>
     </div>
 

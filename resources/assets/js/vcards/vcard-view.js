@@ -266,7 +266,7 @@ listenClick('.copy-referral-btn', function () {
 })
 
 $(window).resize(function () {
-    if ($(window).width() < 992) {
+    if ($(window).width() < 1025) {
         $('.vcard11-referral-text').addClass('d-none')
         $('.vcard11-referral-icon').removeClass('me-2')
     } else {

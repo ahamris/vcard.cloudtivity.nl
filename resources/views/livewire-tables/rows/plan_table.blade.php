@@ -9,7 +9,7 @@
 
 <x-livewire-tables::bs5.table.cell class="text-end">
 {{--    {{ $row->currency->currency_icon . ' ' . number_format($row->price) }}--}}
-    {{ currencyFormat($row->price, $row->currency->currency_code) }}
+    {{ currencyFormat($row->price,0,$row->currency->currency_code) }}
 </x-livewire-tables::bs5.table.cell>
 
 <x-livewire-tables::bs5.table.cell class="text-center">

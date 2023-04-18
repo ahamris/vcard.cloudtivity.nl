@@ -787,7 +787,10 @@ body {
     }
 
 }
-
+.vcard1-sticky-btn {
+    background: $primary;
+    color:white;
+}
 //Download Button
 .vcard-one-btn {
     padding: 10px 20px;
@@ -1071,4 +1074,14 @@ button{
 }
 .vcard-one__blog .blog-slider .slick-dots {
     bottom: 4px;
+}
+
+.lb-data .lb-number {
+    display: none !important;
+}
+
+.social-icons {
+    img {
+        border-radius: 50% !important;
+    }
 }

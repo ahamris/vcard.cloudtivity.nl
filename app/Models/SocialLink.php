@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * App\Models\SocialLink
@@ -49,9 +53,9 @@ use Illuminate\Support\Carbon;
  * @method static Builder|SocialLink whereYoutube($value)
  * @mixin Eloquent
  */
-class SocialLink extends Model
+class SocialLink extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
     protected $table = 'social_links';
 
@@ -88,8 +92,28 @@ class SocialLink extends Model
         'tiktok'    => 'string',
     ];
 
+    protected $appends = ['social_icon'];
+
+    const SOCIAL_ICON = 'icon';
+
     public function vcard(): BelongsTo
     {
         return $this->belongsTo(Vcard::class, 'vcard_id');
+    }
+
+    public function getSocialIconAttribute()
+    {
+        /** @var Media $media */
+        $media = $this->getMedia(self::SOCIAL_ICON)->first();
+        if (! empty($media)) {
+            return $media->getFullUrl();
+        }
+
+        return asset('web/media/avatars/150-2.jpg');
+    }
+
+    public function icon()
+    {
+        return $this->hasMany(SocialIcon::class,'social_link_id');
     }
 }

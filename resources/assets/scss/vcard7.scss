@@ -15,6 +15,7 @@
         box-shadow:  unset !important;
     }
 }
+
 //color variable
 $primary: #313BAC;
 $white: #fff;
@@ -22,7 +23,10 @@ $dark: #010101;
 $bg-color: #EDF2F8;
 $yellow: #FFCA2C;
 $grey: #B8B8B8;
-
+.vcard7-sticky-btn {
+    background: $bg-color;
+    color:$dark;
+}
 .main-section {
     .main-bg {
         overflow: hidden;
@@ -968,3 +972,13 @@ button{
     margin-bottom:22px !important;
 }
 
+.lb-data .lb-number {
+    display: none !important;
+}
+
+.social-icons {
+    img {
+        width: 36px;
+        height: 36px;
+    }
+}

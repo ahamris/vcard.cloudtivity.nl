@@ -48,15 +48,22 @@ class SettingRepository extends BaseRepository
         }
 
         $inputArr = Arr::except($input, ['_token']);
-        if (!isset($inputArr['is_front_page']) && !isset($inputArr['front_cms_form'])) {
-            $setting = Setting::where('key', 'is_front_page')->first();
-            $setting->update(['value' => '0']);
-        }
-        if (!isset($inputArr['is_cookie_banner']) && !isset($inputArr['front_cms_form'])) {
-            $setting = Setting::where('key', 'is_cookie_banner')->first();
-            $setting->update(['value' => '0']);
-        }
         if (!isset($input['front_cms_form'])) {
+
+            if (!isset($inputArr['is_front_page'])) {
+                $setting = Setting::where('key', 'is_front_page')->first();
+                $setting->update(['value' => '0']);
+            }
+            if (!isset($inputArr['is_cookie_banner'])) {
+                $setting = Setting::where('key', 'is_cookie_banner')->first();
+                $setting->update(['value' => '0']);
+            }
+            
+            if (!isset($inputArr['currency_after_amount'])) {
+                $setting = Setting::where('key', 'currency_after_amount')->first();
+                $setting->update(['value' => '0']);
+            }
+            
             $paymentMethodKeys = [
                 'stripe_key', 'stripe_secret', 'paypal_client_id', 'paypal_secret', 'razorpay_key', 'razorpay_secret',
             ];
@@ -85,8 +92,6 @@ class SettingRepository extends BaseRepository
                 $setting->update(['value' => $media->getFullUrl()]);
                 continue;
             }
-
-
             $setting->update(['value' => $value]);
         }
 

@@ -19,7 +19,7 @@
 
 <x-livewire-tables::table.cell>
     <span class="badge bg-success me-2">
-       {{ currencyFormat($row->amount) }}
+       {{ currencyFormat($row->amount,2) }}
     </span>
 </x-livewire-tables::table.cell>
 
@@ -46,7 +46,7 @@
 				{{ __('messages.affiliation.approval_status') }}
 			</button>
 			<ul class="dropdown-menu withdraw-approval-dropdown" aria-labelledby="dropdownMenuLink">
-				<li><a class="dropdown-item" href="#" data-amount="{{ currencyFormat($row->amount) }}"
+				<li><a class="dropdown-item" href="#" data-amount="{{ currencyFormat($row->amount,2) }}"
 				       data-id="{{ $row->id }}" id="approveWithdrawalBtn">{{ __('messages.affiliation.approve') }}</a>
 				</li>
 				<li><a class="dropdown-item" href="#" data-id="{{ $row->id }}"

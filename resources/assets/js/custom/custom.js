@@ -595,6 +595,8 @@ window.downloadVcard = function (fileName, id) {
         success: function (result) {
             if (result.success) {
                 let vcard = result.data
+                let url = vcard.social_link.website ?? appUrl + '/' +
+                    vcard.url_alias
                 let vcardString = 'BEGIN:VCARD\n' +
                     'VERSION:3.0\n'
 
@@ -630,8 +632,7 @@ window.downloadVcard = function (fileName, id) {
                         vcard.region_code + ' ' + vcard.alternative_phone + '\n'
                 }
                 if (!isEmpty(vcard.url_alias)) {
-                    vcardString += 'URL;CHARSET=UTF-8:' + appUrl + '/' +
-                        vcard.url_alias + '\n'
+                    vcardString += 'URL;CHARSET=UTF-8:' + url + '\n'
                 }
                 if (!isEmpty(vcard.description)) {
                     vcardString += 'NOTE;CHARSET=UTF-8:' + vcard.description +
@@ -660,4 +661,17 @@ window.downloadVcard = function (fileName, id) {
             displayError('#enquiryError', result.responseJSON.message)
         },
     })
+}
+
+window.allowAlphaNumeric = function (input) {
+    input.value = input.value.toUpperCase().split(/[^a-zA-Z0-9_-]/).join('');
+}
+
+window.getCurrencyAmount = (amount,currencyCode) => {
+    var formattedAmount = currencyCode + '' + amount;
+    if(currencyAfterAmount == true){
+        formattedAmount = amount + '' + currencyCode;
+    }
+    
+    return formattedAmount
 }

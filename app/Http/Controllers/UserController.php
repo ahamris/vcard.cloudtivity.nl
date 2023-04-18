@@ -14,6 +14,8 @@ use App\Models\MultiTenant;
 use App\Models\Subscription;
 use App\Models\User;
 use App\Models\Vcard;
+use App\Models\Withdrawal;
+use App\Models\WithdrawalTransaction;
 use App\Repositories\UserRepository;
 use Carbon\Carbon;
 use Exception;
@@ -158,6 +160,19 @@ class UserController extends AppBaseController
     public function destroy(User $user)
     {
         if ($user->getRoleNames()[0] == 'admin') {
+            $affiliateUsers = AffiliateUser::whereUserId($user->id)->orWhere('affiliated_by', $user->id)->get();
+            $withdrawals = Withdrawal::whereUserId($user->id)->get();
+            foreach ($withdrawals as $withdrawal) {
+                $withdrawalTransactions = WithdrawalTransaction::where('withdrawal_id', $withdrawal->id)->get();
+                foreach ($withdrawalTransactions as $transaction) {
+                    $transaction->delete();
+                }
+
+                $withdrawal->delete();
+            }
+            foreach ($affiliateUsers as $affiliateUser) {
+                $affiliateUser->delete();
+            }
             Vcard::where('tenant_id', $user->tenant_id)->delete();
             MultiTenant::where('id', $user->tenant_id)->delete();
             $user->delete();

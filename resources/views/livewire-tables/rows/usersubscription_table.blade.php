@@ -13,8 +13,7 @@
     <span class="">{{$row->plan->name}}</span>
 </x-livewire-tables::bs5.table.cell>
 <x-livewire-tables::bs5.table.cell class="text-end">
-    {{--    <span class="">{{$row->plan->currency->currency_icon . '  ' .number_format($row->plan_amount)}}</span>--}}
-    <span class="">{{ currencyFormat($row->plan_amount, $row->plan->currency->currency_code) }}</span>
+    <span class="">{{ currencyFormat($row->plan_amount,0, $row->plan->currency->currency_code) }}</span>
 </x-livewire-tables::bs5.table.cell>
 <x-livewire-tables::bs5.table.cell class="text-center">
     <span class="">{{Carbon\Carbon::parse($row->starts_at)->isoFormat('Do MMM, YYYY')}}</span>

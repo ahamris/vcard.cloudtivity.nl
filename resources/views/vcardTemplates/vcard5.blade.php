@@ -34,7 +34,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/plugins.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/custom-vcard.css') }}">
-
+	<link rel="stylesheet" href="{{ asset('assets/css/lightbox.css') }}">
 
 	{{--google font--}}
 	<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -203,11 +203,30 @@
                     </div>
                 </div>
             </div>
-
+	        {{--Qr code--}}
+	        <div class="main-Qr-section mb-13 ">
+                <div class="qr-header-title">
+                    <h4 class="mb-5 text-center">{{ __('messages.vcard.qr_code') }}</h4>
+		        </div>
+		        <div class="row">
+			        <div class="col-lg-6">
+				        <div class="text-center mb-4">
+					        {!! QrCode::size(130)->format('svg')->generate(Request::url()); !!}
+				        </div>
+			        </div>
+			        <div class="col-lg-6">
+				        <div class="text-center">
+					        <img src="{{$vcard->profile_url}}" width="125px"
+					             class="qr-logo rounded-circle"/>
+					        
+				        </div>
+			        </div>
+		        </div>
+	        </div>
             {{--Our service--}}
             @if(checkFeature('services') && $vcard->services->count())
                 <div class="container">
-                    <div class="main-our-service mb-4">
+                    <div class="main-our-service mb-10 mt-0">
                         <div class="service-header-title">
                             <h4 class="mb-4 text-center mb-5">{{ __('messages.vcard.our_service') }}</h4>
                         </div>
@@ -250,7 +269,7 @@
                                 <div class="gallery-profile">
 
                                     @if($file->type == App\Models\Gallery::TYPE_IMAGE)
-                                        <img src="{{$file->gallery_image}}" alt="profile" class="w-100"/>
+		                                <a href="{{$file->gallery_image}}" data-lightbox="gallery-images"><img src="{{$file->gallery_image}}" alt="profile" class="w-100"/></a>
                                     @elseif($file->type == App\Models\Gallery::TYPE_FILE)
                                         <a id="file_url" href="{{$file->gallery_image}}"
                                            class="gallery-link gallery-file-link" target="_blank">
@@ -303,7 +322,7 @@
             {{--Product--}}
             @if(checkFeature('products') && $vcard->products->count())
                 <div class="container">
-                    <div class="main-product pb-4">
+                    <div class="main-product pb-15">
                         <div class="product-header-title">
                             <h4 class="mb-4">{{ __('messages.plan.products') }}</h4>
                         </div>
@@ -343,7 +362,7 @@
             {{--testimonial--}}
             @if(checkFeature('testimonials') && $vcard->testimonials->count())
                 <div class="container">
-                    <div class="main-testimonial pb-4">
+                    <div class="main-testimonial pb-4 mb-10">
                         <div class="testimonial-header-title">
                             <h4 class="mb-4">{{ __('messages.plan.testimonials') }}</h4>
                         </div>
@@ -402,29 +421,6 @@
                     </div>
                 </div>
             @endif
-            {{--Qr code--}}
-            <div class="main-Qr-section mb-5">
-                <div class="qr-header-title">
-                    <h4 class="mb-5 text-center">{{ __('messages.vcard.qr_code') }}</h4>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="text-center mb-4">
-                            {!! QrCode::size(130)->format('svg')->generate(Request::url()); !!}
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="text-center">
-                            <img src="{{$vcard->profile_url}}" width="125px"
-                                 class="qr-logo rounded-circle"/>
-                            <div class="mt-4">
-                                <a class="btn btn-lg Qr-btn" id="qr-code-btn"
-                                   download="qr_code.png">{{ __('messages.vcard.download_my_qr_code') }}</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             {{--business-hour--}}
             @if($vcard->businessHours->count())
@@ -432,7 +428,7 @@
                     $todayWeekName = strtolower(\Carbon\Carbon::now()->rawFormat('D'))
                 @endphp
                 <div class="container">
-                    <div class="main-business mb-4">
+                    <div class="main-business mb-12">
                         <div class="business-heading">
                             <h4 class="mb-4">{{ __('messages.business.business_hours') }}</h4>
                         </div>
@@ -460,7 +456,7 @@
 
             {{--Appointment--}}
             @if(checkFeature('appointments') && $vcard->appointmentHours->count())
-                <div class="container py-3 mb-4 appointment-section">
+                <div class="container py-3 mb-10 mt-0 appointment-section">
                     <h4 class="appointment-heading mb-4 position-relative">{{__('messages.make_appointments')}}</h4>
                     <div class="appointment">
                         <div class="row d-flex align-items-center justify-content-center mb-3">
@@ -491,10 +487,10 @@
 
             {{--contact us--}}
             @php $currentSubs = $vcard->subscriptions()->where('status', \App\Models\Subscription::ACTIVE)->latest()->first() @endphp
-            @if($currentSubs && $currentSubs->plan->planFeature->enquiry_form)
-                <div class="container py-4">
+            @if($currentSubs && $currentSubs->plan->planFeature->enquiry_form && $vcard->enable_enquiry_form)
+                <div class="container py-4 pt-0">
                     <h4 class="contact-heading mb-4 text-center">{{ __('messages.contact_us.contact_us') }}</h4>
-                    <div class="main-contact">
+                    <div class="main-contact mb-10">
                         <form id="enquiryForm">
                             @csrf
                             <div class="row">
@@ -557,29 +553,9 @@
                     </div>
                 </div>
             @endif
-            <div class="d-sm-flex justify-content-center mt-5">
-                <button type="submit" class="vcard-five-btn mt-4 btn d-block btn text-white"
-                        onclick="downloadVcard('{{ $vcard->name }}.vcf',{{ $vcard->id }})"><i
-                            class="fas fa-download me-2"></i>{{ __('messages.vcard.download_vcard') }}
-                </button>
-                {{--share btn--}}
-                <button type="button" class="vcard5-share share-btn text-white d-block btn mt-4 ms-sm-3">
-                    <a class="text-white text-decoration-none">
-                        <i class="fas fa-share-alt me-2"></i>{{ __('messages.vcard.share') }}</a>
-                </button>
-            </div>
-            @if(!empty($userSetting['enable_affiliation']))
-                <div class='d-sm-flex justify-content-center mt-2 pb-5'>
-                    <button type="button" class="vcard-five-btn copy-referral-btn text-white d-block btn"
-                            data-id="{{ $vcard->user->affiliate_code }}">
-	                    <a class="text-white text-decoration-none">
-		                    <i class="text-white fa-regular fa-copy me-2"></i>{{ __('messages.vcard.copy_referral_link') }}
-                        </a>
-                    </button>
-                </div>
-            @endif
+
             @if($vcard->location_url && isset($url[5]))
-                <div class="m-2 ">
+                <div class="m-2 mb-10 mt-0">
                     <iframe width="100%" height="300px" src='https://maps.google.de/maps?q={{$url[5]}}/&output=embed'
                             frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
                             style="border-radius: 10px;"></iframe>
@@ -617,6 +593,18 @@
                     </div>
                 @endif
             </div>
+	        <div class="w-100 d-flex justify-content-center sticky-vcard-div">
+		        <div class="btn-group" role="group" aria-label="Basic example" >
+			        <button type="button" class="vcard-btn-group vcard5-sticky-btn rounded-0 px-2 ps-5 py-1" onclick="downloadVcard('{{ $vcard->name }}.vcf',{{ $vcard->id }})"><i class="fas fa-download fs-4"></i></button>
+			        <button type="button" class="vcard5-share vcard-btn-group vcard5-sticky-btn rounded-0 px-2 py-1"><i class="fas fa-share-alt fs-4"></i></button>
+			        @if(!empty($userSetting['enable_affiliation']))
+				        <button type="button" class="vcard-btn-group vcard5-sticky-btn rounded-0 px-2 py-1 copy-referral-btn" data-id="{{ $vcard->user->affiliate_code }}"><i class="fa-regular fa-copy fs-4"></i></button>
+			        @endif
+			        @if($vcard->enable_download_qr_code)
+			        <a type="button" class="vcard-btn-group vcard5-sticky-btn rounded-0 px-2 pe-5 py-2 text-white" id="qr-code-btn" download="qr_code.png"><i class="fa-solid fa-qrcode fs-4"></i></a>
+					@endif
+		        </div>
+	        </div>
         </div>
     </div>
     {{-- share modal code--}}
@@ -800,17 +788,15 @@
 </script>
 <script>
     const svg = document.getElementsByTagName('svg')[0];
-    const { x, y, width, height } = svg.viewBox.baseVal;
     const blob = new Blob([svg.outerHTML], { type: 'image/svg+xml' });
     const url = URL.createObjectURL(blob);
     const image = document.createElement('img');
     image.src = url;
     image.addEventListener('load', () => {
         const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = canvas.height = {{ $vcard->qr_code_download_size }};
         const context = canvas.getContext('2d');
-        context.drawImage(image, x, y, width, height);
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
         const link = document.getElementById('qr-code-btn');
         link.href = canvas.toDataURL();
         URL.revokeObjectURL(url);
@@ -821,6 +807,7 @@
 <script src="{{ mix('assets/js/custom/helpers.js') }}"></script>
 <script src="{{ mix('assets/js/custom/custom.js') }}"></script>
 <script src="{{ mix('assets/js/vcards/vcard-view.js') }}"></script>
+<script src="{{ mix('assets/js/lightbox.js') }}"></script>
 
 </body>
 </html>

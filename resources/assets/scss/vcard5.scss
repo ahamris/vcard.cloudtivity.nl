@@ -15,6 +15,7 @@
         box-shadow:  unset !important;
     }
 }
+
 //color variable
 $primary: #313BAC;
 $white: #fff;
@@ -22,7 +23,10 @@ $dark: #010101;
 $bg-color: #EDF2F8;
 $yellow: #FFCA2C;
 $grey: #B8B8B8;
-
+.vcard5-sticky-btn {
+    background: #6F34FE !important;
+    color:white;
+}
 body {
     font-family: 'Poppins', sans-serif;
 }
@@ -931,6 +935,10 @@ bottom: -32px !important;
 .main-section .main-bg .blog-section .blog-slider .slick-list{
     margin-bottom: 37px !important;
 }
-.main-section .main-bg .blog-section .blog-slider .slick-dots{
-bottom: -32px !important;
+.main-section .main-bg .blog-section .blog-slider .slick-dots {
+    bottom: -32px !important;
+}
+
+.lb-data .lb-number {
+    display: none !important;
 }

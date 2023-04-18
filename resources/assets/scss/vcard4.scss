@@ -26,6 +26,15 @@ $gradient: linear-gradient(126.11deg, #134E5E 0%, #71b280 100%);
 $yellow: #FFCA2C;
 $grey: #B8B8B8;
 
+
+
+.vcard4-btn-div {
+    background: $gradient !important;
+}
+.vcard4-sticky-btn {
+    background-color: transparent;
+    color:white;
+}
 body {
     background-color: #E5E5E5 !important;
 }
@@ -867,6 +876,18 @@ button{
 .vcard__blog .blog-slider .slick-list{
     margin-bottom:18px !important;
 }
-.vcard__blog .blog-slider .slick-dots{
+.vcard__blog .blog-slider .slick-dots {
     bottom: -35px !important;
+}
+
+.lb-data .lb-number {
+    display: none !important;
+}
+
+.social-icons {
+    img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50% !important;
+    }
 }

@@ -1,9 +1,10 @@
-import "flatpickr/dist/l10n";
+import 'flatpickr/dist/l10n'
+
 listenClick('#subscriptionPlanStatus', function () {
-    $(this).attr('disabled', true);
-    let planId = $(this).data('id');
-    let tenantId = $(this).data('tenant');
-    let updateStatus = route('subscription.status', planId);
+    $(this).attr('disabled', true)
+    let planId = $(this).data('id')
+    let tenantId = $(this).data('tenant')
+    let updateStatus = route('subscription.status', planId)
     $.ajax({
         type: 'get',
         url: updateStatus,
@@ -80,4 +81,38 @@ listenHiddenBsModal('#editSubscriptionModal', function (e) {
     $('#UnlimitedNote').text('')
 });
 
+listenClick('.subscribed-user-plan-view-btn', function (event) {
+    let id = $(event.currentTarget).attr('data-id')
+    let SubscriptionUrl = route('subscription.user.plan.edit', id)
+    $.ajax({
+        url: SubscriptionUrl,
+        type: 'GET',
+        data: {
+            'id': id,
+        },
+        success: function (result) {
+            let coupon = result.data.coupon_code_meta
+            let currency = result.data.plan.currency.currency_icon
+            $('#subscriptionUserName').text(result.data.tenant.user.full_name)
+            $('#subscriptionPlanName').text(result.data.plan.name)
+            $('#subscriptionPlanPrice').text(getCurrencyAmount(result.data.plan_amount,currency))
+            $('#subscriptionPayableAmount').text(getCurrencyAmount(result.data.payable_amount ?? 0,currency))
+            $('#subscriptionEndDate').
+                text(moment(result.data.ends_at).format('Do MMM Y'))
+            if (coupon) {
+                $('.coupon-data-div').removeClass('d-none')
+                $('#subscriptionCouponDiscount').
+                    text(currency + result.data.discount)
+                $('#subscriptionCouponName').
+                    text(getCurrencyAmount(coupon.couponCode))
+            } else {
+                $('.coupon-data-div').addClass('d-none')
+            }
+            $('#showSubscriptionModal').modal('show')
+        },
+        error: function (result) {
+            displayErrorMessage(result.responseJSON.message)
+        },
+    })
+})
 

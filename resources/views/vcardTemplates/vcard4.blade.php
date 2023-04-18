@@ -34,6 +34,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/plugins.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/custom-vcard.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/lightbox.css') }}">
 
 
 	@if(checkFeature('custom-fonts') && $vcard->font_family)
@@ -199,9 +200,23 @@
                 </div>
             </div>
         </div>
+	    {{--QR code--}}
+	    <div class="vcard__qr-code">
+		    <div class="px-4 pt-5 pb-4">
+			    <h4 class="vcard__heading text-center pb-10">{{ __('messages.vcard.qr_code') }}</h4>
+			    <div class="qr-code d-block mx-auto position-relative px-5 pt-5 pb-3">
+				    <img src="{{$vcard->profile_url}}"
+				         class="qr-code-profile d-block mx-auto position-absolute top-0 start-50 translate-middle"/>
+				    <div class="qr-code-image d-flex justify-content-center pt-7">
+					    {!! QrCode::size(130)->format('svg')->generate(Request::url()); !!}
+				    </div>
+			    </div>
+			    
+		    </div>
+	    </div>
         {{--our services--}}
         @if(checkFeature('services') && $vcard->services->count())
-            <div class="my-4 px-4 pb-2 position-relative overflow-hidden">
+            <div class="my-4 px-4 pb-2 position-relative overflow-hidden mb-10 mt-0">
                 <div class="line-shape position-absolute">
                     <span class="inner-circle position-absolute rounded-circle"></span>
                 </div>
@@ -233,9 +248,9 @@
 
         {{--gallery--}}
         @if(checkFeature('gallery') && $vcard->gallery->count())
-        <div class="pt-4 px-4">
-            <div class="vcard__gallery">
-                <h4 class="vcard__heading text-center pb-2">{{ __('messages.plan.gallery') }}</h4>
+            <div class="pt-4 px-4 mb-10 mt-0">
+                <div class="vcard__gallery">
+                    <h4 class="vcard__heading text-center pb-2">{{ __('messages.plan.gallery') }}</h4>
                 <div class="container mt-4 py-3">
                     <div class="row g-4 justify-content-center gallery-slider">
                         @foreach($vcard->gallery as $file)
@@ -247,7 +262,7 @@
                             <div class="card gallery-card h-100 border-0 w-100">
                                 <div class="gallery-profile">
                                     @if($file->type == App\Models\Gallery::TYPE_IMAGE)
-                                        <img src="{{$file->gallery_image}}" alt="profile" class="w-100"/>
+		                                <a href="{{$file->gallery_image}}" data-lightbox="gallery-images"><img src="{{$file->gallery_image}}" alt="profile" class="w-100"/></a>
                                     @elseif($file->type == App\Models\Gallery::TYPE_FILE)
                                         <a id="file_url" href="{{$file->gallery_image}}"
                                            class="gallery-link gallery-file-link" target="_blank">
@@ -296,7 +311,7 @@
         @endif
         {{--Product--}}
         @if(checkFeature('products') && $vcard->products->count())
-            <div class="pt-4 px-4 position-relative">
+            <div class="pt-4 px-4 position-relative mb-10 mt-0">
                 <div class="vcard__product">
                     <h4 class="vcard__heading text-center pb-2">{{ __('messages.plan.products') }}</h4>
                     <div class="container mt-4 py-3">
@@ -335,7 +350,7 @@
         @endif
         {{--Testimonial--}}
         @if(checkFeature('testimonials') && $vcard->testimonials->count())
-            <div class="pt-4 px-4">
+            <div class="pt-4 px-4 mb-10 mt-0">
                 <div class="vcard__testimonial">
                     <h4 class="vcard__heading text-center pb-2">{{ __('messages.plan.testimonials') }}</h4>
                     <div class="container mt-4 py-3">
@@ -364,7 +379,7 @@
         @endif
         {{-- blog--}}
         @if(checkFeature('blog') && $vcard->blogs->count())
-            <div class="vcard__blog py-3">
+            <div class="vcard__blog py-3 mb-10 mt-0">
                 <h4 class="vcard__heading heading-line position-relative text-center pb-4">{{ __('messages.feature.blog') }}</h4>
                 <div class="container">
                     <div class="row g-4 blog-slider overflow-hidden">
@@ -387,27 +402,12 @@
                 </div>
             </div>
         @endif
-        {{--QR code--}}
-        <div class="vcard__qr-code">
-            <div class="px-4 pt-5 pb-4">
-                <h4 class="vcard__heading text-center pb-10">{{ __('messages.vcard.qr_code') }}</h4>
-                <div class="qr-code d-block mx-auto position-relative px-5 pt-5 pb-3">
-                    <img src="{{$vcard->profile_url}}"
-                         class="qr-code-profile d-block mx-auto position-absolute top-0 start-50 translate-middle"/>
-                    <div class="qr-code-image d-flex justify-content-center pt-7">
-                        {!! QrCode::size(130)->format('svg')->generate(Request::url()); !!}
-                    </div>
-                </div>
-                <a class="qr-code-btn text-white mt-4 d-block mx-auto text-decoration-none" id="qr-code-btn"
-                   download="qr_code.png">{{ __('messages.vcard.download_my_qr_code') }}</a>
-            </div>
-        </div>
         {{--Business hour--}}
         @if($vcard->businessHours->count())
             @php
                 $todayWeekName = strtolower(\Carbon\Carbon::now()->rawFormat('D'))
             @endphp
-            <div class="vcard__timing pt-5 pb-4">
+            <div class="vcard__timing pt-5 pb-4 mb-10 mt-0">
                 <div class="px-4">
                     <h4 class="vcard__heading text-center pb-4">{{ __('messages.vcard.buisness_hours') }}</h4>
                     <div class="row g-3 mx-sm-4">
@@ -433,7 +433,7 @@
 
         {{--Appointment--}}
         @if(checkFeature('appointments') && $vcard->appointmentHours->count())
-            <div class="vcard__appointment py-3">
+            <div class="vcard__appointment  mb-10 mt-0">
                 <h4 class="vcard__heading heading-line text-center pb-4 position-relative">{{__('messages.make_appointments')}}</h4>
                 <div class="container">
                     <div class="appointment">
@@ -465,9 +465,9 @@
 
         {{--contact us--}}
         @php $currentSubs = $vcard->subscriptions()->where('status', \App\Models\Subscription::ACTIVE)->latest()->first() @endphp
-        <div class="vcard__contact-us pb-5 pt-4">
-            @if($currentSubs && $currentSubs->plan->planFeature->enquiry_form)
-                <div class="px-4">
+        <div class="vcard__contact-us pb-5  ">
+            @if($currentSubs && $currentSubs->plan->planFeature->enquiry_form && $vcard->enable_enquiry_form)
+                <div class="px-4 mb-10 mt-0">
                     <h4 class="vcard__heading text-center pb-4">{{ __('messages.contact_us.contact_us') }}</h4>
                     <form id="enquiryForm">
                         @csrf
@@ -497,31 +497,9 @@
                     </form>
                 </div>
             @endif
-            <div class="d-sm-flex justify-content-center mt-5 pb-sm-5 pb-4">
-                <div class="d-flex justify-content-center">
-                    <button type="button" class="vcard-four-btn text-white mt-4 d-block me-2"
-                            onclick="downloadVcard('{{ $vcard->name }}.vcf',{{ $vcard->id }})"><i
-                                class="fas fa-download me-2"></i>{{ __('messages.vcard.download_vcard') }}</button>
-                </div>
-                {{--share btn--}}
-                <button type="button" class="vcard4-share share-btn text-white d-block btn mt-4">
-                    <a class="text-white text-decoration-none">
-                        <i class="text-white fas fa-share-alt me-2"></i>{{ __('messages.vcard.share') }}</a>
-                </button>
-            </div>
-            @if(!empty($userSetting['enable_affiliation']))
-                <div class='d-flex justify-content-center mt-sm-2 pb-5'>
-                    <button type="button" class="vcard-four-btn copy-referral-btn text-white d-block btn"
-                            data-id="{{ $vcard->user->affiliate_code }}">
-	                    <a class="text-white text-decoration-none">
-		                    <i class="text-white fa-regular fa-copy me-2"></i>{{ __('messages.vcard.copy_referral_link') }}
-                        </a>
-                    </button>
-                </div>
-            @endif
         </div>
         @if($vcard->location_url && isset($url[5]))
-            <div class="m-2 ">
+            <div class="m-2 mb-10 mt-0">
                 <iframe width="100%" height="300px" src='https://maps.google.de/maps?q={{$url[5]}}/&output=embed'
                         frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
                         style="border-radius: 10px;"></iframe>
@@ -559,6 +537,18 @@
                 </div>
             @endif
         </div>
+	    <div class="w-100 d-flex justify-content-center sticky-vcard-div">
+		    <div class="btn-group vcard4-btn-div" role="group" aria-label="Basic example" >
+			    <button type="button" class="vcard-btn-group vcard4-sticky-btn rounded-0 px-2 ps-5 py-1" onclick="downloadVcard('{{ $vcard->name }}.vcf',{{ $vcard->id }})"><i class="fas fa-download fs-4"></i></button>
+			    <button type="button" class="vcard4-share vcard-btn-group vcard4-sticky-btn rounded-0 px-2 py-1"><i class="fas fa-share-alt fs-4"></i></button>
+			    @if(!empty($userSetting['enable_affiliation']))
+				    <button type="button" class="vcard-btn-group vcard4-sticky-btn rounded-0 px-2 py-1 copy-referral-btn" data-id="{{ $vcard->user->affiliate_code }}"><i class="fa-regular fa-copy fs-4"></i></button>
+			    @endif
+			    @if($vcard->enable_download_qr_code)
+			    <a type="button" class="vcard-btn-group vcard4-sticky-btn rounded-0 px-2 pe-5 py-2 text-white" id="qr-code-btn" download="qr_code.png"><i class="fa-solid fa-qrcode fs-4"></i></a>
+				@endif
+		    </div>
+	    </div>
     </div>
     {{-- share modal code--}}
     <div id="vcard4-shareModel" class="modal fade" role="dialog">
@@ -740,17 +730,15 @@
 </script>
 <script>
     const svg = document.getElementsByTagName('svg')[0];
-    const { x, y, width, height } = svg.viewBox.baseVal;
     const blob = new Blob([svg.outerHTML], { type: 'image/svg+xml' });
     const url = URL.createObjectURL(blob);
     const image = document.createElement('img');
     image.src = url;
     image.addEventListener('load', () => {
         const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = canvas.height = {{ $vcard->qr_code_download_size }};
         const context = canvas.getContext('2d');
-        context.drawImage(image, x, y, width, height);
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
         const link = document.getElementById('qr-code-btn');
         link.href = canvas.toDataURL();
         URL.revokeObjectURL(url);
@@ -761,6 +749,7 @@
 <script src="{{ mix('assets/js/custom/helpers.js') }}"></script>
 <script src="{{ mix('assets/js/custom/custom.js') }}"></script>
 <script src="{{ mix('assets/js/vcards/vcard-view.js') }}"></script>
+<script src="{{ mix('assets/js/lightbox.js') }}"></script>
 
 </body>
 </html>

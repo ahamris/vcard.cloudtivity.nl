@@ -93,7 +93,7 @@ class AffiliationWithdrawController extends AppBaseController
     public function showAffiliationWithdraw($id)
     {
         $affiliationWithdraw = Withdrawal::with('user')->find($id);
-        $affiliationWithdraw['formattedAmount'] = currencyFormat($affiliationWithdraw->amount);
+        $affiliationWithdraw['formattedAmount'] = currencyFormat($affiliationWithdraw->amount,2);
 
         if (isAdmin() && $affiliationWithdraw->user_id !== getLogInUserId()) {
             return $this->sendError('Withdrawal data not found');

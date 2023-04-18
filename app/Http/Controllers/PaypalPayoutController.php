@@ -37,7 +37,7 @@ class PaypalPayoutController extends AppBaseController
         $client = new PayPalHttpClient($environment);
         $request = new PayoutsPostRequest();
 
-        $note = "Your ".currencyFormat($amount)." Payout";
+        $note = "Your ".currencyFormat($amount,2)." Payout";
         $body = json_decode(
             '{
                 "sender_batch_header":

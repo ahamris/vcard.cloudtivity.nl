@@ -31,7 +31,7 @@ class RazorpayController extends AppBaseController
      */
     public function onBoard(Request $request)
     {
-        $data = $this->subscriptionRepository->manageSubscription($request->get('planId'));
+        $data = $this->subscriptionRepository->manageSubscription($request->all());
 
         $subscription = $data['subscription'];
         $api = new Api(getSelectedPaymentGateway('razorpay_key'), getSelectedPaymentGateway('razorpay_secret'));

@@ -30,6 +30,14 @@ $text-color: #b4b5b7;
 $grey: #B8B8B8;
 $dark: #010101;
 
+.vcard10-sticky-btn {
+    background: $bg-light;
+    color:$secondary;
+    &:hover{
+        color:$secondary;
+    }
+}
+
 body {
     background-color: #E5E5E5;
     font-family: 'Work Sans', sans-serif;
@@ -1025,7 +1033,7 @@ body {
             cursor: pointer;
             transition: all 0.3s ease;
             background: #2d2833;
-            padding: unset;
+            padding: 5px;
             border-radius: 50%;
             min-width: 60px;
             width: 60px;
@@ -1206,4 +1214,18 @@ button{
 
 .morelink {
     color: $white;
+}
+
+.lb-data .lb-number {
+    display: none !important;
+}
+
+.social-icons {
+    img {
+        width: 68px !important;
+        height: 68px !important;
+        border-radius: 50% !important;
+        box-shadow: 0 0 0 4px #3d3943 !important;
+        padding: 6px !important;
+    }
 }

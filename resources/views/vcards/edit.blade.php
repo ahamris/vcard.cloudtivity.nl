@@ -13,6 +13,9 @@
             @if(Session::has('success'))
                 <p class="alert alert-success">{{ getSuccessMessage(Request::query('part')).Session::get('success') }}</p>
             @endif
+                @if(Session::has('error'))
+                    <p class="alert alert-danger">{{ getSuccessMessage(Request::query('part')).Session::get('error') }}</p>
+                @endif
             @include('layouts.errors')
             @include('flash::message')
         </div>

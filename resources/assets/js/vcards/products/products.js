@@ -139,8 +139,8 @@ listenClick( '.product-view-btn', function (event) {
         success: function (result) {
             if (result.success) {
                 $('#showName').append(result.data.name)
-                if(result.data.currency_id && result.data.price != null){
-                    $('#showPrice').append(result.data.currency.currency_icon+" "+result.data.price)
+                if(result.data.formatted_amount){
+                    $('#showPrice').append(result.data.formatted_amount)
                 }
                 else if(result.data.price != null){
                     $('#showPrice').append(result.data.price)

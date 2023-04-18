@@ -9,6 +9,7 @@ use App\Models\PaymentGateway;
 use App\Models\Plan;
 use App\Models\Role as CustomRole;
 use App\Models\Setting;
+use App\Models\SocialIcon;
 use App\Models\State;
 use App\Models\Subscription;
 use App\Models\Template;
@@ -29,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
+use Stancl\Tenancy\Database\TenantScope;
 use Stripe\Stripe;
 
 /**
@@ -182,16 +184,28 @@ function getCurrenciesCode()
     return $currencyCodeList;
 }
 
-function currencyFormat($number, $currencyCode = null)
+function currencyFormat($number,$precision = 0, $currencyCode = null)
 {
     try {
-        $currency = new Gerardojbaez\Money\Money($number,
-            $currencyCode ?? getSuperAdminSettingValue('default_currency'));
+        $currency = new Gerardojbaez\Money\Currency($currencyCode ?? getSuperAdminSettingValue('default_currency'));
+        $currency->setPrecision($precision);
+        $currency->setThousandSeparator(',');
+        $currency->setDecimalSeparator('.');
+        $currency->setSymbolPlacement(getSuperAdminSettingValue('currency_after_amount') ? 'after' : 'before');
+        
+        try {
+            $amount = new Gerardojbaez\Money\Money($number,$currency);
+        } catch (Exception $e) {
+            $amount = new Gerardojbaez\Money\Money($number, 'USD');
+        }
+    
+        $formattedAmount = $amount->format();
     } catch (Exception $e) {
-        $currency = new Gerardojbaez\Money\Money($number, 'USD');
+        $currency = Currency::whereCurrencyCode($currencyCode)->first();
+        $formattedAmount = getCurrencyAmount(number_format($number,2),$currency->currency_icon);
     }
 
-    return $currency->format();
+    return $formattedAmount;
 }
 
 /**
@@ -266,23 +280,51 @@ function getPlanFeature($plan): array
 function getSocialLink($vcard): array
 {
     $socialLink = array_values(array_diff($vcard->socialLink->getFillable(), ['vcard_id']));
+    $socialLinkAdd = SocialIcon::whereSocialLinkId($vcard->socialLink->id)->get();
+
+
     $vcardSocials = [];
+    foreach ($socialLinkAdd as $social) {
+        if ($url = parse_url($social->link, PHP_URL_SCHEME) === null ?
+            'https://'.$social->link : $social->link) {
+
+            $vcardSocials[$social->link] =
+                '<a href="'.$url.'" target="_blank">
+                        <img src="'.$social->social_icon.'" alt="" class="" style="width: 30px">
+                    </a>';
+        }
+    }
     foreach ($socialLink as $social) {
         if ($vcard->socialLink->$social) {
+            if ($social == 'social_links') {
+                foreach (json_decode($vcard->socialLink->$social) as $links) {
+                    if ($url = parse_url($links->name, PHP_URL_SCHEME) === null ?
+                        'https://'.$links->name : $links->name) {
+                        $vcardSocials[$links->name] =
+                            '<a href="'.$url.'" target="_blank">
+                        <i class="fas fa-globe icon fa-2x" title="'.__('messages.social.website').'"></i>
+                    </a>';
+                    }
+                }
+
+            }
             if ($social != 'website') {
-                if ($url = parse_url($vcard->socialLink->$social, PHP_URL_SCHEME) === null ?
-                    'https://'.$vcard->socialLink->$social : $vcard->socialLink->$social) {
-                    $vcardSocials[$social] =
-                        '<a href="'.$url.'" target="_blank">
+                if ($social != 'social_links') {
+                    if ($url = parse_url($vcard->socialLink->$social, PHP_URL_SCHEME) === null ?
+                        'https://'.$vcard->socialLink->$social : $vcard->socialLink->$social) {
+                        $vcardSocials[$social] =
+                            '<a href="'.$url.'" target="_blank">
                         <i class="fab fa-'.$social.' '.$social.'-icon icon fa-2x" title="'.__('messages.social.'.ucfirst($social)).'"></i>
                     </a>';
+                    }
                 }
             } else {
                 if ($url = parse_url($vcard->socialLink->$social, PHP_URL_SCHEME) === null ?
                     'https://'.$vcard->socialLink->$social : $vcard->socialLink->$social) {
                     $vcardSocials[$social] =
                         '<a href="'.$url.'" target="_blank">
-                        <i class="fa fa-globe-africa globe-africa-icon icon fa-2x" title="'.__('messages.social.website').'"></i>
+                        <i class="fas fa-globe icon fa-2x" title="'.__('messages.social.website').'"></i>
+                      
                     </a>';
                 }
             }
@@ -295,7 +337,6 @@ function getSocialLink($vcard): array
                     </a>';
         }
     }
-
     return $vcardSocials;
 }
 
@@ -496,23 +537,26 @@ function getProratedPlanData($planIDChosenByUser)
                 ? round($subscriptionPlan->price - $remainingBalance)
                 : round($subscriptionPlan->price - $remainingBalance, 2);
         } else {
-            $perDayPriceOfNewPlan = round($subscriptionPlan->price / $newPlanDays, 2);
+            $perDayPriceOfNewPlan = round($subscriptionPlan->price / $newPlanDays, 5);
             $totalExtraDays = round($remainingBalance / $perDayPriceOfNewPlan);
 
             $endsAt = Carbon::now()->addDays($totalExtraDays);
             $totalDays = $totalExtraDays;
         }
 
+        $currency = $subscriptionPlan->currency->currency_icon;
+
         return [
-            'startDate' => $startsAt,
-            'name' => $subscriptionPlan->name.' / '.$frequency,
-            'trialDays' => $subscriptionPlan->trial_days,
+            'startDate'        => $startsAt,
+            'name'             => $subscriptionPlan->name.' / '.$frequency,
+            'trialDays'        => $subscriptionPlan->trial_days,
             'remainingBalance' => $remainingBalance,
-            'endDate' => $endsAt->format('jS M, Y'),
-            'amountToPay' => $amountToPay,
-            'usedDays' => $usedDays,
-            'totalExtraDays' => $totalExtraDays,
-            'totalDays' => $totalDays,
+            'endDate'          => $endsAt->format('jS M, Y'),
+            'amountToPay'      => $amountToPay,
+            'usedDays'         => $usedDays,
+            'totalExtraDays'   => $totalExtraDays,
+            'totalDays'        => $totalDays,
+            'currency'         => $currency,
         ];
     }
 
@@ -990,12 +1034,15 @@ function getStatusClassName($status)
 /**
  * @return mixed
  */
-function getMaximumCurrencyCode()
+function getMaximumCurrencyCode($getIcon = false)
 {
     $plan = Plan::all()->groupBy('currency_id');
 
     if ($plan->isEmpty()) {
         return;
+    }
+    if($getIcon){
+        return $plan->first()->first()->currency->currency_icon;
     }
 
     return $plan->first()->first()->currency->currency_code;
@@ -1266,4 +1313,36 @@ function currentAffiliateAmount($userId = null)
     $totalAmount = AffiliateUser::whereAffiliatedBy($userId)->sum('amount');
 
     return $totalAmount - $withdrawAmount;
+}
+
+function getCurrencyAmount($amount, $currency_icon)
+{
+    static $currencyPosition;
+    if (empty($currencyPosition)) {
+        $currencyPosition = getSuperAdminSettingValue('currency_after_amount');
+    }
+
+    if ($currencyPosition) {
+        return $amount.''.$currency_icon;
+    }
+
+    return $currency_icon.''.$amount;
+}
+
+function getUniqueVcardUrlAlias(){
+    
+    $urlAlias = strtolower(Str::random(12));
+    $vcardWithSameUrl = Vcard::whereUrlAlias($urlAlias)->first();
+    if($vcardWithSameUrl){
+       $urlAlias =  getUniqueVcardUrlAlias();
+    }
+    return $urlAlias;
+}
+
+function isUniqueVcardUrlAlias($urlAlias){
+    $vcardWithSameUrl = Vcard::withoutGlobalScope(TenantScope::class)->whereUrlAlias($urlAlias)->first();
+    if($vcardWithSameUrl){
+        return $vcardWithSameUrl->id;
+    }
+    return true;
 }

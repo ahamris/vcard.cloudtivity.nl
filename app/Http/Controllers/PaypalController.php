@@ -55,7 +55,7 @@ class PaypalController extends AppBaseController
             return $this->sendError(__('messages.placeholder.this_currency_is_not_supported'));
         }
 
-        $data = $this->subscriptionRepository->manageSubscription($request->get('planId'));
+        $data = $this->subscriptionRepository->manageSubscription($request->all());
 
         if (! isset($data['plan'])) { // 0 amount plan or try to switch the plan if it is in trial mode
             // returning from here if the plan is free.
@@ -177,7 +177,6 @@ class PaypalController extends AppBaseController
         $clientId = getUserSettingValue('paypal_client_id', $userId);
         $clientSecret = getUserSettingValue('paypal_secret', $userId);
         $mode = getUserSettingValue('paypal_mode', $userId);
-        $mode = getUserSettingValue('paypal_mode', $userId);
         $currencyCode = Currency::whereId(getUserSettingValue('currency_id', $userId))->first();
         $config = [
             'mode'           => $mode, // Can only be 'sandbox' Or 'live'. If empty or invalid, 'live' will be used.
@@ -192,6 +191,14 @@ class PaypalController extends AppBaseController
             // force gateway language  i.e. it_IT, es_ES, en_US ... (for express checkout only)
             'validate_ssl'   => config('paypal.validate_ssl'), // Validate SSL when creating api client.
         ];
+
+        config([
+            'paypal.mode'                  => $mode,
+            'paypal.sandbox.client_id'     => $clientId,
+            'paypal.sandbox.client_secret' => $clientSecret,
+            'paypal.live.client_id'        => $clientId,
+            'paypal.live.client_secret'    => $clientSecret,
+        ]);
 
         $provider = new PayPalClient;
         $provider->getAccessToken();

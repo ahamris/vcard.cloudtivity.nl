@@ -29,6 +29,7 @@ class UpdateVcardRequest extends FormRequest
         $rules['current_password'] = 'nullable|min:6';
         $rules['profile_img'] = 'mimes:jpg,bmp,png,apng,avif,jpeg,';
         $rules['cover_img'] = 'mimes:jpg,bmp,png,apng,avif,jpeg,';
+        $rules['qr_code_download_size'] = ['numeric', 'in:100,200,300,400,500'];
 
         return $rules;
     }

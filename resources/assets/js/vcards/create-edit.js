@@ -378,3 +378,32 @@ listenClick('#paidButton', function () {
     $('#isUserPaidId').addClass('required');
 });
 
+listenClick('#generate-url-alias',function(){
+    $.ajax({
+        url : route('vcards.get-unique-url-alias'),
+        type : 'GET',
+        success : function (result) {
+            $('#vcard-url-alias').val(result)
+        }
+    })
+})
+
+listen('blur','#vcard-url-alias',function(){
+    let vcardId = $('#vcardId').length ? $('#vcardId').val() : '';
+    if($(this).val().trim().length) {
+        $.ajax({
+            url: route('vcards.check-unique-url-alias', $(this).val()),
+            type: 'GET',
+            success: function (result) {
+                let data = result.data;
+                if(!data.isUnique && data.usedInVcard != vcardId){
+                    $('#error-url-alias-msg').removeClass('d-none')
+                }
+                
+                setTimeout(()=>{
+                    $('#error-url-alias-msg').addClass('d-none')
+                },3000)
+            }
+        })
+    }
+})

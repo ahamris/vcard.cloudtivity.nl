@@ -17,7 +17,7 @@
 
 <x-livewire-tables::table.cell>
     <span class="badge bg-success me-2">
-       {{ currencyFormat($row->amount) }}
+       {{ currencyFormat($row->amount,2) }}
     </span>
 </x-livewire-tables::table.cell>
 

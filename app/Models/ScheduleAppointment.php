@@ -114,7 +114,7 @@ class ScheduleAppointment extends Model
     {
         $transaction = $this->appointmentTransaction;
         if ($transaction) {
-            return $transaction->currency_symbol.''.$transaction->amount;
+            return getCurrencyAmount($transaction->amount,$transaction->currency_symbol);
         }
 
         return '';

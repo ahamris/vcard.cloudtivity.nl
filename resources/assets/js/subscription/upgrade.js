@@ -1,12 +1,14 @@
 
 listenClick( '.makePayment', function () {
     let payloadData = {
-        plan_id: $(this).data('id'),
+        planId: $(this).data('id'),
         from_pricing: typeof fromPricing != 'undefined'
             ? fromPricing
             : null,
         price: $(this).data('plan-price'),
         payment_type: $('#paymentType option:selected').val(),
+        couponCode: $('#couponCode').val(),
+        couponCodeId: $('#couponCodeId').val(),
     };
     $(this).addClass('disabled');
     $('.makePayment').text('Please Wait...');
@@ -91,6 +93,8 @@ listenClick('.paymentByPaypal', function () {
             'planId': $(this).data('id'),
             'from_pricing': pricing,
             'payment_type': $('#paymentType option:selected').val(),
+            'couponCode': $('#couponCode').val(),
+            'couponCodeId': $('#couponCodeId').val(),
         },
         success: function (result) {
 
@@ -131,6 +135,8 @@ listenClick('.paymentByRazorPay', function () {
             'planId': $(this).data('id'),
             'from_pricing': pricing,
             'payment_type': $('#paymentType option:selected').val(),
+            'couponCode': $('#couponCode').val(),
+            'couponCodeId': $('#couponCodeId').val(),
         },
         success: function (result) {
             if (result.success) {
@@ -221,7 +227,7 @@ listenClick('.freePayment', function () {
     if ($(this).data('plan-price') === 0) {
         $(this).addClass('disabled');
         let data = {
-            plan_id: $(this).data('id'),
+            planId: $(this).data('id'),
             price: $(this).data('plan-price'),
         };
         $.post(route('purchase-subscription'), data).done((result) => {
@@ -230,11 +236,98 @@ listenClick('.freePayment', function () {
                 Turbo.visit(window.location.href);
             }, 5000);
         }).catch(error => {
-            $(this).html(Lang.get('messages.subscription.choose_plan')).removeClass('disabled');
-            $('.freePayment').attr('disabled', false);
-            displayErrorMessage(error.responseJSON.message);
+            $(this).
+                html(Lang.get('messages.subscription.choose_plan')).
+                removeClass('disabled')
+            $('.freePayment').attr('disabled', false)
+            displayErrorMessage(error.responseJSON.message)
         });
 
-        return true;
+        return true
     }
 });
+
+listenKeyup('#paymentCouponCode', function () {
+    let code = $(this)
+    let applyBtn = $('#applyCouponCodeBtn')
+    code.val(code.val().toUpperCase().split(/[^a-zA-Z0-9_]/).join(''));
+    code.val().trim().length ? applyBtn.removeClass('disabled')
+        : applyBtn.addClass('disabled')
+})
+
+listenClick('#applyCouponCodeBtn', function () {
+    let planId = $(this).attr('data-id')
+    let planPrice = $(this).attr('data-plan-price')
+    let url
+    if ($(this).hasClass('apply-coupon-code-btn')) {
+        url = route('apply-coupon-code', $('#paymentCouponCode').val())
+    } else {
+        url = route('apply-coupon-code')
+    }
+    $(this).addClass('disabled')
+    applyCouponCode(url, planId, planPrice)
+})
+
+function applyCouponCode (url, planId, planPrice) {
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: {
+            planId: planId,
+            planPrice: planPrice,
+        },
+        success: function (result) {
+            if (result.data.afterDiscount) {
+                let afterDiscount = result.data.afterDiscount
+                let currencyIcon = $('#currencyIcon').val()
+                $('.coupon-discount').
+                    text(getCurrencyAmount(afterDiscount.discount,currencyIcon)).
+                    parent().
+                    parent().
+                    removeClass('d-none')
+                $('#couponCodeId').val(afterDiscount.couponId)
+                $('#couponCode').val(afterDiscount.couponCode)
+                $('#amountToPay').val(afterDiscount.amountToPay)
+                $('.payable-amount').text(getCurrencyAmount(afterDiscount.amountToPay.toFixed(2),currencyIcon))
+                if (afterDiscount.amountToPay == 0) {
+                    $('.plan-payment-type').addClass('d-none')
+                    $('.switch-plan-btn').removeClass('d-none')
+                    $('.manuallyPayAttachment').addClass('d-none')
+                    $('.RazorPayPayment').addClass('d-none')
+                    $('.paypalPayment').addClass('d-none')
+                    $('.stripePayment').addClass('d-none')
+                }
+                swal({
+                    icon: 'success',
+                    title: `"` + afterDiscount.couponCode + `" Coupon Code Applied successfully.`,
+                    timer: 2000,
+                })
+                $('#paymentCouponCode').attr('disabled', true)
+                $('#applyCouponCodeBtn').
+                    removeClass('disabled apply-coupon-code-btn bg-primary').
+                    addClass('remove-coupon-code-btn bg-secondary').
+                    text(Lang.get('messages.coupon_code.remove'))
+            } else {
+                $('.coupon-discount').
+                    text('').
+                    parent().
+                    parent().
+                    addClass('d-none')
+                $('.payable-amount').text(result.data.amountToPay)
+                $('#couponCodeId').val('')
+                $('#couponCode').val('')
+                $('#amountToPay').val(result.data.amountToPay)
+                $('#paymentCouponCode').attr('disabled', false).val('')
+                $('#applyCouponCodeBtn').removeClass('disabled remove-coupon-code-btn bg-secondary').addClass('apply-coupon-code-btn bg-primary').text(Lang.get('messages.common.apply'))
+                $('#paymentCouponCode').trigger('keyup')
+                    $('.plan-payment-type').removeClass('d-none')
+                    $('.switch-plan-btn').addClass('d-none')
+                    $('#paymentType').val('').trigger('change')
+            }
+        },
+        error: function (result) {
+            $('#applyCouponCodeBtn').removeClass('disabled')
+            displayErrorMessage(result.responseJSON.message)
+        },
+    })
+}

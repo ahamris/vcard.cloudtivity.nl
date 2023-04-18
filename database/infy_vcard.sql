@@ -3,13 +3,15 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Jan 31, 2023 at 12:48 PM
--- Server version: 5.7.32
--- PHP Version: 8.0.3
+-- Generation Time: Apr 07, 2023 at 12:57 PM
+-- Server version: 5.7.34
+-- PHP Version: 7.2.34
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET
+SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+00:00";
+SET
+time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -18,7 +20,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `vcard-fresh`
+-- Database: `vcard-test`
 --
 
 -- --------------------------------------------------------
@@ -28,21 +30,24 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `about_us` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+                            `id`          bigint(20) UNSIGNED NOT NULL,
+                            `title`       varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+                            `description` text COLLATE utf8mb4_unicode_ci         NOT NULL,
+                            `created_at`  timestamp NULL DEFAULT NULL,
+                            `updated_at`  timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `about_us`
 --
 
-INSERT INTO `about_us` (`id`, `title`, `description`, `created_at`, `updated_at`) VALUES
-(1, 'Make Smart Business Card', 'Make Your Own Smart business Card with us and grow your business easily.', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(2, 'About2', 'Make Your Own Smart business Card with us and grow your business easily.', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(3, 'About3', 'Make Your Own Smart business Card with us and grow your business easily.', '2023-01-31 07:18:39', '2023-01-31 07:18:39');
+INSERT INTO `about_us` (`id`, `title`, `description`, `created_at`, `updated_at`)
+VALUES (1, 'Make Smart Business Card', 'Make Your Own Smart business Card with us and grow your business easily.',
+        '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (2, 'About2', 'Make Your Own Smart business Card with us and grow your business easily.', '2023-04-07 07:26:42',
+        '2023-04-07 07:26:42'),
+       (3, 'About3', 'Make Your Own Smart business Card with us and grow your business easily.', '2023-04-07 07:26:42',
+        '2023-04-07 07:26:42');
 
 -- --------------------------------------------------------
 
@@ -50,9 +55,10 @@ INSERT INTO `about_us` (`id`, `title`, `description`, `created_at`, `updated_at`
 -- Table structure for table `affiliate_users`
 --
 
-CREATE TABLE `affiliate_users` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `affiliated_by` bigint(20) UNSIGNED NOT NULL,
+CREATE TABLE `affiliate_users`
+(
+    `id`            bigint(20) UNSIGNED NOT NULL,
+    `affiliated_by` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `is_verified` tinyint(1) NOT NULL DEFAULT '0',
   `amount` int(11) NOT NULL,
@@ -48829,158 +48835,176 @@ INSERT INTO `countries` (`id`, `name`, `short_code`, `phone_code`, `created_at`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `coupon_codes`
+--
+
+CREATE TABLE `coupon_codes` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `coupon_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` int(11) NOT NULL,
+  `discount` double NOT NULL,
+  `expire_at` datetime DEFAULT NULL,
+  `status` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `currencies`
 --
 
 CREATE TABLE `currencies` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `currency_name` varchar(170) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `currency_icon` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `currency_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+                              `id`            bigint(20) UNSIGNED NOT NULL,
+                              `currency_name` varchar(170) COLLATE utf8mb4_unicode_ci NOT NULL,
+                              `currency_icon` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+                              `currency_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+                              `created_at`    timestamp NULL DEFAULT NULL,
+                              `updated_at`    timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `currencies`
 --
 
-INSERT INTO `currencies` (`id`, `currency_name`, `currency_icon`, `currency_code`, `created_at`, `updated_at`) VALUES
-(1, 'USD US Dollar', '$', 'USD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(2, 'EUR Euro', '€', 'EUR', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(3, 'HKD Hong Kong Dollar', '$', 'HKD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(4, 'INR Indian Rupee', '₹', 'INR', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(5, 'AUD Australian Dollar', '$', 'AUD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(6, 'JMD Jamaican Dollar', 'J$', 'JMD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(7, 'CAD Canadian Dollar', '$', 'CAD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(8, 'AED United Arab Emirates Dirham', 'د.إ', 'AED', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(9, 'AFN Afghanistan Afghani', '؋', 'AFN', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(10, 'ALL Albania Lek', 'Lek', 'ALL', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(11, 'AMD Armenian Dram', '֏', 'AMD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(12, 'ANG Netherlands Antilles Guilder', 'ƒ', 'ANG', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(13, 'AOA Angola kwanza', 'Kz', 'AOA', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(14, 'ARS Argentina Peso', '$', 'ARS', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(15, 'AWG Aruba Guilder', 'ƒ', 'AWG', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(16, 'AZN Azerbaijan Manat', '₼', 'AZN', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(17, 'BAM Bosnia and Herzegovina Convertible Marka', 'KM', 'BAM', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(18, 'BBD Barbados Dollar', '$', 'BBD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(19, 'BDT Bangladesh Taka', '৳', 'BDT', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(20, 'BGN Bulgaria Lev', 'лв', 'BGN', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(21, 'BMD Bermuda Dollar', '$', 'BMD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(22, 'BND Brunei Darussalam Dollar', '$', 'BND', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(23, 'BOB Bolivia Boliviano', '$b', 'BOB', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(24, 'BRL Brazil Real', 'R$', 'BRL', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(25, 'BSD Bahamas Dollar', '$', 'BSD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(26, 'BWP Botswana Pula', 'P', 'BWP', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(27, 'BZD Belize Dollar', 'BZ$', 'BZD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(28, 'CDF Congo Congolese franc', 'FC', 'CDF', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(29, 'CHF Switzerland Franc', 'CHF', 'CHF', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(30, 'CNY China Yuan Renminbi', '¥', 'CNY', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(31, 'COP Colombia Peso', '$', 'COP', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(32, 'CRC Costa Rica Colon', '₡', 'CRC', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(33, 'CVE Cape Verde Escudo', '$', 'CVE', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(34, 'CZK Czech Republic Koruna', 'Kč', 'CZK', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(35, 'DKK Denmark Krone', 'kr', 'DKK', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(36, 'DOP Dominican Republic Peso', 'RD$', 'DOP', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(37, 'DZD Algeria Dinar', 'دج', 'DZD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(38, 'EGP Egypt Pound', '£', 'EGP', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(39, 'ETB Ethiopia Birr', 'ብር', 'ETB', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(40, 'FJD Fiji Dollar', '$', 'FJD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(41, 'FKP Falkland Islands Pound', '£', 'FKP', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(42, 'GBP United Kingdom Pound', '£', 'GBP', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(43, 'GEL Georgia Lari', '₾', 'GEL', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(44, 'GIP Gibraltar Pound', '£', 'GIP', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(45, 'GMD Gambia Dalasi', 'D', 'GMD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(46, 'GTQ Guatemala Quetzal', 'Q', 'GTQ', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(47, 'GYD Guyana Dollar', '$', 'GYD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(48, 'HNL Honduras Lempira', 'L', 'HNL', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(49, 'HRK Croatia Kuna', 'kn', 'HRK', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(50, 'HTG Haiti Gourde', 'G', 'HTG', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(51, 'HUF Hungary Forint', 'Ft', 'HUF', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(52, 'IDR Indonesia Rupiah', 'Rp', 'IDR', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(53, 'ILS Israel Shekel', '₪', 'ILS', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(54, 'ISK Iceland Krona', 'kr', 'ISK', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(55, 'KES Kenya Shilling', '/=', 'KES', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(56, 'KGS Kyrgyzstan Som', 'лв', 'KGS', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(57, 'KHR Cambodia Riel', '៛', 'KHR', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(58, 'KYD Cayman Dollar', '$', 'KYD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(59, 'KZT Kazakhstan Tenge', 'лв', 'KZT', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(60, 'LAK Laos Kip', '₭', 'LAK', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(61, 'LBP Lebanon Pound', '£', 'LBP', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(62, 'LKR Sri Lanka Rupee', '₨', 'LKR', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(63, 'LRD Liberia Dollar', '$', 'LRD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(64, 'LSL Lesotho Loti', 'L', 'LSL', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(65, 'MAD Morocco Dirham', 'MAD', 'MAD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(66, 'MDL Moldova Leu', 'L', 'MDL', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(67, 'MKD Macedonia Denar', 'ден', 'MKD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(68, 'MMK Myanmar Kyat', 'K', 'MMK', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(69, 'MNT Mongolia Tughrik', '₮', 'MNT', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(70, 'MOP Macau P ataca', 'MOP$', 'MOP', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(71, 'MRO Mauritania Ouguiya', 'MRU', 'MRO', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(72, 'MUR Mauritius Rupee', '₨', 'MUR', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(73, 'MVR Maldives Rufiyaa', '.ރ', 'MVR', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(74, 'MWK Malawi Kwacha', 'MK', 'MWK', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(75, 'MXN Mexico Peso', '$', 'MXN', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(76, 'MYR Malaysia Ringgit', 'RM', 'MYR', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(77, 'MZN Mozambique Metical', 'MT', 'MZN', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(78, 'NAD Namibia Dollar', '$', 'NAD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(79, 'NGN Nigeria Naira', '₦', 'NGN', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(80, 'NIO Nicaragua Cordoba', 'C$', 'NIO', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(81, 'NOK Norway Krone', 'kr', 'NOK', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(82, 'NPR Nepal Rupee', '₨', 'NPR', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(83, 'NZD New Zealand Dollar', '$', 'NZD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(84, 'PAB Panama Balboa', 'B/.', 'PAB', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(85, 'PEN Peru Nuevo Sol', 'S/.', 'PEN', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(86, 'PGK Papua New Guinea Kina', 'K', 'PGK', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(87, 'PHP Philippines Peso', '₱', 'PHP', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(88, 'PKR Pakistan Rupee', '₨', 'PKR', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(89, 'PLN Poland Zloty', 'zł', 'PLN', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(90, 'QAR Qatar Riyal', '﷼', 'QAR', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(91, 'RON Romania New Leu', 'lei', 'RON', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(92, 'RSD Serbia Dinar', 'Дин.', 'RSD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(93, 'RUB Russia Ruble', '₽', 'RUB', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(94, 'SAR Saudi Arabia Riyal', '﷼', 'SAR', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(95, 'SBD Solomon Islands Dollar', '$', 'SBD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(96, 'SCR Seychelles Rupee', '₨', 'SCR', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(97, 'SEK Sweden Krona', 'kr', 'SEK', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(98, 'SGD Singapore Dollar', '$', 'SGD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(99, 'SHP Saint Helena Pound', '£', 'SHP', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(100, 'SLL Sierra Leone Leone', 'Le', 'SLL', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(101, 'SOS Somalia Shilling', 'S', 'SOS', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(102, 'SRD Suriname Dollar', '$', 'SRD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(103, 'STD São Tomé and Príncipe Dobra', 'Db', 'STD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(104, 'SZL Eswatini lilangeni', 'L', 'SZL', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(105, 'THB Thailand Baht', '฿', 'THB', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(106, 'TJS Tajikistan Somoni', 'ЅM', 'TJS', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(107, 'TOP Tonga Pa’anga', 'T$', 'TOP', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(108, 'TRY Turkey Lira', '₺', 'TRY', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(109, 'TTD Trinidad and Tobago Dollar', 'TT$', 'TTD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(110, 'TWD Taiwan New Dollar', 'NT$', 'TWD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(111, 'TZS Tanzania Shiling', 'TSh', 'TZS', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(112, 'UAH Ukraine Hryvna', '₴', 'UAH', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(113, 'UYU Uruguay Peso', '$U', 'UYU', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(114, 'UZS Uzbekistan Som', 'лв', 'UZS', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(115, 'WST Samoa  Tālā', 'WS$', 'WST', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(116, 'XCD Eastern Caribbean States Dollar', '$', 'XCD', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(117, 'YER Yemen Rial', '﷼', 'YER', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(118, 'ZAR South Africa Rand', 'R', 'ZAR', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(119, 'ZMW Zambia Kwacha', 'ZK', 'ZMW', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(120, 'BIF Burundi Franc', 'FBu', 'BIF', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(121, 'CLP Chile Peso', '$', 'CLP', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(122, 'DJF Djibouti Franc', 'Fdj', 'DJF', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(123, 'GNF Guinea Franc', 'GFr', 'GNF', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(124, 'JPY Japan Yen', '¥', 'JPY', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(125, 'KMF Comoros Franc', 'CF', 'KMF', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(126, 'KRW Korea Won', '₩', 'KRW', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(127, 'MGA Madagascar Ariary ', 'Ar', 'MGA', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(128, 'PYG Paraguay Guarani', 'Gs', 'PYG', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(129, 'RWF Rwanda Franc', 'R₣', 'RWF', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(130, 'UGX Uganda Shilling', 'USh', 'UGX', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(131, 'VND Viet Nam Dong', '₫', 'VND', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(132, 'VUV Vanuatu Vatu', 'VT', 'VUV', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(133, 'XAF Central Africa Central African CFA Franc', 'FCFA', 'XAF', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(134, 'XOF West Africa West African CFA Franc', 'CFA', 'XOF', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(135, 'XPF France Franc', '₣', 'XPF', '2023-01-31 07:18:36', '2023-01-31 07:18:36');
+INSERT INTO `currencies` (`id`, `currency_name`, `currency_icon`, `currency_code`, `created_at`, `updated_at`)
+VALUES (1, 'USD US Dollar', '$', 'USD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (2, 'EUR Euro', '€', 'EUR', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (3, 'HKD Hong Kong Dollar', '$', 'HKD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (4, 'INR Indian Rupee', '₹', 'INR', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (5, 'AUD Australian Dollar', '$', 'AUD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (6, 'JMD Jamaican Dollar', 'J$', 'JMD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (7, 'CAD Canadian Dollar', '$', 'CAD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (8, 'AED United Arab Emirates Dirham', 'د.إ', 'AED', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (9, 'AFN Afghanistan Afghani', '؋', 'AFN', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (10, 'ALL Albania Lek', 'Lek', 'ALL', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (11, 'AMD Armenian Dram', '֏', 'AMD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (12, 'ANG Netherlands Antilles Guilder', 'ƒ', 'ANG', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (13, 'AOA Angola kwanza', 'Kz', 'AOA', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (14, 'ARS Argentina Peso', '$', 'ARS', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (15, 'AWG Aruba Guilder', 'ƒ', 'AWG', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (16, 'AZN Azerbaijan Manat', '₼', 'AZN', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (17, 'BAM Bosnia and Herzegovina Convertible Marka', 'KM', 'BAM', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (18, 'BBD Barbados Dollar', '$', 'BBD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (19, 'BDT Bangladesh Taka', '৳', 'BDT', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (20, 'BGN Bulgaria Lev', 'лв', 'BGN', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (21, 'BMD Bermuda Dollar', '$', 'BMD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (22, 'BND Brunei Darussalam Dollar', '$', 'BND', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (23, 'BOB Bolivia Boliviano', '$b', 'BOB', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (24, 'BRL Brazil Real', 'R$', 'BRL', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (25, 'BSD Bahamas Dollar', '$', 'BSD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (26, 'BWP Botswana Pula', 'P', 'BWP', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (27, 'BZD Belize Dollar', 'BZ$', 'BZD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (28, 'CDF Congo Congolese franc', 'FC', 'CDF', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (29, 'CHF Switzerland Franc', 'CHF', 'CHF', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (30, 'CNY China Yuan Renminbi', '¥', 'CNY', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (31, 'COP Colombia Peso', '$', 'COP', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (32, 'CRC Costa Rica Colon', '₡', 'CRC', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (33, 'CVE Cape Verde Escudo', '$', 'CVE', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (34, 'CZK Czech Republic Koruna', 'Kč', 'CZK', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (35, 'DKK Denmark Krone', 'kr', 'DKK', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (36, 'DOP Dominican Republic Peso', 'RD$', 'DOP', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (37, 'DZD Algeria Dinar', 'دج', 'DZD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (38, 'EGP Egypt Pound', '£', 'EGP', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (39, 'ETB Ethiopia Birr', 'ብር', 'ETB', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (40, 'FJD Fiji Dollar', '$', 'FJD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (41, 'FKP Falkland Islands Pound', '£', 'FKP', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (42, 'GBP United Kingdom Pound', '£', 'GBP', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (43, 'GEL Georgia Lari', '₾', 'GEL', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (44, 'GIP Gibraltar Pound', '£', 'GIP', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (45, 'GMD Gambia Dalasi', 'D', 'GMD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (46, 'GTQ Guatemala Quetzal', 'Q', 'GTQ', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (47, 'GYD Guyana Dollar', '$', 'GYD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (48, 'HNL Honduras Lempira', 'L', 'HNL', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (49, 'HRK Croatia Kuna', 'kn', 'HRK', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (50, 'HTG Haiti Gourde', 'G', 'HTG', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (51, 'HUF Hungary Forint', 'Ft', 'HUF', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (52, 'IDR Indonesia Rupiah', 'Rp', 'IDR', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (53, 'ILS Israel Shekel', '₪', 'ILS', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (54, 'ISK Iceland Krona', 'kr', 'ISK', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (55, 'KES Kenya Shilling', '/=', 'KES', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (56, 'KGS Kyrgyzstan Som', 'лв', 'KGS', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (57, 'KHR Cambodia Riel', '៛', 'KHR', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (58, 'KYD Cayman Dollar', '$', 'KYD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (59, 'KZT Kazakhstan Tenge', 'лв', 'KZT', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (60, 'LAK Laos Kip', '₭', 'LAK', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (61, 'LBP Lebanon Pound', '£', 'LBP', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (62, 'LKR Sri Lanka Rupee', '₨', 'LKR', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (63, 'LRD Liberia Dollar', '$', 'LRD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (64, 'LSL Lesotho Loti', 'L', 'LSL', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (65, 'MAD Morocco Dirham', 'MAD', 'MAD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (66, 'MDL Moldova Leu', 'L', 'MDL', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (67, 'MKD Macedonia Denar', 'ден', 'MKD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (68, 'MMK Myanmar Kyat', 'K', 'MMK', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (69, 'MNT Mongolia Tughrik', '₮', 'MNT', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (70, 'MOP Macau P ataca', 'MOP$', 'MOP', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (71, 'MRO Mauritania Ouguiya', 'MRU', 'MRO', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (72, 'MUR Mauritius Rupee', '₨', 'MUR', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (73, 'MVR Maldives Rufiyaa', '.ރ', 'MVR', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (74, 'MWK Malawi Kwacha', 'MK', 'MWK', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (75, 'MXN Mexico Peso', '$', 'MXN', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (76, 'MYR Malaysia Ringgit', 'RM', 'MYR', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (77, 'MZN Mozambique Metical', 'MT', 'MZN', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (78, 'NAD Namibia Dollar', '$', 'NAD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (79, 'NGN Nigeria Naira', '₦', 'NGN', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (80, 'NIO Nicaragua Cordoba', 'C$', 'NIO', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (81, 'NOK Norway Krone', 'kr', 'NOK', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (82, 'NPR Nepal Rupee', '₨', 'NPR', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (83, 'NZD New Zealand Dollar', '$', 'NZD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (84, 'PAB Panama Balboa', 'B/.', 'PAB', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (85, 'PEN Peru Nuevo Sol', 'S/.', 'PEN', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (86, 'PGK Papua New Guinea Kina', 'K', 'PGK', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (87, 'PHP Philippines Peso', '₱', 'PHP', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (88, 'PKR Pakistan Rupee', '₨', 'PKR', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (89, 'PLN Poland Zloty', 'zł', 'PLN', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (90, 'QAR Qatar Riyal', '﷼', 'QAR', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (91, 'RON Romania New Leu', 'lei', 'RON', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (92, 'RSD Serbia Dinar', 'Дин.', 'RSD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (93, 'RUB Russia Ruble', '₽', 'RUB', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (94, 'SAR Saudi Arabia Riyal', '﷼', 'SAR', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (95, 'SBD Solomon Islands Dollar', '$', 'SBD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (96, 'SCR Seychelles Rupee', '₨', 'SCR', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (97, 'SEK Sweden Krona', 'kr', 'SEK', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (98, 'SGD Singapore Dollar', '$', 'SGD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (99, 'SHP Saint Helena Pound', '£', 'SHP', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (100, 'SLL Sierra Leone Leone', 'Le', 'SLL', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (101, 'SOS Somalia Shilling', 'S', 'SOS', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (102, 'SRD Suriname Dollar', '$', 'SRD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (103, 'STD São Tomé and Príncipe Dobra', 'Db', 'STD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (104, 'SZL Eswatini lilangeni', 'L', 'SZL', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (105, 'THB Thailand Baht', '฿', 'THB', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (106, 'TJS Tajikistan Somoni', 'ЅM', 'TJS', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (107, 'TOP Tonga Pa’anga', 'T$', 'TOP', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (108, 'TRY Turkey Lira', '₺', 'TRY', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (109, 'TTD Trinidad and Tobago Dollar', 'TT$', 'TTD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (110, 'TWD Taiwan New Dollar', 'NT$', 'TWD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (111, 'TZS Tanzania Shiling', 'TSh', 'TZS', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (112, 'UAH Ukraine Hryvna', '₴', 'UAH', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (113, 'UYU Uruguay Peso', '$U', 'UYU', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (114, 'UZS Uzbekistan Som', 'лв', 'UZS', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (115, 'WST Samoa  Tālā', 'WS$', 'WST', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (116, 'XCD Eastern Caribbean States Dollar', '$', 'XCD', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (117, 'YER Yemen Rial', '﷼', 'YER', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (118, 'ZAR South Africa Rand', 'R', 'ZAR', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (119, 'ZMW Zambia Kwacha', 'ZK', 'ZMW', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (120, 'BIF Burundi Franc', 'FBu', 'BIF', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (121, 'CLP Chile Peso', '$', 'CLP', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (122, 'DJF Djibouti Franc', 'Fdj', 'DJF', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (123, 'GNF Guinea Franc', 'GFr', 'GNF', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (124, 'JPY Japan Yen', '¥', 'JPY', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (125, 'KMF Comoros Franc', 'CF', 'KMF', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (126, 'KRW Korea Won', '₩', 'KRW', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (127, 'MGA Madagascar Ariary ', 'Ar', 'MGA', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (128, 'PYG Paraguay Guarani', 'Gs', 'PYG', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (129, 'RWF Rwanda Franc', 'R₣', 'RWF', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (130, 'UGX Uganda Shilling', 'USh', 'UGX', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (131, 'VND Viet Nam Dong', '₫', 'VND', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (132, 'VUV Vanuatu Vatu', 'VT', 'VUV', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (133, 'XAF Central Africa Central African CFA Franc', 'FCFA', 'XAF', '2023-04-07 07:26:41',
+        '2023-04-07 07:26:41'),
+       (134, 'XOF West Africa West African CFA Franc', 'CFA', 'XOF', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (135, 'XPF France Franc', '₣', 'XPF', '2023-04-07 07:26:41', '2023-04-07 07:26:41');
 
 -- --------------------------------------------------------
 
@@ -48988,9 +49012,10 @@ INSERT INTO `currencies` (`id`, `currency_name`, `currency_icon`, `currency_code
 -- Table structure for table `domains`
 --
 
-CREATE TABLE `domains` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `domain` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `domains`
+(
+    `id`       int(10) UNSIGNED NOT NULL,
+    `domain`   varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `tenant_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -49064,24 +49089,33 @@ CREATE TABLE `failed_jobs` (
 --
 
 CREATE TABLE `features` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+                            `id`          bigint(20) UNSIGNED NOT NULL,
+                            `name`        varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+                            `description` text COLLATE utf8mb4_unicode_ci         NOT NULL,
+                            `created_at`  timestamp NULL DEFAULT NULL,
+                            `updated_at`  timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `features`
 --
 
-INSERT INTO `features` (`id`, `name`, `description`, `created_at`, `updated_at`) VALUES
-(1, 'Share your VCards', 'Share Your Business Information with your prospects directly via SMS, Email or any other ways.', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(2, 'Scan QR Code', 'By scanning Your QR Code, your client can see your details and also then can share your QR Code to others.', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(3, 'Social Media Links', 'Your Client can follow you on social media account. You can also inc areas your bussiness by sharing your social link.', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(4, 'Various Range of Templates', 'You Can select various templates for your VCards and share to your clients.', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(5, 'Pricing And Plans', 'We provide various plan from which you can choose plan according to your requirement.', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(6, 'Click On Call', 'Your client can reach you by just tap on phone number and contact you for any query.', '2023-01-31 07:18:39', '2023-01-31 07:18:39');
+INSERT INTO `features` (`id`, `name`, `description`, `created_at`, `updated_at`)
+VALUES (1, 'Share your VCards',
+        'Share Your Business Information with your prospects directly via SMS, Email or any other ways.',
+        '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (2, 'Scan QR Code',
+        'By scanning Your QR Code, your client can see your details and also then can share your QR Code to others.',
+        '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (3, 'Social Media Links',
+        'Your Client can follow you on social media account. You can also inc areas your bussiness by sharing your social link.',
+        '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (4, 'Various Range of Templates', 'You Can select various templates for your VCards and share to your clients.',
+        '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (5, 'Pricing And Plans', 'We provide various plan from which you can choose plan according to your requirement.',
+        '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (6, 'Click On Call', 'Your client can reach you by just tap on phone number and contact you for any query.',
+        '2023-04-07 07:26:42', '2023-04-07 07:26:42');
 
 -- --------------------------------------------------------
 
@@ -49089,9 +49123,10 @@ INSERT INTO `features` (`id`, `name`, `description`, `created_at`, `updated_at`)
 -- Table structure for table `front_testimonials`
 --
 
-CREATE TABLE `front_testimonials` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `front_testimonials`
+(
+    `id`        bigint(20) UNSIGNED NOT NULL,
+    `name`      varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -49135,28 +49170,28 @@ CREATE TABLE `jobs` (
 --
 
 CREATE TABLE `languages` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `iso_code` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_default` tinyint(1) NOT NULL DEFAULT '0',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+                             `id`         bigint(20) UNSIGNED NOT NULL,
+                             `name`       varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+                             `iso_code`   varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+                             `is_default` tinyint(1) NOT NULL DEFAULT '0',
+                             `created_at` timestamp NULL DEFAULT NULL,
+                             `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `languages`
 --
 
-INSERT INTO `languages` (`id`, `name`, `iso_code`, `is_default`, `created_at`, `updated_at`) VALUES
-(1, 'Arabic', 'ar', 0, '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(2, 'Chinese', 'zh', 0, '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(3, 'English', 'en', 1, '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(4, 'French', 'fr', 0, '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(5, 'German', 'de', 0, '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(6, 'Portuguese', 'pt', 0, '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(7, 'Russian', 'ru', 0, '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(8, 'Spanish', 'es', 0, '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(9, 'Turkish', 'tr', 0, '2023-01-31 07:18:39', '2023-01-31 07:18:39');
+INSERT INTO `languages` (`id`, `name`, `iso_code`, `is_default`, `created_at`, `updated_at`)
+VALUES (1, 'Arabic', 'ar', 0, '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (2, 'Chinese', 'zh', 0, '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (3, 'English', 'en', 1, '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (4, 'French', 'fr', 0, '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (5, 'German', 'de', 0, '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (6, 'Portuguese', 'pt', 0, '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (7, 'Russian', 'ru', 0, '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (8, 'Spanish', 'es', 0, '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (9, 'Turkish', 'tr', 0, '2023-04-07 07:26:42', '2023-04-07 07:26:42');
 
 -- --------------------------------------------------------
 
@@ -49164,9 +49199,10 @@ INSERT INTO `languages` (`id`, `name`, `iso_code`, `is_default`, `created_at`, `
 -- Table structure for table `media`
 --
 
-CREATE TABLE `media` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `media`
+(
+    `id`             bigint(20) UNSIGNED NOT NULL,
+    `model_type`     varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `model_id` bigint(20) UNSIGNED NOT NULL,
   `uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `collection_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -49219,81 +49255,81 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(1, '2014_10_10_045631_create_countries_table', 1),
-(2, '2014_10_11_000010_create_tenants_table', 1),
-(3, '2014_10_12_000000_create_users_table', 1),
-(4, '2014_10_12_045650_create_states_table', 1),
-(5, '2014_10_12_045711_create_cities_table', 1),
-(6, '2014_10_12_100000_create_password_resets_table', 1),
-(7, '2019_08_19_000000_create_failed_jobs_table', 1),
-(8, '2019_09_15_000020_create_domains_table', 1),
-(9, '2021_07_26_044558_create_media_table', 1),
-(10, '2021_07_28_114939_create_settings_table', 1),
-(11, '2021_08_05_085326_create_permission_tables', 1),
-(12, '2021_11_10_121124_create_templates_table', 1),
-(13, '2021_11_11_102817_create_vcards_table', 1),
-(14, '2021_11_16_085111_create_currencies_table', 1),
-(15, '2021_11_16_095248_create_plans_table', 1),
-(16, '2021_11_19_062154_create_subscriptions_table', 1),
-(17, '2021_11_22_065915_create_plan_features_table', 1),
-(18, '2021_11_27_062056_create_vcard_services_table', 1),
-(19, '2021_11_27_062057_create_vcard_blog_table', 1),
-(20, '2021_11_29_042127_create_testimonials_table', 1),
-(21, '2021_11_29_103042_create_social_links_table', 1),
-(22, '2021_11_30_123837_create_plan_template_table', 1),
-(23, '2021_12_02_091742_create_transactions_table', 1),
-(24, '2021_12_08_040738_create_business_hours_table', 1),
-(25, '2021_12_08_064936_create_enquiries_table', 1),
-(26, '2021_12_30_103305_create_features_table', 1),
-(27, '2022_01_03_100929_create_email_subscriptions_table', 1),
-(28, '2022_01_04_122930_create_contact_us_table', 1),
-(29, '2022_01_05_052806_create_front_testimonials_table', 1),
-(30, '2022_01_06_043131_create_about_us_table', 1),
-(31, '2022_01_25_045829_add_products_to_plan_features_table', 1),
-(32, '2022_01_25_053730_create_products_table', 1),
-(33, '2022_01_26_071259_change_field_type_json_in_media_table', 1),
-(34, '2022_01_27_041615_add_address_to_vcards_table', 1),
-(35, '2022_02_03_041325_add_appointments_to_plan_features_table', 1),
-(36, '2022_02_03_085714_create_galleries_table', 1),
-(37, '2022_02_03_100343_create_appointments_table', 1),
-(38, '2022_02_04_100737_create_schedule_appointments_table', 1),
-(39, '2022_02_05_043302_add_gallery_to_plan_features_table', 1),
-(40, '2022_02_09_065056_create_jobs_table', 1),
-(41, '2022_02_15_051819_create_analytics_table', 1),
-(42, '2022_02_17_051249_change_vcard_table_column', 1),
-(43, '2022_02_19_043114_add_theme_mode_to_users_table', 1),
-(44, '2022_02_23_113225_add_analytics_to_plan_features_table', 1),
-(45, '2022_02_28_120647_create_payment_gateways_table', 1),
-(46, '2022_03_02_052141_create_social_accounts_table', 1),
-(47, '2022_03_03_043217_add_tiktok_to_social_links_table', 1),
-(48, '2022_03_11_040528_add_seo_to_plan_features_table', 1),
-(49, '2022_03_11_040529_add_blog_to_plan_features_table', 1),
-(50, '2022_03_11_043436_add_meta_to_vcards_table', 1),
-(51, '2022_03_14_071755_add_payment_type_to_subscriptions_table', 1),
-(52, '2022_03_15_074521_create_metas_table', 1),
-(53, '2022_03_31_092107_create_languages_table', 1),
-(54, '2022_04_26_113358_add_payable_amount_in_subscriptions_table', 1),
-(55, '2022_05_04_112737_create_user_settings_table', 1),
-(56, '2022_05_05_084735_create_appointment_details_table', 1),
-(57, '2022_05_05_085632_create_appointment_transactions_table', 1),
-(58, '2022_05_11_104900_add_field_in_schedule_appointments_table', 1),
-(59, '2022_05_11_113546_add_field_in_appointment_transactions_table', 1),
-(60, '2022_05_30_041917_add_language_field_in_vcards_table', 1),
-(61, '2022_05_31_070404_add_google_analytics_to_metas_table', 1),
-(62, '2022_07_25_103401_create_privacy_policies_table', 1),
-(63, '2022_07_29_041154_create_term_conditions_table', 1),
-(64, '2022_08_08_093543_vcard_made_by_column_add', 1),
-(65, '2022_08_24_085829_add_appointment_status_field_to_schedule_appointments_table', 1),
-(66, '2022_08_27_042037_change_dob_type_in_vcard_table', 1),
-(67, '2022_09_02_112922_run_default_seeder', 1),
-(68, '2022_09_05_113052_add_alternative_phone_and_alternative_email_to_the_vcards_table', 1),
-(69, '2022_09_06_055030_make_nullable_occupation_and_description_in_vcards_table', 1),
-(70, '2022_09_07_094930_run_default_seeder_1', 1),
-(71, '2022_09_08_061858_create_email_verifications_table', 1),
-(72, '2022_09_22_051227_run_default_seeder_2', 1),
-(73, '2022_09_29_055816_add_product_url_to_products_table', 1),
-(74, '2022_10_03_090619_remove_is_custom_domain_field_from_vcards_table', 1),
-(75, '2022_10_04_044346_run_default_seeder_3', 1),
+                                                          (1, '2014_10_10_045631_create_countries_table', 1),
+                                                          (2, '2014_10_11_000010_create_tenants_table', 1),
+                                                          (3, '2014_10_12_000000_create_users_table', 1),
+                                                          (4, '2014_10_12_045650_create_states_table', 1),
+                                                          (5, '2014_10_12_045711_create_cities_table', 1),
+                                                          (6, '2014_10_12_100000_create_password_resets_table', 1),
+                                                          (7, '2019_08_19_000000_create_failed_jobs_table', 1),
+                                                          (8, '2019_09_15_000020_create_domains_table', 1),
+                                                          (9, '2021_07_26_044558_create_media_table', 1),
+                                                          (10, '2021_07_28_114939_create_settings_table', 1),
+                                                          (11, '2021_08_05_085326_create_permission_tables', 1),
+                                                          (12, '2021_11_10_121124_create_templates_table', 1),
+                                                          (13, '2021_11_11_102817_create_vcards_table', 1),
+                                                          (14, '2021_11_16_085111_create_currencies_table', 1),
+                                                          (15, '2021_11_16_095248_create_plans_table', 1),
+                                                          (16, '2021_11_19_062154_create_subscriptions_table', 1),
+                                                          (17, '2021_11_22_065915_create_plan_features_table', 1),
+                                                          (18, '2021_11_27_062056_create_vcard_services_table', 1),
+                                                          (19, '2021_11_27_062057_create_vcard_blog_table', 1),
+                                                          (20, '2021_11_29_042127_create_testimonials_table', 1),
+                                                          (21, '2021_11_29_103042_create_social_links_table', 1),
+                                                          (22, '2021_11_30_123837_create_plan_template_table', 1),
+                                                          (23, '2021_12_02_091742_create_transactions_table', 1),
+                                                          (24, '2021_12_08_040738_create_business_hours_table', 1),
+                                                          (25, '2021_12_08_064936_create_enquiries_table', 1),
+                                                          (26, '2021_12_30_103305_create_features_table', 1),
+                                                          (27, '2022_01_03_100929_create_email_subscriptions_table', 1),
+                                                          (28, '2022_01_04_122930_create_contact_us_table', 1),
+                                                          (29, '2022_01_05_052806_create_front_testimonials_table', 1),
+                                                          (30, '2022_01_06_043131_create_about_us_table', 1),
+                                                          (31, '2022_01_25_045829_add_products_to_plan_features_table', 1),
+                                                          (32, '2022_01_25_053730_create_products_table', 1),
+                                                          (33, '2022_01_26_071259_change_field_type_json_in_media_table', 1),
+                                                          (34, '2022_01_27_041615_add_address_to_vcards_table', 1),
+                                                          (35, '2022_02_03_041325_add_appointments_to_plan_features_table', 1),
+                                                          (36, '2022_02_03_085714_create_galleries_table', 1),
+                                                          (37, '2022_02_03_100343_create_appointments_table', 1),
+                                                          (38, '2022_02_04_100737_create_schedule_appointments_table', 1),
+                                                          (39, '2022_02_05_043302_add_gallery_to_plan_features_table', 1),
+                                                          (40, '2022_02_09_065056_create_jobs_table', 1),
+                                                          (41, '2022_02_15_051819_create_analytics_table', 1),
+                                                          (42, '2022_02_17_051249_change_vcard_table_column', 1),
+                                                          (43, '2022_02_19_043114_add_theme_mode_to_users_table', 1),
+                                                          (44, '2022_02_23_113225_add_analytics_to_plan_features_table', 1),
+                                                          (45, '2022_02_28_120647_create_payment_gateways_table', 1),
+                                                          (46, '2022_03_02_052141_create_social_accounts_table', 1),
+                                                          (47, '2022_03_03_043217_add_tiktok_to_social_links_table', 1),
+                                                          (48, '2022_03_11_040528_add_seo_to_plan_features_table', 1),
+                                                          (49, '2022_03_11_040529_add_blog_to_plan_features_table', 1),
+                                                          (50, '2022_03_11_043436_add_meta_to_vcards_table', 1),
+                                                          (51, '2022_03_14_071755_add_payment_type_to_subscriptions_table', 1),
+                                                          (52, '2022_03_15_074521_create_metas_table', 1),
+                                                          (53, '2022_03_31_092107_create_languages_table', 1),
+                                                          (54, '2022_04_26_113358_add_payable_amount_in_subscriptions_table', 1),
+                                                          (55, '2022_05_04_112737_create_user_settings_table', 1),
+                                                          (56, '2022_05_05_084735_create_appointment_details_table', 1),
+                                                          (57, '2022_05_05_085632_create_appointment_transactions_table', 1),
+                                                          (58, '2022_05_11_104900_add_field_in_schedule_appointments_table', 1),
+                                                          (59, '2022_05_11_113546_add_field_in_appointment_transactions_table', 1),
+                                                          (60, '2022_05_30_041917_add_language_field_in_vcards_table', 1),
+                                                          (61, '2022_05_31_070404_add_google_analytics_to_metas_table', 1),
+                                                          (62, '2022_07_25_103401_create_privacy_policies_table', 1),
+                                                          (63, '2022_07_29_041154_create_term_conditions_table', 1),
+                                                          (64, '2022_08_08_093543_vcard_made_by_column_add', 1),
+                                                          (65, '2022_08_24_085829_add_appointment_status_field_to_schedule_appointments_table', 1),
+                                                          (66, '2022_08_27_042037_change_dob_type_in_vcard_table', 1),
+                                                          (67, '2022_09_02_112922_run_default_seeder', 1),
+                                                          (68, '2022_09_05_113052_add_alternative_phone_and_alternative_email_to_the_vcards_table', 1),
+                                                          (69, '2022_09_06_055030_make_nullable_occupation_and_description_in_vcards_table', 1),
+                                                          (70, '2022_09_07_094930_run_default_seeder_1', 1),
+                                                          (71, '2022_09_08_061858_create_email_verifications_table', 1),
+                                                          (72, '2022_09_22_051227_run_default_seeder_2', 1),
+                                                          (73, '2022_09_29_055816_add_product_url_to_products_table', 1),
+                                                          (74, '2022_10_03_090619_remove_is_custom_domain_field_from_vcards_table', 1),
+                                                          (75, '2022_10_04_044346_run_default_seeder_3', 1),
 (76, '2022_10_10_105349_add_alternative_region_code_field_to_vcards_table', 1),
 (77, '2022_11_11_104402_run_default_seeder_4', 1),
 (78, '2022_12_24_042055_add_service_url_at_vcard_service_table', 1),
@@ -49304,10 +49340,37 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (83, '2023_01_03_092209_affiliate_code_for_existing_user', 1),
 (84, '2023_01_03_101106_create_affiliate_user_table', 1),
 (85, '2023_01_04_112541_create_withdrawal_table', 1),
-(86, '2023_01_07_044636_create_withdrawal_transactions_table', 1),
-(87, '2023_01_09_053710_add_is_verified_user_column_in_affiliate_users_table', 1),
-(88, '2023_01_19_094640_add_payment_credentials_fields_for_super_admin', 1),
-(89, '2023_01_20_103334_add_paypal_mode_field_in_setting_table', 1);
+                                                          (86, '2023_01_07_044636_create_withdrawal_transactions_table',
+                                                           1),
+                                                          (87,
+                                                           '2023_01_09_053710_add_is_verified_user_column_in_affiliate_users_table',
+                                                           1),
+                                                          (88,
+                                                           '2023_01_19_094640_add_payment_credentials_fields_for_super_admin',
+                                                           1),
+                                                          (89,
+                                                           '2023_01_20_103334_add_paypal_mode_field_in_setting_table',
+                                                           1),
+                                                          (90, '2023_01_25_092458_create_coupon_codes_table', 1),
+                                                          (91,
+                                                           '2023_02_06_113340_add_coupon_code_data_field_on_subscriptions_table',
+                                                           1),
+                                                          (92,
+                                                           '2023_02_20_101951_change_datatype_of_discount_field_to_coupon_codes_table',
+                                                           1),
+                                                          (93,
+                                                           '2023_03_02_111320_add_enable_download_q_r_code_in_vcards_table',
+                                                           1),
+                                                          (94,
+                                                           '2023_03_03_051207_add_currency_after_amount_on_settings_table',
+                                                           1),
+                                                          (95,
+                                                           '2023_03_03_132114_add_qr_code_download_size_field_in_vcards_table',
+                                                           1),
+                                                          (96,
+                                                           '2023_03_06_045216_add_enable_enquiry_form_field_in_vcards_table',
+                                                           1),
+                                                          (97, '2023_03_28_110034_create_social_icon_table', 1);
 
 -- --------------------------------------------------------
 
@@ -49315,9 +49378,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 -- Table structure for table `model_has_permissions`
 --
 
-CREATE TABLE `model_has_permissions` (
-  `permission_id` bigint(20) UNSIGNED NOT NULL,
-  `model_type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `model_has_permissions`
+(
+    `permission_id` bigint(20) UNSIGNED NOT NULL,
+    `model_type`    varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `model_id` bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -49374,27 +49438,27 @@ CREATE TABLE `payment_gateways` (
 --
 
 CREATE TABLE `permissions` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `display_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `guard_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+                               `id`           bigint(20) UNSIGNED NOT NULL,
+                               `name`         varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+                               `display_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+                               `guard_name`   varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+                               `created_at`   timestamp NULL DEFAULT NULL,
+                               `updated_at`   timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `permissions`
 --
 
-INSERT INTO `permissions` (`id`, `name`, `display_name`, `guard_name`, `created_at`, `updated_at`) VALUES
-(1, 'manage_users', 'Manage Users', 'web', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(2, 'manage_vcards', 'Manage VCards', 'web', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(3, 'manage_plans', 'Manage Plans', 'web', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(4, 'manage_countries', 'Manage Countries', 'web', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(5, 'manage_roles', 'Manage Roles', 'web', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(6, 'manage_settings', 'Manage Settings', 'web', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(7, 'manage_features', 'Manage Features', 'web', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(8, 'manage_language', 'Manage Language', 'web', '2023-01-31 07:18:39', '2023-01-31 07:18:39');
+INSERT INTO `permissions` (`id`, `name`, `display_name`, `guard_name`, `created_at`, `updated_at`)
+VALUES (1, 'manage_users', 'Manage Users', 'web', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (2, 'manage_vcards', 'Manage VCards', 'web', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (3, 'manage_plans', 'Manage Plans', 'web', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (4, 'manage_countries', 'Manage Countries', 'web', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (5, 'manage_roles', 'Manage Roles', 'web', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (6, 'manage_settings', 'Manage Settings', 'web', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (7, 'manage_features', 'Manage Features', 'web', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (8, 'manage_language', 'Manage Language', 'web', '2023-04-07 07:26:42', '2023-04-07 07:26:42');
 
 -- --------------------------------------------------------
 
@@ -49402,9 +49466,10 @@ INSERT INTO `permissions` (`id`, `name`, `display_name`, `guard_name`, `created_
 -- Table structure for table `plans`
 --
 
-CREATE TABLE `plans` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `plans`
+(
+    `id`         bigint(20) UNSIGNED NOT NULL,
+    `name`       varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `no_of_vcards` int(11) DEFAULT NULL,
   `currency_id` bigint(20) UNSIGNED DEFAULT NULL,
   `price` double(8,2) DEFAULT '0.00',
@@ -49419,8 +49484,9 @@ CREATE TABLE `plans` (
 -- Dumping data for table `plans`
 --
 
-INSERT INTO `plans` (`id`, `name`, `no_of_vcards`, `currency_id`, `price`, `frequency`, `is_default`, `trial_days`, `created_at`, `updated_at`) VALUES
-(1, 'Standard', 7, 1, 10.00, 1, 1, 7, '2023-01-31 07:18:38', '2023-01-31 07:18:38');
+INSERT INTO `plans` (`id`, `name`, `no_of_vcards`, `currency_id`, `price`, `frequency`, `is_default`, `trial_days`,
+                     `created_at`, `updated_at`)
+VALUES (1, 'Standard', 7, 1, 10.00, 1, 1, 7, '2023-04-07 07:26:42', '2023-04-07 07:26:42');
 
 -- --------------------------------------------------------
 
@@ -49428,35 +49494,39 @@ INSERT INTO `plans` (`id`, `name`, `no_of_vcards`, `currency_id`, `price`, `freq
 -- Table structure for table `plan_features`
 --
 
-CREATE TABLE `plan_features` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `plan_id` bigint(20) UNSIGNED NOT NULL,
-  `products_services` tinyint(1) NOT NULL DEFAULT '0',
-  `testimonials` tinyint(1) NOT NULL DEFAULT '0',
-  `hide_branding` tinyint(1) NOT NULL DEFAULT '0',
-  `enquiry_form` tinyint(1) NOT NULL DEFAULT '0',
-  `social_links` tinyint(1) NOT NULL DEFAULT '0',
-  `password` tinyint(1) NOT NULL DEFAULT '0',
-  `custom_css` tinyint(1) NOT NULL DEFAULT '0',
-  `custom_js` tinyint(1) NOT NULL DEFAULT '0',
-  `custom_fonts` tinyint(1) NOT NULL DEFAULT '0',
-  `products` tinyint(1) NOT NULL DEFAULT '0',
-  `gallery` tinyint(1) NOT NULL DEFAULT '0',
-  `appointments` tinyint(1) NOT NULL DEFAULT '0',
-  `analytics` tinyint(1) NOT NULL DEFAULT '0',
-  `seo` tinyint(1) NOT NULL DEFAULT '0',
-  `blog` tinyint(1) NOT NULL DEFAULT '0',
-  `affiliation` tinyint(1) NOT NULL DEFAULT '0',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+CREATE TABLE `plan_features`
+(
+    `id`                bigint(20) UNSIGNED NOT NULL,
+    `plan_id`           bigint(20) UNSIGNED NOT NULL,
+    `products_services` tinyint(1) NOT NULL DEFAULT '0',
+    `testimonials`      tinyint(1) NOT NULL DEFAULT '0',
+    `hide_branding`     tinyint(1) NOT NULL DEFAULT '0',
+    `enquiry_form`      tinyint(1) NOT NULL DEFAULT '0',
+    `social_links`      tinyint(1) NOT NULL DEFAULT '0',
+    `password`          tinyint(1) NOT NULL DEFAULT '0',
+    `custom_css`        tinyint(1) NOT NULL DEFAULT '0',
+    `custom_js`         tinyint(1) NOT NULL DEFAULT '0',
+    `custom_fonts`      tinyint(1) NOT NULL DEFAULT '0',
+    `products`          tinyint(1) NOT NULL DEFAULT '0',
+    `gallery`           tinyint(1) NOT NULL DEFAULT '0',
+    `appointments`      tinyint(1) NOT NULL DEFAULT '0',
+    `analytics`         tinyint(1) NOT NULL DEFAULT '0',
+    `seo`               tinyint(1) NOT NULL DEFAULT '0',
+    `blog`              tinyint(1) NOT NULL DEFAULT '0',
+    `affiliation`       tinyint(1) NOT NULL DEFAULT '0',
+    `created_at`        timestamp NULL DEFAULT NULL,
+    `updated_at`        timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `plan_features`
 --
 
-INSERT INTO `plan_features` (`id`, `plan_id`, `products_services`, `testimonials`, `hide_branding`, `enquiry_form`, `social_links`, `password`, `custom_css`, `custom_js`, `custom_fonts`, `products`, `gallery`, `appointments`, `analytics`, `seo`, `blog`, `affiliation`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, '2023-01-31 07:18:38', '2023-01-31 07:18:38');
+INSERT INTO `plan_features` (`id`, `plan_id`, `products_services`, `testimonials`, `hide_branding`, `enquiry_form`,
+                             `social_links`, `password`, `custom_css`, `custom_js`, `custom_fonts`, `products`,
+                             `gallery`, `appointments`, `analytics`, `seo`, `blog`, `affiliation`, `created_at`,
+                             `updated_at`)
+VALUES (1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, '2023-04-07 07:26:42', '2023-04-07 07:26:42');
 
 -- --------------------------------------------------------
 
@@ -49464,9 +49534,10 @@ INSERT INTO `plan_features` (`id`, `plan_id`, `products_services`, `testimonials
 -- Table structure for table `plan_template`
 --
 
-CREATE TABLE `plan_template` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `plan_id` bigint(20) UNSIGNED NOT NULL,
+CREATE TABLE `plan_template`
+(
+    `id`        bigint(20) UNSIGNED NOT NULL,
+    `plan_id`   bigint(20) UNSIGNED NOT NULL,
   `template_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -49522,23 +49593,23 @@ CREATE TABLE `products` (
 --
 
 CREATE TABLE `roles` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `display_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_default` tinyint(1) NOT NULL DEFAULT '0',
-  `guard_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+                         `id`           bigint(20) UNSIGNED NOT NULL,
+                         `name`         varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+                         `display_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+                         `is_default`   tinyint(1) NOT NULL DEFAULT '0',
+                         `guard_name`   varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+                         `created_at`   timestamp NULL DEFAULT NULL,
+                         `updated_at`   timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `roles`
 --
 
-INSERT INTO `roles` (`id`, `name`, `display_name`, `is_default`, `guard_name`, `created_at`, `updated_at`) VALUES
-(1, 'super_admin', 'Super Admin', 1, 'web', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(2, 'admin', 'Admin', 1, 'web', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(3, 'user', 'User', 1, 'web', '2023-01-31 07:18:39', '2023-01-31 07:18:39');
+INSERT INTO `roles` (`id`, `name`, `display_name`, `is_default`, `guard_name`, `created_at`, `updated_at`)
+VALUES (1, 'super_admin', 'Super Admin', 1, 'web', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (2, 'admin', 'Admin', 1, 'web', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (3, 'user', 'User', 1, 'web', '2023-04-07 07:26:42', '2023-04-07 07:26:42');
 
 -- --------------------------------------------------------
 
@@ -49546,9 +49617,10 @@ INSERT INTO `roles` (`id`, `name`, `display_name`, `is_default`, `guard_name`, `
 -- Table structure for table `role_has_permissions`
 --
 
-CREATE TABLE `role_has_permissions` (
-  `permission_id` bigint(20) UNSIGNED NOT NULL,
-  `role_id` bigint(20) UNSIGNED NOT NULL
+CREATE TABLE `role_has_permissions`
+(
+    `permission_id` bigint(20) UNSIGNED NOT NULL,
+    `role_id`       bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -49594,48 +49666,161 @@ CREATE TABLE `schedule_appointments` (
 --
 
 CREATE TABLE `settings` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+                            `id`         bigint(20) UNSIGNED NOT NULL,
+                            `key`        varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+                            `value`      text COLLATE utf8mb4_unicode_ci         NOT NULL,
+                            `created_at` timestamp NULL DEFAULT NULL,
+                            `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`id`, `key`, `value`, `created_at`, `updated_at`) VALUES
-(1, 'sub_text', 'Create your business digital card with lots of information.', '2023-01-31 07:18:35', '2023-01-31 07:18:35'),
-(2, 'default_country_code', 'in', '2023-01-31 07:18:35', '2023-01-31 07:18:35'),
-(3, 'default_currency', 'INR', '2023-01-31 07:18:35', '2023-01-31 07:18:35'),
-(4, 'is_front_page', '1', '2023-01-31 07:18:35', '2023-01-31 07:18:35'),
-(5, 'manual_payment_guide', '<h2>Hello</h2>\n\n\n<h4>Thank You !!</h4>\n', '2023-01-31 07:18:35', '2023-01-31 07:18:35'),
-(6, 'is_manual_payment_guide_on', '1', '2023-01-31 07:18:35', '2023-01-31 07:18:35'),
-(7, 'is_cookie_banner', '1', '2023-01-31 07:18:35', '2023-01-31 07:18:35'),
-(8, 'extra_js_front', '', '2023-01-31 07:18:35', '2023-01-31 07:18:35'),
-(9, 'affiliation_amount', '10', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(10, 'stripe_key', '', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(11, 'stripe_secret', '', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(12, 'paypal_client_id', '', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(13, 'paypal_secret', '', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(14, 'razorpay_key', '', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(15, 'razorpay_secret', '', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(16, 'paypal_mode', 'sandbox', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(17, 'app_name', 'InfyVCards-SaaS', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(18, 'app_logo', '/assets/images/infyom-logo.png', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(19, 'favicon', '/web/media/logos/favicon-infyom.png', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(20, 'email', 'vcards@gmail.com', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(21, 'phone', '9876543210', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(22, 'address', 'C-303, Atlanta Shopping Mall, Nr. Sudama Chowk, Mota Varachha, Surat - 394101, Gujarat, India.', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(23, 'prefix_code', '91', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(24, 'plan_expire_notification', '5', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(25, 'home_page_title', 'InfyVCards-SaaS', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(26, 'home_page_banner', '/front/images/home.png', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(27, 'default_language', 'en', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(28, 'user_default_language', 'en', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(29, 'terms_conditions', '<h1>Terms and Conditions</h1>\n<p>Last updated: December 28, 2021</p>\n<p>Please read these terms and conditions carefully before using Our Service.</p>\n<h1>Interpretation and Definitions</h1>\n<h2>Interpretation</h2>\n<p>The words of which the initial letter is capitalized have meanings defined under the following conditions. The\n    following definitions shall have the same meaning regardless of whether they appear in singular or in plural.</p>\n<h2>Definitions</h2>\n<p>For the purposes of these Terms and Conditions:</p>\n<ul>\n    <li>\n        <p><strong>Affiliate</strong> means an entity that controls, is controlled by or is under common control with a\n            party, where &quot;control&quot; means ownership of 50% or more of the shares, equity interest or other\n            securities entitled to vote for election of directors or other managing authority.</p>\n    </li>\n    <li>\n        <p><strong>Country</strong> refers to: Gujarat, India</p>\n    </li>\n    <li>\n        <p><strong>Company</strong> (referred to as either &quot;the Company&quot;, &quot;We&quot;, &quot;Us&quot; or\n            &quot;Our&quot; in this Agreement) refers to My Site.</p>\n    </li>\n    <li>\n        <p><strong>Device</strong> means any device that can access the Service such as a computer, a cellphone or a\n            digital tablet.</p>\n    </li>\n    <li>\n        <p><strong>Service</strong> refers to the Website.</p>\n    </li>\n    <li>\n        <p><strong>Terms and Conditions</strong> (also referred as &quot;Terms&quot;) mean these Terms and Conditions\n            that form the entire agreement between You and the Company regarding the use of the Service.</p>\n    </li>\n    <li>\n        <p><strong>Third-party Social Media Service</strong> means any services or content (including data, information,\n            products or services) provided by a third-party that may be displayed, included or made available by the\n            Service.</p>\n    </li>\n    <li>\n        <p><strong>Website</strong> refers to My Site, accessible from <a href=\"http://infy-vcard.test\"\n                                                                          rel=\"external nofollow noopener\"\n                                                                          target=\"_blank\">http://infy-vcard.test</a></p>\n    </li>\n    <li>\n        <p><strong>You</strong> means the individual accessing or using the Service, or the company, or other legal\n            entity on behalf of which such individual is accessing or using the Service, as applicable.</p>\n    </li>\n</ul>\n<h1>Acknowledgment</h1>\n<p>These are the Terms and Conditions governing the use of this Service and the agreement that operates between You and\n    the Company. These Terms and Conditions set out the rights and obligations of all users regarding the use of the\n    Service.</p>\n<p>Your access to and use of the Service is conditioned on Your acceptance of and compliance with these Terms and\n    Conditions. These Terms and Conditions apply to all visitors, users and others who access or use the Service.</p>\n<p>By accessing or using the Service You agree to be bound by these Terms and Conditions. If You disagree with any part\n    of these Terms and Conditions then You may not access the Service.</p>\n<p>You represent that you are over the age of 18. The Company does not permit those under 18 to use the Service.</p>\n<p>Your access to and use of the Service is also conditioned on Your acceptance of and compliance with the Privacy\n    Policy of the Company. Our Privacy Policy describes Our policies and procedures on the collection, use and\n    disclosure of Your personal information when You use the Application or the Website and tells You about Your privacy\n    rights and how the law protects You. Please read Our Privacy Policy carefully before using Our Service.</p>\n<h1>Links to Other Websites</h1>\n<p>Our Service may contain links to third-party web sites or services that are not owned or controlled by the\n    Company.</p>\n<p>The Company has no control over, and assumes no responsibility for, the content, privacy policies, or practices of\n    any third party web sites or services. You further acknowledge and agree that the Company shall not be responsible\n    or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with\n    the use of or reliance on any such content, goods or services available on or through any such web sites or\n    services.</p>\n<p>We strongly advise You to read the terms and conditions and privacy policies of any third-party web sites or services\n    that You visit.</p>\n<h1>Termination</h1>\n<p>We may terminate or suspend Your access immediately, without prior notice or liability, for any reason whatsoever,\n    including without limitation if You breach these Terms and Conditions.</p>\n<p>Upon termination, Your right to use the Service will cease immediately.</p>\n<h1>Limitation of Liability</h1>\n<p>Notwithstanding any damages that You might incur, the entire liability of the Company and any of its suppliers under\n    any provision of this Terms and Your exclusive remedy for all of the foregoing shall be limited to the amount\n    actually paid by You through the Service or 100 USD if You haven\'t purchased anything through the Service.</p>\n<p>To the maximum extent permitted by applicable law, in no event shall the Company or its suppliers be liable for any\n    special, incidental, indirect, or consequential damages whatsoever (including, but not limited to, damages for loss\n    of profits, loss of data or other information, for business interruption, for personal injury, loss of privacy\n    arising out of or in any way related to the use of or inability to use the Service, third-party software and/or\n    third-party hardware used with the Service, or otherwise in connection with any provision of this Terms), even if\n    the Company or any supplier has been advised of the possibility of such damages and even if the remedy fails of its\n    essential purpose.</p>\n<p>Some states do not allow the exclusion of implied warranties or limitation of liability for incidental or\n    consequential damages, which means that some of the above limitations may not apply. In these states, each party\'s\n    liability will be limited to the greatest extent permitted by law.</p>\n<h1>&quot;AS IS&quot; and &quot;AS AVAILABLE&quot; Disclaimer</h1>\n<p>The Service is provided to You &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; and with all faults and defects without\n    warranty of any kind. To the maximum extent permitted under applicable law, the Company, on its own behalf and on\n    behalf of its Affiliates and its and their respective licensors and service providers, expressly disclaims all\n    warranties, whether express, implied, statutory or otherwise, with respect to the Service, including all implied\n    warranties of merchantability, fitness for a particular purpose, title and non-infringement, and warranties that may\n    arise out of course of dealing, course of performance, usage or trade practice. Without limitation to the foregoing,\n    the Company provides no warranty or undertaking, and makes no representation of any kind that the Service will meet\n    Your requirements, achieve any intended results, be compatible or work with any other software, applications,\n    systems or services, operate without interruption, meet any performance or reliability standards or be error free or\n    that any errors or defects can or will be corrected.</p>\n<p>Without limiting the foregoing, neither the Company nor any of the company\'s provider makes any representation or\n    warranty of any kind, express or implied: (i) as to the operation or availability of the Service, or the\n    information, content, and materials or products included thereon; (ii) that the Service will be uninterrupted or\n    error-free; (iii) as to the accuracy, reliability, or currency of any information or content provided through the\n    Service; or (iv) that the Service, its servers, the content, or e-mails sent from or on behalf of the Company are\n    free of viruses, scripts, trojan horses, worms, malware, timebombs or other harmful components.</p>\n<p>Some jurisdictions do not allow the exclusion of certain types of warranties or limitations on applicable statutory\n    rights of a consumer, so some or all of the above exclusions and limitations may not apply to You. But in such a\n    case the exclusions and limitations set forth in this section shall be applied to the greatest extent enforceable\n    under applicable law.</p>\n<h1>Governing Law</h1>\n<p>The laws of the Country, excluding its conflicts of law rules, shall govern this Terms and Your use of the Service.\n    Your use of the Application may also be subject to other local, state, national, or international laws.</p>\n<h1>Disputes Resolution</h1>\n<p>If You have any concern or dispute about the Service, You agree to first try to resolve the dispute informally by\n    contacting the Company.</p>\n<h1>For European Union (EU) Users</h1>\n<p>If You are a European Union consumer, you will benefit from any mandatory provisions of the law of the country in\n    which you are resident in.</p>\n<h1>United States Legal Compliance</h1>\n<p>You represent and warrant that (i) You are not located in a country that is subject to the United States government\n    embargo, or that has been designated by the United States government as a &quot;terrorist supporting&quot; country,\n    and (ii) You are not listed on any United States government list of prohibited or restricted parties.</p>\n<h1>Severability and Waiver</h1>\n<h2>Severability</h2>\n<p>If any provision of these Terms is held to be unenforceable or invalid, such provision will be changed and\n    interpreted to accomplish the objectives of such provision to the greatest extent possible under applicable law and\n    the remaining provisions will continue in full force and effect.</p>\n<h2>Waiver</h2>\n<p>Except as provided herein, the failure to exercise a right or to require performance of an obligation under this\n    Terms shall not effect a party\'s ability to exercise such right or require such performance at any time thereafter\n    nor shall be the waiver of a breach constitute a waiver of any subsequent breach.</p>\n<h1>Translation Interpretation</h1>\n<p>These Terms and Conditions may have been translated if We have made them available to You on our Service.\n    You agree that the original English text shall prevail in the case of a dispute.</p>\n<h1>Changes to These Terms and Conditions</h1>\n<p>We reserve the right, at Our sole discretion, to modify or replace these Terms at any time. If a revision is material\n    We will make reasonable efforts to provide at least 30 days\' notice prior to any new terms taking effect. What\n    constitutes a material change will be determined at Our sole discretion.</p>\n<p>By continuing to access or use Our Service after those revisions become effective, You agree to be bound by the\n    revised terms. If You do not agree to the new terms, in whole or in part, please stop using the website and the\n    Service.</p>\n<h1>Contact Us</h1>\n<p>If you have any questions about these Terms and Conditions, You can contact us:</p>\n\n', '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(30, 'privacy_policy', '<h1>Privacy Policy</h1>\n<p>Last updated: December 28, 2021</p>\n<p>This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information\n    when You use the Service and tells You about Your privacy rights and how the law protects You.</p>\n<p>We use Your Personal data to provide and improve the Service. By using the Service, You agree to the collection and\n    use of information in accordance with this Privacy Policy.</p>\n<h1>Interpretation and Definitions</h1>\n<h2>Interpretation</h2>\n<p>The words of which the initial letter is capitalized have meanings defined under the following conditions. The\n    following definitions shall have the same meaning regardless of whether they appear in singular or in plural.</p>\n<h2>Definitions</h2>\n<p>For the purposes of this Privacy Policy:</p>\n<ul>\n    <li>\n        <p><strong>Account</strong> means a unique account created for You to access our Service or parts of our\n            Service.</p>\n    </li>\n    <li>\n        <p><strong>Company</strong> (referred to as either &quot;the Company&quot;, &quot;We&quot;, &quot;Us&quot; or\n            &quot;Our&quot; in this Agreement) refers to My Site.</p>\n    </li>\n    <li>\n        <p><strong>Cookies</strong> are small files that are placed on Your computer, mobile device or any other device\n            by a website, containing the details of Your browsing history on that website among its many uses.</p>\n    </li>\n    <li>\n        <p><strong>Country</strong> refers to: Gujarat, India</p>\n    </li>\n    <li>\n        <p><strong>Device</strong> means any device that can access the Service such as a computer, a cellphone or a\n            digital tablet.</p>\n    </li>\n    <li>\n        <p><strong>Personal Data</strong> is any information that relates to an identified or identifiable individual.\n        </p>\n    </li>\n    <li>\n        <p><strong>Service</strong> refers to the Website.</p>\n    </li>\n    <li>\n        <p><strong>Service Provider</strong> means any natural or legal person who processes the data on behalf of the\n            Company. It refers to third-party companies or individuals employed by the Company to facilitate the\n            Service, to provide the Service on behalf of the Company, to perform services related to the Service or to\n            assist the Company in analyzing how the Service is used.</p>\n    </li>\n    <li>\n        <p><strong>Usage Data</strong> refers to data collected automatically, either generated by the use of the\n            Service or from the Service infrastructure itself (for example, the duration of a page visit).</p>\n    </li>\n    <li>\n        <p><strong>Website</strong> refers to My Site, accessible from <a href=\"http://infy-vcard.test\"\n                                                                          rel=\"external nofollow noopener\"\n                                                                          target=\"_blank\">http://infy-vcard.test</a></p>\n    </li>\n    <li>\n        <p><strong>You</strong> means the individual accessing or using the Service, or the company, or other legal\n            entity on behalf of which such individual is accessing or using the Service, as applicable.</p>\n    </li>\n</ul>\n<h1>Collecting and Using Your Personal Data</h1>\n<h2>Types of Data Collected</h2>\n<h3>Personal Data</h3>\n<p>While using Our Service, We may ask You to provide Us with certain personally identifiable information that can be\n    used to contact or identify You. Personally identifiable information may include, but is not limited to:</p>\n<ul>\n    <li>\n        <p>Email address</p>\n    </li>\n    <li>\n        <p>First name and last name</p>\n    </li>\n    <li>\n        <p>Phone number</p>\n    </li>\n    <li>\n        <p>Usage Data</p>\n    </li>\n</ul>\n<h3>Usage Data</h3>\n<p>Usage Data is collected automatically when using the Service.</p>\n<p>Usage Data may include information such as Your Device\'s Internet Protocol address (e.g. IP address), browser type,\n    browser version, the pages of our Service that You visit, the time and date of Your visit, the time spent on those\n    pages, unique device identifiers and other diagnostic data.</p>\n<p>When You access the Service by or through a mobile device, We may collect certain information automatically,\n    including, but not limited to, the type of mobile device You use, Your mobile device unique ID, the IP address of\n    Your mobile device, Your mobile operating system, the type of mobile Internet browser You use, unique device\n    identifiers and other diagnostic data.</p>\n<p>We may also collect information that Your browser sends whenever You visit our Service or when You access the Service\n    by or through a mobile device.</p>\n<h3>Tracking Technologies and Cookies</h3>\n<p>We use Cookies and similar tracking technologies to track the activity on Our Service and store certain information.\n    Tracking technologies used are beacons, tags, and scripts to collect and track information and to improve and\n    analyze Our Service. The technologies We use may include:</p>\n<ul>\n    <li><strong>Cookies or Browser Cookies.</strong> A cookie is a small file placed on Your Device. You can instruct\n        Your browser to refuse all Cookies or to indicate when a Cookie is being sent. However, if You do not accept\n        Cookies, You may not be able to use some parts of our Service. Unless you have adjusted Your browser setting so\n        that it will refuse Cookies, our Service may use Cookies.\n    </li>\n    <li><strong>Flash Cookies.</strong> Certain features of our Service may use local stored objects (or Flash Cookies)\n        to collect and store information about Your preferences or Your activity on our Service. Flash Cookies are not\n        managed by the same browser settings as those used for Browser Cookies. For more information on how You can\n        delete Flash Cookies, please read &quot;Where can I change the settings for disabling, or deleting local shared\n        objects?&quot; available at <a\n                href=\"//helpx.adobe.com/flash-player/kb/disable-local-shared-objects-flash.html#main_Where_can_I_change_the_settings_for_disabling__or_deleting_local_shared_objects_\"\n                rel=\"external nofollow noopener\" target=\"_blank\">Link</a>\n    </li>\n    <li><strong>Web Beacons.</strong> Certain sections of our Service and our emails may contain small electronic files\n        known as web beacons (also referred to as clear gifs, pixel tags, and single-pixel gifs) that permit the\n        Company, for example, to count users who have visited those pages or opened an email and for other related\n        website statistics (for example, recording the popularity of a certain section and verifying system and server\n        integrity).\n    </li>\n</ul>\n<p>Cookies can be &quot;Persistent&quot; or &quot;Session&quot; Cookies. Persistent Cookies remain on Your personal\n    computer or mobile device when You go offline, while Session Cookies are deleted as soon as You close Your web\n    browser. You can learn more about cookies here: <a href=\"//html.com/resources/cookies-ultimate-guide/\"\n                                                       target=\"_blank\">Cookies Ultimate Guide</a>.</p>\n<p>We use both Session and Persistent Cookies for the purposes set out below:</p>\n<ul>\n    <li>\n        <p><strong>Necessary / Essential Cookies</strong></p>\n        <p>Type: Session Cookies</p>\n        <p>Administered by: Us</p>\n        <p>Purpose: These Cookies are essential to provide You with services available through the Website and to enable\n            You to use some of its features. They help to authenticate users and prevent fraudulent use of user\n            accounts. Without these Cookies, the services that You have asked for cannot be provided, and We only use\n            these Cookies to provide You with those services.</p>\n    </li>\n    <li>\n        <p><strong>Cookies Policy / Notice Acceptance Cookies</strong></p>\n        <p>Type: Persistent Cookies</p>\n        <p>Administered by: Us</p>\n        <p>Purpose: These Cookies identify if users have accepted the use of cookies on the Website.</p>\n    </li>\n    <li>\n        <p><strong>Functionality Cookies</strong></p>\n        <p>Type: Persistent Cookies</p>\n        <p>Administered by: Us</p>\n        <p>Purpose: These Cookies allow us to remember choices You make when You use the Website, such as remembering\n            your login details or language preference. The purpose of these Cookies is to provide You with a more\n            personal experience and to avoid You having to re-enter your preferences every time You use the Website.</p>\n    </li>\n</ul>\n<p>For more information about the cookies we use and your choices regarding cookies, please visit our Cookies Policy or\n    the Cookies section of our Privacy Policy.</p>\n<h2>Use of Your Personal Data</h2>\n<p>The Company may use Personal Data for the following purposes:</p>\n<ul>\n    <li>\n        <p><strong>To provide and maintain our Service</strong>, including to monitor the usage of our Service.</p>\n    </li>\n    <li>\n        <p><strong>To manage Your Account:</strong> to manage Your registration as a user of the Service. The Personal\n            Data You provide can give You access to different functionalities of the Service that are available to You\n            as a registered user.</p>\n    </li>\n    <li>\n        <p><strong>For the performance of a contract:</strong> the development, compliance and undertaking of the\n            purchase contract for the products, items or services You have purchased or of any other contract with Us\n            through the Service.</p>\n    </li>\n    <li>\n        <p><strong>To contact You:</strong> To contact You by email, telephone calls, SMS, or other equivalent forms of\n            electronic communication, such as a mobile application\'s push notifications regarding updates or informative\n            communications related to the functionalities, products or contracted services, including the security\n            updates, when necessary or reasonable for their implementation.</p>\n    </li>\n    <li>\n        <p><strong>To provide You</strong> with news, special offers and general information about other goods, services\n            and events which we offer that are similar to those that you have already purchased or enquired about unless\n            You have opted not to receive such information.</p>\n    </li>\n    <li>\n        <p><strong>To manage Your requests:</strong> To attend and manage Your requests to Us.</p>\n    </li>\n    <li>\n        <p><strong>For business transfers:</strong> We may use Your information to evaluate or conduct a merger,\n            divestiture, restructuring, reorganization, dissolution, or other sale or transfer of some or all of Our\n            assets, whether as a going concern or as part of bankruptcy, liquidation, or similar proceeding, in which\n            Personal Data held by Us about our Service users is among the assets transferred.</p>\n    </li>\n    <li>\n        <p><strong>For other purposes</strong>: We may use Your information for other purposes, such as data analysis,\n            identifying usage trends, determining the effectiveness of our promotional campaigns and to evaluate and\n            improve our Service, products, services, marketing and your experience.</p>\n    </li>\n</ul>\n<p>We may share Your personal information in the following situations:</p>\n<ul>\n    <li><strong>With Service Providers:</strong> We may share Your personal information with Service Providers to\n        monitor and analyze the use of our Service, to contact You.\n    </li>\n    <li><strong>For business transfers:</strong> We may share or transfer Your personal information in connection with,\n        or during negotiations of, any merger, sale of Company assets, financing, or acquisition of all or a portion of\n        Our business to another company.\n    </li>\n    <li><strong>With Affiliates:</strong> We may share Your information with Our affiliates, in which case we will\n        require those affiliates to honor this Privacy Policy. Affiliates include Our parent company and any other\n        subsidiaries, joint venture partners or other companies that We control or that are under common control with\n        Us.\n    </li>\n    <li><strong>With business partners:</strong> We may share Your information with Our business partners to offer You\n        certain products, services or promotions.\n    </li>\n    <li><strong>With other users:</strong> when You share personal information or otherwise interact in the public areas\n        with other users, such information may be viewed by all users and may be publicly distributed outside.\n    </li>\n    <li><strong>With Your consent</strong>: We may disclose Your personal information for any other purpose with Your\n        consent.\n    </li>\n</ul>\n<h2>Retention of Your Personal Data</h2>\n<p>The Company will retain Your Personal Data only for as long as is necessary for the purposes set out in this Privacy\n    Policy. We will retain and use Your Personal Data to the extent necessary to comply with our legal obligations (for\n    example, if we are required to retain your data to comply with applicable laws), resolve disputes, and enforce our\n    legal agreements and policies.</p>\n<p>The Company will also retain Usage Data for internal analysis purposes. Usage Data is generally retained for a\n    shorter period of time, except when this data is used to strengthen the security or to improve the functionality of\n    Our Service, or We are legally obligated to retain this data for longer time periods.</p>\n<h2>Transfer of Your Personal Data</h2>\n<p>Your information, including Personal Data, is processed at the Company\'s operating offices and in any other places\n    where the parties involved in the processing are located. It means that this information may be transferred to — and\n    maintained on — computers located outside of Your state, province, country or other governmental jurisdiction where\n    the data protection laws may differ than those from Your jurisdiction.</p>\n<p>Your consent to this Privacy Policy followed by Your submission of such information represents Your agreement to that\n    transfer.</p>\n<p>The Company will take all steps reasonably necessary to ensure that Your data is treated securely and in accordance\n    with this Privacy Policy and no transfer of Your Personal Data will take place to an organization or a country\n    unless there are adequate controls in place including the security of Your data and other personal information.</p>\n<h2>Disclosure of Your Personal Data</h2>\n<h3>Business Transactions</h3>\n<p>If the Company is involved in a merger, acquisition or asset sale, Your Personal Data may be transferred. We will\n    provide notice before Your Personal Data is transferred and becomes subject to a different Privacy Policy.</p>\n<h3>Law enforcement</h3>\n<p>Under certain circumstances, the Company may be required to disclose Your Personal Data if required to do so by law\n    or in response to valid requests by public authorities (e.g. a court or a government agency).</p>\n<h3>Other legal requirements</h3>\n<p>The Company may disclose Your Personal Data in the good faith belief that such action is necessary to:</p>\n<ul>\n    <li>Comply with a legal obligation</li>\n    <li>Protect and defend the rights or property of the Company</li>\n    <li>Prevent or investigate possible wrongdoing in connection with the Service</li>\n    <li>Protect the personal safety of Users of the Service or the public</li>\n    <li>Protect against legal liability</li>\n</ul>\n<h2>Security of Your Personal Data</h2>\n<p>The security of Your Personal Data is important to Us, but remember that no method of transmission over the Internet,\n    or method of electronic storage is 100% secure. While We strive to use commercially acceptable means to protect Your\n    Personal Data, We cannot guarantee its absolute security.</p>\n<h1>Children\'s Privacy</h1>\n<p>Our Service does not address anyone under the age of 13. We do not knowingly collect personally identifiable\n    information from anyone under the age of 13. If You are a parent or guardian and You are aware that Your child has\n    provided Us with Personal Data, please contact Us. If We become aware that We have collected Personal Data from\n    anyone under the age of 13 without verification of parental consent, We take steps to remove that information from\n    Our servers.</p>\n<p>If We need to rely on consent as a legal basis for processing Your information and Your country requires consent from\n    a parent, We may require Your parent\'s consent before We collect and use that information.</p>\n<h1>Links to Other Websites</h1>\n<p>Our Service may contain links to other websites that are not operated by Us. If You click on a third party link, You\n    will be directed to that third party\'s site. We strongly advise You to review the Privacy Policy of every site You\n    visit.</p>\n<p>We have no control over and assume no responsibility for the content, privacy policies or practices of any third\n    party sites or services.</p>\n<h1>Changes to this Privacy Policy</h1>\n<p>We may update Our Privacy Policy from time to time. We will notify You of any changes by posting the new Privacy\n    Policy on this page.</p>\n<p>We will let You know via email and/or a prominent notice on Our Service, prior to the change becoming effective and\n    update the &quot;Last updated&quot; date at the top of this Privacy Policy.</p>\n<p>You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are\n    effective when they are posted on this page.</p>\n<h1>Contact Us</h1>\n<p>If you have any questions about this Privacy Policy, You can contact us:</p>\n', '2023-01-31 07:18:39', '2023-01-31 07:18:39');
+INSERT INTO `settings` (`id`, `key`, `value`, `created_at`, `updated_at`)
+VALUES (1, 'sub_text', 'Create your business digital card with lots of information.', '2023-04-07 07:26:41',
+        '2023-04-07 07:26:41'),
+       (2, 'default_country_code', 'in', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (3, 'default_currency', 'INR', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (4, 'is_front_page', '1', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (5, 'manual_payment_guide', '<h2>Hello</h2>\n\n\n<h4>Thank You !!</h4>\n', '2023-04-07 07:26:41',
+        '2023-04-07 07:26:41'),
+       (6, 'is_manual_payment_guide_on', '1', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (7, 'is_cookie_banner', '1', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (8, 'extra_js_front', '', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (9, 'affiliation_amount', '10', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (10, 'stripe_key', '', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (11, 'stripe_secret', '', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (12, 'paypal_client_id', '', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (13, 'paypal_secret', '', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (14, 'razorpay_key', '', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (15, 'razorpay_secret', '', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (16, 'paypal_mode', 'sandbox', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (17, 'currency_after_amount', '0', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (18, 'app_name', 'InfyVCards-SaaS', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (19, 'app_logo', '/assets/images/infyom-logo.png', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (20, 'favicon', '/web/media/logos/favicon-infyom.png', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (21, 'email', 'vcards@gmail.com', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (22, 'phone', '9876543210', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (23, 'address', 'C-303, Atlanta Shopping Mall, Nr. Sudama Chowk, Mota Varachha, Surat - 394101, Gujarat, India.',
+        '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (24, 'prefix_code', '91', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (25, 'plan_expire_notification', '5', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (26, 'home_page_title', 'InfyVCards-SaaS', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (27, 'home_page_banner', '/front/images/home.png', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (28, 'default_language', 'en', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (29, 'user_default_language', 'en', '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (30, 'terms_conditions',
+        '<h1>Terms and Conditions</h1>\n<p>Last updated: December 28, 2021</p>\n<p>Please read these terms and conditions carefully before using Our Service.</p>\n<h1>Interpretation and Definitions</h1>\n<h2>Interpretation</h2>\n<p>The words of which the initial letter is capitalized have meanings defined under the following conditions. The\n    following definitions shall have the same meaning regardless of whether they appear in singular or in plural.</p>\n<h2>Definitions</h2>\n<p>For the purposes of these Terms and Conditions:</p>\n<ul>\n    <li>\n        <p><strong>Affiliate</strong> means an entity that controls, is controlled by or is under common control with a\n            party, where &quot;control&quot; means ownership of 50% or more of the shares, equity interest or other\n            securities entitled to vote for election of directors or other managing authority.</p>\n    </li>\n    <li>\n        <p><strong>Country</strong> refers to: Gujarat, India</p>\n    </li>\n    <li>\n        <p><strong>Company</strong> (referred to as either &quot;the Company&quot;, &quot;We&quot;, &quot;Us&quot; or\n            &quot;Our&quot; in this Agreement) refers to My Site.</p>\n    </li>\n    <li>\n        <p><strong>Device</strong> means any device that can access the Service such as a computer, a cellphone or a\n            digital tablet.</p>\n    </li>\n    <li>\n        <p><strong>Service</strong> refers to the Website.</p>\n    </li>\n    <li>\n        <p><strong>Terms and Conditions</strong> (also referred as &quot;Terms&quot;) mean these Terms and Conditions\n            that form the entire agreement between You and the Company regarding the use of the Service.</p>\n    </li>\n    <li>\n        <p><strong>Third-party Social Media Service</strong> means any services or content (including data, information,\n            products or services) provided by a third-party that may be displayed, included or made available by the\n            Service.</p>\n    </li>\n    <li>\n        <p><strong>Website</strong> refers to My Site, accessible from <a href=\"http://infy-vcards.test\"\n                                                                          rel=\"external nofollow noopener\"\n                                                                          target=\"_blank\">http://infy-vcards.test</a></p>\n    </li>\n    <li>\n        <p><strong>You</strong> means the individual accessing or using the Service, or the company, or other legal\n            entity on behalf of which such individual is accessing or using the Service, as applicable.</p>\n    </li>\n</ul>\n<h1>Acknowledgment</h1>\n<p>These are the Terms and Conditions governing the use of this Service and the agreement that operates between You and\n    the Company. These Terms and Conditions set out the rights and obligations of all users regarding the use of the\n    Service.</p>\n<p>Your access to and use of the Service is conditioned on Your acceptance of and compliance with these Terms and\n    Conditions. These Terms and Conditions apply to all visitors, users and others who access or use the Service.</p>\n<p>By accessing or using the Service You agree to be bound by these Terms and Conditions. If You disagree with any part\n    of these Terms and Conditions then You may not access the Service.</p>\n<p>You represent that you are over the age of 18. The Company does not permit those under 18 to use the Service.</p>\n<p>Your access to and use of the Service is also conditioned on Your acceptance of and compliance with the Privacy\n    Policy of the Company. Our Privacy Policy describes Our policies and procedures on the collection, use and\n    disclosure of Your personal information when You use the Application or the Website and tells You about Your privacy\n    rights and how the law protects You. Please read Our Privacy Policy carefully before using Our Service.</p>\n<h1>Links to Other Websites</h1>\n<p>Our Service may contain links to third-party web sites or services that are not owned or controlled by the\n    Company.</p>\n<p>The Company has no control over, and assumes no responsibility for, the content, privacy policies, or practices of\n    any third party web sites or services. You further acknowledge and agree that the Company shall not be responsible\n    or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with\n    the use of or reliance on any such content, goods or services available on or through any such web sites or\n    services.</p>\n<p>We strongly advise You to read the terms and conditions and privacy policies of any third-party web sites or services\n    that You visit.</p>\n<h1>Termination</h1>\n<p>We may terminate or suspend Your access immediately, without prior notice or liability, for any reason whatsoever,\n    including without limitation if You breach these Terms and Conditions.</p>\n<p>Upon termination, Your right to use the Service will cease immediately.</p>\n<h1>Limitation of Liability</h1>\n<p>Notwithstanding any damages that You might incur, the entire liability of the Company and any of its suppliers under\n    any provision of this Terms and Your exclusive remedy for all of the foregoing shall be limited to the amount\n    actually paid by You through the Service or 100 USD if You haven\'t purchased anything through the Service.</p>\n<p>To the maximum extent permitted by applicable law, in
+        no event shall the Company or its suppliers be liable for any \n special, incidental, indirect, or consequential
+        damages whatsoever (including, but not limited to, damages for loss\n of profits, loss of data or other
+        information, for business interruption, for personal injury, loss of privacy\n arising out of or in any way
+        related to the use of or inability to use the Service, third - party software and / or \n third - party hardware
+        used with the Service, or otherwise in connection with any provision of this Terms),
+        even if\n    the Company or any supplier has been advised of the possibility of such damages and even if the remedy fails of its\n    essential purpose.</p>\n<p>Some states do not allow the exclusion of implied warranties or limitation of liability for incidental or\n    consequential damages,
+        which means that some of the above limitations may not apply. In these states,
+        each party\'s\n    liability will be limited to the greatest extent permitted by law.</p>\n<h1>&quot;AS IS&quot; and &quot;AS AVAILABLE&quot; Disclaimer</h1>\n<p>The Service is provided to You &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; and with all faults and defects without\n    warranty of any kind. To the maximum extent permitted under applicable law, the Company, on its own behalf and on\n    behalf of its Affiliates and its and their respective licensors and service providers, expressly disclaims all\n    warranties, whether express, implied, statutory or otherwise, with respect to the Service, including all implied\n    warranties of merchantability, fitness for a particular purpose, title and non-infringement, and warranties that may\n    arise out of course of dealing, course of performance, usage or trade practice. Without limitation to the foregoing,\n    the Company provides no warranty or undertaking, and makes no representation of any kind that the Service will meet\n    Your requirements, achieve any intended results, be compatible or work with any other software, applications,\n    systems or services, operate without interruption, meet any performance or reliability standards or be error free or\n    that any errors or defects can or will be corrected.</p>\n<p>Without limiting the foregoing, neither the Company nor any of the company\'s provider makes any representation or\n    warranty of any kind,
+        express or implied: (i) as to the operation or availability of the Service, or the\n information, content, and
+        materials or products included thereon;
+    (ii)
+    that the Service will be uninterrupted or
+    \n    error-free;
+    (iii)
+    as to the accuracy, reliability, or currency of any information or content provided through the
+    \n    Service;
+or (iv) that the Service, its servers, the content, or e-mails sent from or on behalf of the Company are
+\n    free of viruses, scripts, trojan horses, worms, malware, timebombs or other harmful components.</p>
+\n<p>Some jurisdictions do not allow the exclusion of certain types of warranties or limitations on applicable statutory
+\n    rights of a consumer, so some or all of the above exclusions and limitations may not apply to You. But in such a
+\n    case the exclusions and limitations set forth in this section shall be applied to the greatest extent enforceable
+\n    under applicable law.</p>
+\n<h1>Governing Law</h1>
+\n<p>The laws of the Country, excluding its conflicts of law rules, shall govern this Terms and Your use of the Service.
+\n    Your use of the Application may also be subject to other local, state, national, or international laws.</p>
+\n<h1>Disputes Resolution</h1>
+\n<p>If You have any concern or dispute about the Service, You agree to first try to resolve the dispute informally by
+\n    contacting the Company.</p>
+\n<h1>For European Union (EU) Users</h1>
+\n<p>If You are a European Union consumer, you will benefit from any mandatory provisions of the law of the country in
+\n    which you are resident in.</p>
+\n<h1>United States Legal Compliance</h1>
+\n<p>You represent and warrant that (i) You are not located in a country that is subject to the United States government
+\n    embargo, or that has been designated by the United States government as a &quot;terrorist
+supporting&quot; country
+,
+\n    and (ii) You are not listed on any United States government list of prohibited or restricted parties.</p>
+\n<h1>Severability and Waiver</h1>
+\n<h2>Severability</h2>
+\n<p>If any provision of these Terms is held to be unenforceable or invalid, such provision will be changed and
+\n    interpreted to accomplish the objectives of such provision to the greatest extent possible under applicable law and
+\n    the remaining provisions will continue in full force and effect.</p>
+\n<h2>Waiver</h2>
+\n<p>Except as provided herein, the failure to exercise a right or to require performance of an obligation under this
+\n    Terms shall not effect a party
+\'s ability to exercise such right or require such performance at any time thereafter\n    nor shall be the waiver of a breach constitute a waiver of any subsequent breach.</p>\n<h1>Translation Interpretation</h1>\n<p>These Terms and Conditions may have been translated if We have made them available to You on our Service.\n    You agree that the original English text shall prevail in the case of a dispute.</p>\n<h1>Changes to These Terms and Conditions</h1>\n<p>We reserve the right, at Our sole discretion, to modify or replace these Terms at any time. If a revision is material\n    We will make reasonable efforts to provide at least 30 days\' notice prior to any new terms taking effect. What
+\n    constitutes a material change will be determined at Our sole discretion.</p>
+\n<p>By continuing to access or use Our Service after those revisions become effective, You agree to be bound by the
+\n    revised terms. If You do not agree to the new terms, in whole or in part, please stop using the website and the
+\n    Service.</p>
+\n<h1>Contact Us</h1>
+\n<p>If you have any questions about these Terms and Conditions, You can contact us:</p>
+\n
+\n', '
+2023-04-07 07:26:42
+', '2023-04-07 07:26:42
+'),
+(31, 'privacy_policy', '<h1>Privacy Policy</h1>
+\n<p>Last updated: December 28, 2021</p>
+\n<p>This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information
+\n    when You use the Service and tells You about Your privacy rights and how the law protects You.</p>
+\n<p>We use Your Personal data to provide and improve the Service. By using the Service, You agree to the collection and
+\n    use of information in accordance with this Privacy Policy.</p>
+\n<h1>Interpretation and Definitions</h1>
+\n<h2>Interpretation</h2>
+\n<p>The words of which the initial letter is capitalized have meanings defined under the following conditions. The
+\n    following definitions shall have the same meaning regardless of whether they appear in singular or in plural.</p>
+\n<h2>Definitions</h2>
+\n<p>For the purposes of this Privacy Policy:</p>
+\n<ul>
+\n    <li>
+\n        <p><strong>Account</strong> means a unique account created for You to access our Service or parts of our
+\n            Service.</p>
+\n    </li>
+\n    <li>
+\n        <p><strong>Company</strong> (referred to as either &quot;the Company&quot;, &quot;We&quot;, &quot;Us&quot; or
+\n            &quot;Our&quot; in this Agreement) refers to My Site.</p>
+\n    </li>
+\n    <li>
+\n        <p><strong>Cookies</strong> are small files that are placed on Your computer, mobile device or any other device
+\n            by a website, containing the details of Your browsing history on that website among its many uses.</p>
+\n    </li>
+\n    <li>
+\n        <p><strong>Country</strong> refers to: Gujarat, India</p>
+\n    </li>
+\n    <li>
+\n        <p><strong>Device</strong> means any device that can access the Service such as a computer, a cellphone or a
+\n            digital tablet.</p>
+\n    </li>
+\n    <li>
+\n        <p><strong>Personal Data</strong> is any information that relates to an identified or identifiable individual.
+\n        </p>
+\n    </li>
+\n    <li>
+\n        <p><strong>Service</strong> refers to the Website.</p>
+\n    </li>
+\n    <li>
+\n        <p><strong>Service Provider</strong> means any natural or legal person who processes the data on behalf of the
+\n            Company. It refers to third-party companies or individuals employed by the Company to facilitate the
+\n            Service, to provide the Service on behalf of the Company, to perform services related to the Service or to
+\n            assist the Company in analyzing how the Service is used.</p>
+\n    </li>
+\n    <li>
+\n        <p><strong>Usage Data</strong> refers to data collected automatically, either generated by the use of the
+\n            Service or from the Service infrastructure itself (for example, the duration of a page visit).</p>
+\n    </li>
+\n    <li>
+\n        <p><strong>Website</strong> refers to My Site, accessible from <a href=
+\"http://infy-vcards.test\"\n                                                                          rel=\"external nofollow noopener\"\n                                                                          target=\"_blank\">http://infy-vcards.test</a></p>\n    </li>\n    <li>\n        <p><strong>You</strong> means the individual accessing or using the Service, or the company, or other legal\n            entity on behalf of which such individual is accessing or using the Service, as applicable.</p>\n    </li>\n</ul>\n<h1>Collecting and Using Your Personal Data</h1>\n<h2>Types of Data Collected</h2>\n<h3>Personal Data</h3>\n<p>While using Our Service, We may ask You to provide Us with certain personally identifiable information that can be\n    used to contact or identify You. Personally identifiable information may include, but is not limited to:</p>\n<ul>\n    <li>\n        <p>Email address</p>\n    </li>\n    <li>\n        <p>First name and last name</p>\n    </li>\n    <li>\n        <p>Phone number</p>\n    </li>\n    <li>\n        <p>Usage Data</p>\n    </li>\n</ul>\n<h3>Usage Data</h3>\n<p>Usage Data is collected automatically when using the Service.</p>\n<p>Usage Data may include information such as Your Device\'s Internet Protocol address (e.g. IP address), browser type,\n    browser version, the pages of our Service that You visit, the time and date of Your visit, the time spent on those\n    pages, unique device identifiers and other diagnostic data.</p>\n<p>When You access the Service by or through a mobile device, We may collect certain information automatically,\n    including, but not limited to, the type of mobile device You use, Your mobile device unique ID, the IP address of\n    Your mobile device, Your mobile operating system, the type of mobile Internet browser You use, unique device\n    identifiers and other diagnostic data.</p>\n<p>We may also collect information that Your browser sends whenever You visit our Service or when You access the Service\n    by or through a mobile device.</p>\n<h3>Tracking Technologies and Cookies</h3>\n<p>We use Cookies and similar tracking technologies to track the activity on Our Service and store certain information.\n    Tracking technologies used are beacons, tags, and scripts to collect and track information and to improve and\n    analyze Our Service. The technologies We use may include:</p>\n<ul>\n    <li><strong>Cookies or Browser Cookies.</strong> A cookie is a small file placed on Your Device. You can instruct\n        Your browser to refuse all Cookies or to indicate when a Cookie is being sent. However, if You do not accept\n        Cookies, You may not be able to use some parts of our Service. Unless you have adjusted Your browser setting so\n        that it will refuse Cookies, our Service may use Cookies.\n    </li>\n    <li><strong>Flash Cookies.</strong> Certain features of our Service may use local stored objects (or Flash Cookies)\n        to collect and store information about Your preferences or Your activity on our Service. Flash Cookies are not\n        managed by the same browser settings as those used for Browser Cookies. For more information on how You can\n        delete Flash Cookies, please read &quot;Where can I change the settings for disabling, or deleting local shared\n        objects?&quot; available at <a\n                href=\"//helpx.adobe.com/flash-player/kb/disable-local-shared-objects-flash.html#main_Where_can_I_change_the_settings_for_disabling__or_deleting_local_shared_objects_\"\n                rel=\"external nofollow noopener\" target=\"_blank\">Link</a>\n    </li>\n    <li><strong>Web Beacons.</strong> Certain sections of our Service and our emails may contain small electronic files\n        known as web beacons (also referred to as clear gifs, pixel tags, and single-pixel gifs) that permit the\n        Company, for example, to count users who have visited those pages or opened an email and for other related\n        website statistics (for example, recording the popularity of a certain section and verifying system and server\n        integrity).\n    </li>\n</ul>\n<p>Cookies can be &quot;Persistent&quot; or &quot;Session&quot; Cookies. Persistent Cookies remain on Your personal\n    computer or mobile device when You go offline, while Session Cookies are deleted as soon as You close Your web\n    browser. You can learn more about cookies here: <a href=\"//html.com/resources/cookies-ultimate-guide/\"\n                                                       target=\"_blank\">Cookies Ultimate Guide</a>.</p>\n<p>We use both Session and Persistent Cookies for the purposes set out below:</p>\n<ul>\n    <li>\n        <p><strong>Necessary / Essential Cookies</strong></p>\n        <p>Type: Session Cookies</p>\n        <p>Administered by: Us</p>\n        <p>Purpose: These Cookies are essential to provide You with services available through the Website and to enable\n            You to use some of its features. They help to authenticate users and prevent fraudulent use of user\n            accounts. Without these Cookies, the services that You have asked for cannot be provided, and We only use\n            these Cookies to provide You with those services.</p>\n    </li>\n    <li>\n        <p><strong>Cookies Policy / Notice Acceptance Cookies</strong></p>\n        <p>Type: Persistent Cookies</p>\n        <p>Administered by: Us</p>\n        <p>Purpose: These Cookies identify if users have accepted the use of cookies on the Website.</p>\n    </li>\n    <li>\n        <p><strong>Functionality Cookies</strong></p>\n        <p>Type: Persistent Cookies</p>\n        <p>Administered by: Us</p>\n        <p>Purpose: These Cookies allow us to remember choices You make when You use the Website, such as remembering\n            your login details or language preference. The purpose of these Cookies is to provide You with a more\n            personal experience and to avoid You having to re-enter your preferences every time You use the Website.</p>\n    </li>\n</ul>\n<p>For more information about the cookies we use and your choices regarding cookies, please visit our Cookies Policy or\n    the Cookies section of our Privacy Policy.</p>\n<h2>Use of Your Personal Data</h2>\n<p>The Company may use Personal Data for the following purposes:</p>\n<ul>\n    <li>\n        <p><strong>To provide and maintain our Service</strong>, including to monitor the usage of our Service.</p>\n    </li>\n    <li>\n        <p><strong>To manage Your Account:</strong> to manage Your registration as a user of the Service. The Personal\n            Data You provide can give You access to different functionalities of the Service that are available to You\n            as a registered user.</p>\n    </li>\n    <li>\n        <p><strong>For the performance of a contract:</strong> the development, compliance and undertaking of the\n            purchase contract for the products, items or services You have purchased or of any other contract with Us\n            through the Service.</p>\n    </li>\n    <li>\n        <p><strong>To contact You:</strong> To contact You by email, telephone calls, SMS, or other equivalent forms of\n            electronic communication, such as a mobile application\'s push notifications regarding updates or informative\n            communications related to the functionalities, products or contracted services, including the security\n            updates, when necessary or reasonable for their implementation.</p>\n    </li>\n    <li>\n        <p><strong>To provide You</strong> with news, special offers and general information about other goods, services\n            and events which we offer that are similar to those that you have already purchased or enquired about unless\n            You have opted not to receive such information.</p>\n    </li>\n    <li>\n        <p><strong>To manage Your requests:</strong> To attend and manage Your requests to Us.</p>\n    </li>\n    <li>\n        <p><strong>For business transfers:</strong> We may use Your information to evaluate or conduct a merger,\n            divestiture, restructuring, reorganization, dissolution, or other sale or transfer of some or all of Our\n            assets, whether as a going concern or as part of bankruptcy, liquidation, or similar proceeding, in which\n            Personal Data held by Us about our Service users is among the assets transferred.</p>\n    </li>\n    <li>\n        <p><strong>For other purposes</strong>: We may use Your information for other purposes, such as data analysis,\n            identifying usage trends, determining the effectiveness of our promotional campaigns and to evaluate and\n            improve our Service, products, services, marketing and your experience.</p>\n    </li>\n</ul>\n<p>We may share Your personal information in the following situations:</p>\n<ul>\n    <li><strong>With Service Providers:</strong> We may share Your personal information with Service Providers to\n        monitor and analyze the use of our Service, to contact You.\n    </li>\n    <li><strong>For business transfers:</strong> We may share or transfer Your personal information in connection with,\n        or during negotiations of, any merger, sale of Company assets, financing, or acquisition of all or a portion of\n        Our business to another company.\n    </li>\n    <li><strong>With Affiliates:</strong> We may share Your information with Our affiliates, in which case we will\n        require those affiliates to honor this Privacy Policy. Affiliates include Our parent company and any other\n        subsidiaries, joint venture partners or other companies that We control or that are under common control with\n        Us.\n    </li>\n    <li><strong>With business partners:</strong> We may share Your information with Our business partners to offer You\n        certain products, services or promotions.\n    </li>\n    <li><strong>With other users:</strong> when You share personal information or otherwise interact in the public areas\n        with other users, such information may be viewed by all users and may be publicly distributed outside.\n    </li>\n    <li><strong>With Your consent</strong>: We may disclose Your personal information for any other purpose with Your\n        consent.\n    </li>\n</ul>\n<h2>Retention of Your Personal Data</h2>\n<p>The Company will retain Your Personal Data only for as long as is necessary for the purposes set out in this Privacy\n    Policy. We will retain and use Your Personal Data to the extent necessary to comply with our legal obligations (for\n    example, if we are required to retain your data to comply with applicable laws), resolve disputes, and enforce our\n    legal agreements and policies.</p>\n<p>The Company will also retain Usage Data for internal analysis purposes. Usage Data is generally retained for a\n    shorter period of time, except when this data is used to strengthen the security or to improve the functionality of\n    Our Service, or We are legally obligated to retain this data for longer time periods.</p>\n<h2>Transfer of Your Personal Data</h2>\n<p>Your information, including Personal Data, is processed at the Company\'s operating offices and in any other places\n    where the parties involved in the processing are located. It means that this information may be transferred to — and\n    maintained on — computers located outside of Your state, province, country or other governmental jurisdiction where\n    the data protection laws may differ than those from Your jurisdiction.</p>\n<p>Your consent to this Privacy Policy followed by Your submission of such information represents Your agreement to that\n    transfer.</p>\n<p>The Company will take all steps reasonably necessary to ensure that Your data is treated securely and in accordance\n    with this Privacy Policy and no transfer of Your Personal Data will take place to an organization or a country\n    unless there are adequate controls in place including the security of Your data and other personal information.</p>\n<h2>Disclosure of Your Personal Data</h2>\n<h3>Business Transactions</h3>\n<p>If the Company is involved in a merger, acquisition or asset sale, Your Personal Data may be transferred. We will\n    provide notice before Your Personal Data is transferred and becomes subject to a different Privacy Policy.</p>\n<h3>Law enforcement</h3>\n<p>Under certain circumstances, the Company may be required to disclose Your Personal Data if required to do so by law\n    or in response to valid requests by public authorities (e.g. a court or a government agency).</p>\n<h3>Other legal requirements</h3>\n<p>The Company may disclose Your Personal Data in the good faith belief that such action is necessary to:</p>\n<ul>\n    <li>Comply with a legal obligation</li>\n    <li>Protect and defend the rights or property of the Company</li>\n    <li>Prevent or investigate possible wrongdoing in connection with the Service</li>\n    <li>Protect the personal safety of Users of the Service or the public</li>\n    <li>Protect against legal liability</li>\n</ul>\n<h2>Security of Your Personal Data</h2>\n<p>The security of Your Personal Data is important to Us, but remember that no method of transmission over the Internet,\n    or method of electronic storage is 100% secure. While We strive to use commercially acceptable means to protect Your\n    Personal Data, We cannot guarantee its absolute security.</p>\n<h1>Children\'s Privacy</h1>\n<p>Our Service does not address anyone under the age of 13. We do not knowingly collect personally identifiable\n    information from anyone under the age of 13. If You are a parent or guardian and You are aware that Your child has\n    provided Us with Personal Data, please contact Us. If We become aware that We have collected Personal Data from\n    anyone under the age of 13 without verification of parental consent, We take steps to remove that information from\n    Our servers.</p>\n<p>If We need to rely on consent as a legal basis for processing Your information and Your country requires consent from\n    a parent, We may require Your parent\'s consent before We collect and use that information.</p>\n<h1>Links to Other Websites</h1>\n<p>Our Service may contain links to other websites that are not operated by Us. If You click on a third party link, You\n    will be directed to that third party\'s site. We strongly advise You to review the Privacy Policy of every site You\n    visit.</p>\n<p>We have no control over and assume no responsibility for the content, privacy policies or practices of any third\n    party sites or services.</p>\n<h1>Changes to this Privacy Policy</h1>\n<p>We may update Our Privacy Policy from time to time. We will notify You of any changes by posting the new Privacy\n    Policy on this page.</p>\n<p>We will let You know via email and/or a prominent notice on Our Service, prior to the change becoming effective and\n    update the &quot;Last updated&quot; date at the top of this Privacy Policy.</p>\n<p>You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are\n    effective when they are posted on this page.</p>\n<h1>Contact Us</h1>\n<p>If you have any questions about this Privacy Policy, You can contact us:</p>\n', '2023-04-07 07:26:42', '2023-04-07 07:26:42');
 
 -- --------------------------------------------------------
 
@@ -49643,13 +49828,29 @@ INSERT INTO `settings` (`id`, `key`, `value`, `created_at`, `updated_at`) VALUES
 -- Table structure for table `social_accounts`
 --
 
-CREATE TABLE `social_accounts` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `tenant_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `provider` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `provider_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+CREATE TABLE `social_accounts`
+(
+    `id`          int(10) UNSIGNED NOT NULL,
+    `tenant_id`   varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `provider`    varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `provider_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `created_at`  timestamp NULL DEFAULT NULL,
+    `updated_at`  timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `social_icon`
+--
+
+CREATE TABLE `social_icon`
+(
+    `id`             bigint(20) UNSIGNED NOT NULL,
+    `social_link_id` bigint(20) UNSIGNED DEFAULT NULL,
+    `link`           varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `created_at`     timestamp NULL DEFAULT NULL,
+    `updated_at`     timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -49658,11 +49859,12 @@ CREATE TABLE `social_accounts` (
 -- Table structure for table `social_links`
 --
 
-CREATE TABLE `social_links` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `vcard_id` bigint(20) UNSIGNED NOT NULL,
-  `website` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `twitter` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+CREATE TABLE `social_links`
+(
+    `id`       bigint(20) UNSIGNED NOT NULL,
+    `vcard_id` bigint(20) UNSIGNED NOT NULL,
+    `website`  varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `twitter`  varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `facebook` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `instagram` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `youtube` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -53818,6 +54020,7 @@ CREATE TABLE `subscriptions` (
   `plan_id` bigint(20) UNSIGNED DEFAULT NULL,
   `transaction_id` bigint(20) UNSIGNED DEFAULT NULL,
   `plan_amount` double(8,2) DEFAULT '0.00',
+  `discount` int(11) DEFAULT NULL,
   `payable_amount` double DEFAULT NULL,
   `plan_frequency` int(11) NOT NULL DEFAULT '1' COMMENT '1 = Month, 2 = Year',
   `starts_at` datetime NOT NULL,
@@ -53826,6 +54029,7 @@ CREATE TABLE `subscriptions` (
   `no_of_vcards` double DEFAULT NULL,
   `notes` text COLLATE utf8mb4_unicode_ci,
   `status` tinyint(1) NOT NULL DEFAULT '0',
+  `coupon_code_meta` json DEFAULT NULL,
   `payment_type` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -53835,8 +54039,13 @@ CREATE TABLE `subscriptions` (
 -- Dumping data for table `subscriptions`
 --
 
-INSERT INTO `subscriptions` (`id`, `tenant_id`, `plan_id`, `transaction_id`, `plan_amount`, `payable_amount`, `plan_frequency`, `starts_at`, `ends_at`, `trial_ends_at`, `no_of_vcards`, `notes`, `status`, `payment_type`, `created_at`, `updated_at`) VALUES
-(1, 'b2f386be-4242-486b-a3e0-a877e2824bde', 1, NULL, 10.00, NULL, 1, '2023-01-31 12:48:39', '2023-02-07 12:48:39', '2023-02-07 12:48:39', 7, NULL, 1, NULL, '2023-01-31 07:18:39', '2023-01-31 07:18:39');
+INSERT INTO `subscriptions` (`id`, `tenant_id`, `plan_id`, `transaction_id`, `plan_amount`, `discount`,
+                             `payable_amount`, `plan_frequency`, `starts_at`, `ends_at`, `trial_ends_at`,
+                             `no_of_vcards`, `notes`, `status`, `coupon_code_meta`, `payment_type`, `created_at`,
+                             `updated_at`)
+VALUES (1, 'd77cffe7-454f-4379-9dec-1d1c3b3a0e19', 1, NULL, 10.00, NULL, NULL, 1, '2023-04-07 12:56:42',
+        '2023-04-14 12:56:42', '2023-04-14 12:56:42', 7, NULL, 1, NULL, NULL, '2023-04-07 07:26:42',
+        '2023-04-07 07:26:42');
 
 -- --------------------------------------------------------
 
@@ -53844,30 +54053,31 @@ INSERT INTO `subscriptions` (`id`, `tenant_id`, `plan_id`, `transaction_id`, `pl
 -- Table structure for table `templates`
 --
 
-CREATE TABLE `templates` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `path` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+CREATE TABLE `templates`
+(
+    `id`         bigint(20) UNSIGNED NOT NULL,
+    `name`       varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `path`       varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `created_at` timestamp NULL DEFAULT NULL,
+    `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `templates`
 --
 
-INSERT INTO `templates` (`id`, `name`, `path`, `created_at`, `updated_at`) VALUES
-(1, 'vcard11', 'assets/img/templates/vcard11.png', '2023-01-31 07:18:35', '2023-01-31 07:18:35'),
-(2, 'vcard1', 'assets/img/templates/vcard1.png', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(3, 'vcard2', 'assets/img/templates/vcard2.png', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(4, 'vcard3', 'assets/img/templates/vcard3.png', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(5, 'vcard4', 'assets/img/templates/vcard4.png', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(6, 'vcard5', 'assets/img/templates/vcard5.png', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(7, 'vcard6', 'assets/img/templates/vcard6.png', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(8, 'vcard7', 'assets/img/templates/vcard7.png', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(9, 'vcard8', 'assets/img/templates/vcard8.png', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(10, 'vcard9', 'assets/img/templates/vcard9.png', '2023-01-31 07:18:36', '2023-01-31 07:18:36'),
-(11, 'vcard10', 'assets/img/templates/vcard10.png', '2023-01-31 07:18:36', '2023-01-31 07:18:36');
+INSERT INTO `templates` (`id`, `name`, `path`, `created_at`, `updated_at`)
+VALUES (1, 'vcard11', 'assets/img/templates/vcard11.png', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (2, 'vcard1', 'assets/img/templates/vcard1.png', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (3, 'vcard2', 'assets/img/templates/vcard2.png', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (4, 'vcard3', 'assets/img/templates/vcard3.png', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (5, 'vcard4', 'assets/img/templates/vcard4.png', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (6, 'vcard5', 'assets/img/templates/vcard5.png', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (7, 'vcard6', 'assets/img/templates/vcard6.png', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (8, 'vcard7', 'assets/img/templates/vcard7.png', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (9, 'vcard8', 'assets/img/templates/vcard8.png', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (10, 'vcard9', 'assets/img/templates/vcard9.png', '2023-04-07 07:26:41', '2023-04-07 07:26:41'),
+       (11, 'vcard10', 'assets/img/templates/vcard10.png', '2023-04-07 07:26:41', '2023-04-07 07:26:41');
 
 -- --------------------------------------------------------
 
@@ -53875,21 +54085,22 @@ INSERT INTO `templates` (`id`, `name`, `path`, `created_at`, `updated_at`) VALUE
 -- Table structure for table `tenants`
 --
 
-CREATE TABLE `tenants` (
-  `id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tenant_username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `data` text COLLATE utf8mb4_unicode_ci
+CREATE TABLE `tenants`
+(
+    `id`              varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `tenant_username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `created_at`      timestamp NULL DEFAULT NULL,
+    `updated_at`      timestamp NULL DEFAULT NULL,
+    `data`            text COLLATE utf8mb4_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `tenants`
 --
 
-INSERT INTO `tenants` (`id`, `tenant_username`, `created_at`, `updated_at`, `data`) VALUES
-('6137d601-248f-413d-911e-12fb1542350b', 'super_admin', '2023-01-31 07:18:39', '2023-01-31 07:18:39', NULL),
-('b2f386be-4242-486b-a3e0-a877e2824bde', 'admin', '2023-01-31 07:18:38', '2023-01-31 07:18:38', NULL);
+INSERT INTO `tenants` (`id`, `tenant_username`, `created_at`, `updated_at`, `data`)
+VALUES ('146cc090-5729-42a5-8f31-242e570ecd94', 'super_admin', '2023-04-07 07:26:42', '2023-04-07 07:26:42', NULL),
+       ('d77cffe7-454f-4379-9dec-1d1c3b3a0e19', 'admin', '2023-04-07 07:26:42', '2023-04-07 07:26:42', NULL);
 
 -- --------------------------------------------------------
 
@@ -53897,9 +54108,10 @@ INSERT INTO `tenants` (`id`, `tenant_username`, `created_at`, `updated_at`, `dat
 -- Table structure for table `term_conditions`
 --
 
-CREATE TABLE `term_conditions` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `term_condition` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE `term_conditions`
+(
+    `id`             bigint(20) UNSIGNED NOT NULL,
+    `term_condition` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `vcard_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -53945,31 +54157,37 @@ CREATE TABLE `transactions` (
 --
 
 CREATE TABLE `users` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `contact` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `region_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `is_active` tinyint(1) NOT NULL DEFAULT '1',
-  `language` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT 'en',
-  `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `affiliate_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `theme_mode` tinyint(1) NOT NULL DEFAULT '0',
-  `tenant_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+                         `id` bigint(20) UNSIGNED NOT NULL,
+                         `first_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+                         `last_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+                         `email`             varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+                         `contact`           varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+                         `region_code`       varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+                         `is_active`         tinyint(1) NOT NULL DEFAULT '1',
+                         `language`          varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT 'en',
+                         `email_verified_at` timestamp NULL DEFAULT NULL,
+                         `password`          varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+                         `affiliate_code`    varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+                         `theme_mode`        tinyint(1) NOT NULL DEFAULT '0',
+                         `tenant_id`         varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+                         `remember_token`    varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+                         `created_at`        timestamp NULL DEFAULT NULL,
+                         `updated_at`        timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `contact`, `region_code`, `is_active`, `language`, `email_verified_at`, `password`, `affiliate_code`, `theme_mode`, `tenant_id`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Mr.', 'Admin', 'admin@vcard.com', NULL, NULL, 1, 'en', '2023-01-31 07:18:38', '$2y$10$cCVhuB0LLWxiGYhTD96Qn.pK9Mk4PXkWr6x2RJNzmOoplWqADmAH.', NULL, 0, 'b2f386be-4242-486b-a3e0-a877e2824bde', NULL, '2023-01-31 07:18:39', '2023-01-31 07:18:39'),
-(2, 'Super', 'Admin', 'sadmin@vcard.com', NULL, NULL, 1, 'en', '2023-01-31 07:18:39', '$2y$10$Uu/5KEBmunOePFJVsroxo.Um6sagqabrpT8x2zGT6.6Y2GHk96j5C', NULL, 0, '6137d601-248f-413d-911e-12fb1542350b', NULL, '2023-01-31 07:18:39', '2023-01-31 07:18:39');
+INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `contact`, `region_code`, `is_active`, `language`,
+                     `email_verified_at`, `password`, `affiliate_code`, `theme_mode`, `tenant_id`, `remember_token`,
+                     `created_at`, `updated_at`)
+VALUES (1, 'Mr.', 'Admin', 'admin@vcard.com', NULL, NULL, 1, 'en', '2023-04-07 07:26:42',
+        '$2y$10$0fBRCqFQgIo3Gqh1h3zLKeSlNGvd4wVYlV2B1L3smukPx5tF24WNm', NULL, 0, 'd77cffe7-454f-4379-9dec-1d1c3b3a0e19',
+        NULL, '2023-04-07 07:26:42', '2023-04-07 07:26:42'),
+       (2, 'Super', 'Admin', 'sadmin@vcard.com', NULL, NULL, 1, 'en', '2023-04-07 07:26:42',
+        '$2y$10$i6ljk.d9zWGiyDBJL2s/luUCLn.RIcIcfihxWXwz.yQpgMYVqfsEu', NULL, 0, '146cc090-5729-42a5-8f31-242e570ecd94',
+        NULL, '2023-04-07 07:26:42', '2023-04-07 07:26:42');
 
 -- --------------------------------------------------------
 
@@ -53977,9 +54195,10 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `contact`, `regio
 -- Table structure for table `user_settings`
 --
 
-CREATE TABLE `user_settings` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
+CREATE TABLE `user_settings`
+(
+    `id`       bigint(20) UNSIGNED NOT NULL,
+    `user_id`  bigint(20) UNSIGNED NOT NULL,
   `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `value` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -54025,7 +54244,10 @@ CREATE TABLE `vcards` (
   `meta_description` text COLLATE utf8mb4_unicode_ci,
   `google_analytics` longtext COLLATE utf8mb4_unicode_ci,
   `tenant_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `qr_code_download_size` int(11) NOT NULL DEFAULT '200',
+  `enable_download_qr_code` tinyint(1) NOT NULL DEFAULT '1',
   `language_enable` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
+  `enable_enquiry_form` tinyint(1) NOT NULL DEFAULT '1',
   `default_language` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT 'en',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -54170,6 +54392,12 @@ ALTER TABLE `contact_us`
 -- Indexes for table `countries`
 --
 ALTER TABLE `countries`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `coupon_codes`
+--
+ALTER TABLE `coupon_codes`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -54363,21 +54591,28 @@ ALTER TABLE `schedule_appointments`
 -- Indexes for table `settings`
 --
 ALTER TABLE `settings`
-  ADD PRIMARY KEY (`id`);
+    ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `social_accounts`
 --
 ALTER TABLE `social_accounts`
-  ADD PRIMARY KEY (`id`),
+    ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `social_accounts_provider_id_unique` (`provider_id`),
   ADD KEY `social_accounts_tenant_id_foreign` (`tenant_id`);
+
+--
+-- Indexes for table `social_icon`
+--
+ALTER TABLE `social_icon`
+    ADD PRIMARY KEY (`id`),
+  ADD KEY `social_icon_social_link_id_foreign` (`social_link_id`);
 
 --
 -- Indexes for table `social_links`
 --
 ALTER TABLE `social_links`
-  ADD PRIMARY KEY (`id`),
+    ADD PRIMARY KEY (`id`),
   ADD KEY `social_links_vcard_id_foreign` (`vcard_id`);
 
 --
@@ -54546,6 +54781,12 @@ ALTER TABLE `countries`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=247;
 
 --
+-- AUTO_INCREMENT for table `coupon_codes`
+--
+ALTER TABLE `coupon_codes`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `currencies`
 --
 ALTER TABLE `currencies`
@@ -54621,19 +54862,19 @@ ALTER TABLE `media`
 -- AUTO_INCREMENT for table `metas`
 --
 ALTER TABLE `metas`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+    MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
+    MODIFY `id` int (10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 
 --
 -- AUTO_INCREMENT for table `payment_gateways`
 --
 ALTER TABLE `payment_gateways`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+    MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `permissions`
@@ -54687,19 +54928,25 @@ ALTER TABLE `schedule_appointments`
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+    MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `social_accounts`
 --
 ALTER TABLE `social_accounts`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+    MODIFY `id` int (10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `social_icon`
+--
+ALTER TABLE `social_icon`
+    MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `social_links`
 --
 ALTER TABLE `social_links`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+    MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `states`
@@ -54906,20 +55153,28 @@ ALTER TABLE `role_has_permissions`
 -- Constraints for table `schedule_appointments`
 --
 ALTER TABLE `schedule_appointments`
-  ADD CONSTRAINT `schedule_appointments_appointment_tran_id_foreign` FOREIGN KEY (`appointment_tran_id`) REFERENCES `appointment_transactions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `schedule_appointments_vcard_id_foreign` FOREIGN KEY (`vcard_id`) REFERENCES `vcards` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+    ADD CONSTRAINT `schedule_appointments_appointment_tran_id_foreign` FOREIGN KEY (`appointment_tran_id`) REFERENCES `appointment_transactions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `schedule_appointments_vcard_id_foreign` FOREIGN KEY (`vcard_id`) REFERENCES `vcards` (`id`) ON
+DELETE
+CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `social_accounts`
 --
 ALTER TABLE `social_accounts`
-  ADD CONSTRAINT `social_accounts_tenant_id_foreign` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+    ADD CONSTRAINT `social_accounts_tenant_id_foreign` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `social_icon`
+--
+ALTER TABLE `social_icon`
+    ADD CONSTRAINT `social_icon_social_link_id_foreign` FOREIGN KEY (`social_link_id`) REFERENCES `social_links` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `social_links`
 --
 ALTER TABLE `social_links`
-  ADD CONSTRAINT `social_links_vcard_id_foreign` FOREIGN KEY (`vcard_id`) REFERENCES `vcards` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+    ADD CONSTRAINT `social_links_vcard_id_foreign` FOREIGN KEY (`vcard_id`) REFERENCES `vcards` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `states`

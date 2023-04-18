@@ -45,8 +45,8 @@ mix.sass('resources/assets/scss/vcard1.scss', 'public/assets/css/vcard1.css').
     version()
 //
 
-mix.styles('resources/assets/scss/vcard11/variable.css',
-    'public/assets/css/variable.css')
+// mix.styles('resources/assets/scss/vcard11/variable.css',
+//     'public/assets/css/variable.css')
 
 mix.sass('resources/assets/scss/vcard11/variables.scss',
     'public/assets/css/variables.css').
@@ -127,6 +127,8 @@ mix.js([
     'resources/assets/js/languages/language_translate.js',
     'resources/assets/js/sidebar_menu_search/sidebar_menu_search.js',
     'resources/assets/js/affiliation_withdraw/affiliation_withdraw.js',
+    'resources/assets/js/coupon_code/coupon_code.js',
+    'resources/assets/js/vcards/social-links/social-links.js',
 ], 'public/assets/js/pages.js').version();
 
 // third-party css
@@ -213,3 +215,7 @@ mix.js([
     'resources/assets/js/auth/auth.js',
     'resources/assets/js/home/contact.js'
 ],'public/assets/js/front-pages.js').version()
+
+mix.styles('node_modules/lightbox2/dist/css/lightbox.min.css','public/assets/css/lightbox.css')
+mix.js('node_modules/lightbox2/dist/js/lightbox.min.js','public/assets/js/lightbox.js')
+mix.copyDirectory('node_modules/lightbox2/dist/images','public/assets/images')

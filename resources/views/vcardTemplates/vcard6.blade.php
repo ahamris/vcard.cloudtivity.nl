@@ -34,7 +34,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/plugins.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/custom-vcard.css') }}">
-
+	<link rel="stylesheet" href="{{ asset('assets/css/lightbox.css') }}">
 
 	@if(checkFeature('custom-fonts') && $vcard->font_family)
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family={{$vcard->font_family}}">
@@ -221,11 +221,44 @@
                     </div>
                 </div>
             </div>
+	        {{--Qr code--}}
+	        <div class="main-qrcode position-relative pt-8">
+		        <img src="{{asset('assets/img/vcard6/orengcircle.png')}}"
+		             class="img-fluid position-absolute orengcircle-img"/>
+		        <img src="{{asset('assets/img/vcard6/uptriangle.png')}}"
+		             class="img-fluid position-absolute uptriangle-img"/>
+		        <img src="{{asset('assets/img/vcard6/halfcircle.png')}}"
+		             class="img-fluid position-absolute halfcircle-img"/>
+		        <img src="{{asset('assets/img/vcard6/orengtriangle.png')}}"
+		             class="img-fluid position-absolute orengtriangle-img"/>
+		        <img src="{{asset('assets/img/vcard6/halfblue.png')}}" class="img-fluid position-absolute circle2-img"/>
 
+		        <div class="container mt-3 mb-5">
+			        <div class="main-Qr-section mb-5">
+				        <div>
+					        <h4 class="mb-4 text-center heading-title">{{ __('messages.vcard.qr_code') }}</h4>
+				        </div>
+				        <div class="row d-flex align-items-center">
+					        <div class="col-lg-6">
+						        <div class="text-center mb-4">
+							        {!! QrCode::size(130)->format('svg')->generate(Request::url()); !!}
+						        </div>
+					        </div>
+					        <div class="col-lg-6">
+						        <div class="text-center">
+							        <img src="{{$vcard->profile_url}}"
+							             class="qr-logo rounded-circle"/>
+							       
+						        </div>
+					        </div>
+				        </div>
+			        </div>
+		        </div>
+	        </div>
 
             {{--our-section--}}
            @if(checkFeature('services') && $vcard->services->count())
-                <div class="main-service-our position-relative">
+                <div class="main-service-our position-relative ">
                     <img src="{{asset('assets/img/vcard6/smalltriangle.png')}}"
                          class="img-fluid position-absolute smalltriangle-img"/>
                     <img src="{{asset('assets/img/vcard6/pinkoval.png')}}"
@@ -235,7 +268,7 @@
                     <img src="{{asset('assets/img/vcard6/blueoval.png')}}"
                          class="img-fluid position-absolute blueoval-img"/>
 
-                    <div class="container py-5">
+                    <div class="container py-5 mb-10 mt-0">
                         <div class="main-our-section position-relative">
                             <h4 class="text-center mb-10 heading-title">{{ __('messages.vcard.our_service') }}</h4>
                             <div class="row g-6">
@@ -263,8 +296,8 @@
 
             {{--gallery--}}
             @if(checkFeature('gallery') && $vcard->gallery->count())
-            <div class="main-gallery position-relative">
-                <img src="{{asset('assets/img/vcard6/testioval.png')}}"
+                <div class="main-gallery position-relative ">
+                    <img src="{{asset('assets/img/vcard6/testioval.png')}}"
                      class="img-fluid position-absolute testioval-img"/>
                 <img src="{{asset('assets/img/vcard6/testiright.png')}}"
                      class="img-fluid position-absolute testiright-img"/>
@@ -274,8 +307,8 @@
                      class="img-fluid position-absolute circletesti-img"/>
                 <img src="{{asset('assets/img/vcard6/circle.png')}}" class="img-fluid position-absolute circle2-img"/>
 
-                <div class="container mt-3 mb-5">
-                    <h3 class="text-center mb-4 text-light">{{ __('messages.plan.gallery') }}</h3>
+                    <div class="container mt-3 mb-5 mb-10 mt-0">
+                        <h3 class="text-center mb-4 text-light">{{ __('messages.plan.gallery') }}</h3>
                     <div class="gallery-section position-relative">
                         <div class="row g-3 gallery-slider">
                             @foreach($vcard->gallery as $file)
@@ -287,7 +320,7 @@
                                     <div class="card w-100 h-100 bg-transparent border-0 text-light">
                                         <div class="gallery-profile">
                                             @if($file->type == App\Models\Gallery::TYPE_IMAGE)
-                                                <img src="{{$file->gallery_image}}" alt="profile" class="w-100"/>
+		                                        <a href="{{$file->gallery_image}}" data-lightbox="gallery-images"><img src="{{$file->gallery_image}}" alt="profile" class="w-100"/></a>
                                             @elseif($file->type == App\Models\Gallery::TYPE_FILE)
                                                 <a id="file_url" href="{{$file->gallery_image}}"
                                                    class="gallery-link gallery-file-link" target="_blank">
@@ -339,7 +372,7 @@
             @endif
             {{--product--}}
             @if(checkFeature('products') && $vcard->products->count())
-                <div class="main-product position-relative">
+                <div class="main-product position-relative ">
                     <img src="{{asset('assets/img/vcard6/testioval.png')}}"
                          class="img-fluid position-absolute testioval-img"/>
                     <img src="{{asset('assets/img/vcard6/testiright.png')}}"
@@ -351,7 +384,7 @@
                     <img src="{{asset('assets/img/vcard6/circle.png')}}"
                          class="img-fluid position-absolute circle2-img"/>
 
-                    <div class="container mt-3 mb-5">
+                    <div class="container mt-3 mb-5 mb-10 mt-0">
                         <h4 class="text-center mb-4 text-light product-title">{{ __('messages.vcard.products') }}</h4>
                         <div class="product-section position-relative">
                             <div class="row g-3 product-card">
@@ -402,7 +435,7 @@
                     <img src="{{asset('assets/img/vcard6/circle.png')}}"
                          class="img-fluid position-absolute circle2-img"/>
 
-                    <div class="container mt-3 mb-5">
+                    <div class="container mt-3 mb-10 mt-0">
                         <h4 class="text-center mb-4 heading-title">{{ __('messages.plan.testimonials') }}</h4>
                         <div class="testimonial-section position-relative">
                             <div class="row g-3 testimonial-card">
@@ -437,7 +470,7 @@
                     <img src="{{asset('assets/img/vcard6/circle.png')}}"
                          class="img-fluid position-absolute circletesti-img"/>
                     <h4 class="text-center mb-4 text-light heading-title">{{ __('messages.feature.blog') }}</h4>
-                    <div class="container">
+                    <div class="container mb-10 mt-0">
                         <div class="row g-4 blog-slider overflow-hidden">
                             @foreach($vcard->blogs as $blog)
                                 <div class="col-6 mb-2">
@@ -459,43 +492,6 @@
                     </div>
                 </div>
             @endif
-            {{--Qr code--}}
-            <div class="main-qrcode position-relative pt-8">
-                <img src="{{asset('assets/img/vcard6/orengcircle.png')}}"
-                     class="img-fluid position-absolute orengcircle-img"/>
-                <img src="{{asset('assets/img/vcard6/uptriangle.png')}}"
-                     class="img-fluid position-absolute uptriangle-img"/>
-                <img src="{{asset('assets/img/vcard6/halfcircle.png')}}"
-                     class="img-fluid position-absolute halfcircle-img"/>
-                <img src="{{asset('assets/img/vcard6/orengtriangle.png')}}"
-                     class="img-fluid position-absolute orengtriangle-img"/>
-                <img src="{{asset('assets/img/vcard6/halfblue.png')}}" class="img-fluid position-absolute circle2-img"/>
-
-                <div class="container mt-3 mb-5">
-                    <div class="main-Qr-section mb-5">
-                        <div>
-                            <h4 class="mb-4 text-center heading-title">{{ __('messages.vcard.qr_code') }}</h4>
-                        </div>
-                        <div class="row d-flex align-items-center">
-                            <div class="col-lg-6">
-                                <div class="text-center mb-4">
-                                    {!! QrCode::size(130)->format('svg')->generate(Request::url()); !!}
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="text-center">
-                                    <img src="{{$vcard->profile_url}}"
-                                         class="qr-logo rounded-circle"/>
-                                    <div class="mt-4">
-                                        <a class="btn btn-lg Qr-btn" id="qr-code-btn"
-                                           download="qr_code.png">{{ __('messages.vcard.download_my_qr_code') }}</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             {{--business hour --}}
             @if($vcard->businessHours->count())
@@ -510,7 +506,7 @@
                     <img src="{{asset('assets/img/vcard6/leftblue.png')}}"
                          class="img-fluid position-absolute leftblue-img"/>
 
-                    <div class="container mt-3 mb-5">
+                    <div class="container mt-3 mb-10 mt-0">
                         <div class="main-business position-relative">
                             <h4 class="text-center mb-4 heading-title">{{ __('messages.vcard.buisness_hours') }}</h4>
                             <div class="row g-3">
@@ -538,7 +534,7 @@
 
             {{--appointment--}}
             @if(checkFeature('appointments') && $vcard->appointmentHours->count())
-                <div class="container pt-5">
+                <div class="container pt-5 mb-10 mt-0">
                     <div class="appointment">
                         <h3 class="appointment-heading mb-4 position-relative text-center text-white">{{__('messages.make_appointments')}}</h3>
                         <div class="row d-flex align-items-center justify-content-center mb-3">
@@ -567,8 +563,8 @@
             @endif
             {{--contact us--}}
             @php $currentSubs = $vcard->subscriptions()->where('status', \App\Models\Subscription::ACTIVE)->latest()->first() @endphp
-            <div class="main-contactus position-relative pt-sm-5">
-                @if($currentSubs && $currentSubs->plan->planFeature->enquiry_form)
+            <div class="main-contactus position-relative pt-sm-5 ">
+                @if($currentSubs && $currentSubs->plan->planFeature->enquiry_form && $vcard->enable_enquiry_form)
                     <img src="{{asset('assets/img/vcard6/lightyellow.png')}}"
                          class="img-fluid position-absolute lightyellow-img"/>
                     <img src="{{asset('assets/img/vcard6/smallpink.png')}}"
@@ -580,7 +576,7 @@
                     <img src="{{asset('assets/img/vcard6/halfbox.png')}}"
                          class="img-fluid position-absolute halfbox-img"/>
 
-                    <div class="container mt-3 mb-3">
+                    <div class="container mb-10 mt-0">
                         <div class="contactus-section position-relative">
                             <h4 class="text-center mb-4 heading-title">{{ __('messages.contact_us.contact_us') }}</h4>
                             <div class="main-contact">
@@ -649,29 +645,9 @@
                         </div>
                     </div>
                 @endif
-                    <div class="d-sm-flex justify-content-center mt-5 pb-sm-5 pb-2">
-                        <button type="button" class="vcard-six-btn mt-4 mb-3 d-block btn"
-                                onclick="downloadVcard('{{ $vcard->name }}.vcf',{{ $vcard->id }})"><i
-                                class="fas fa-download me-2"></i>{{ __('messages.vcard.download_vcard') }}
-                    </button>
-                    {{--share btn--}}
-                        <button type="button" class="vcard6-share share-btn d-block btn mt-4 mb-3 ms-sm-3">
-                            <a class="text-decoration-none">
-                                <i class="fas fa-share-alt me-2"></i>{{ __('messages.vcard.share') }}</a>
-                        </button>
-                    </div>
-                @if(!empty($userSetting['enable_affiliation']))
-                    <div class='d-flex justify-content-center mt-sm-2 pb-5'>
-                        <button type="button" class="copy-referral-btn d-block btn"
-                                data-id="{{ $vcard->user->affiliate_code }}">
-	                        <a class="vcard-six-btn text-decoration-none">
-		                        <i class="fa-regular fa-copy me-2"></i>{{ __('messages.vcard.copy_referral_link') }}</a>
-                        </button>
-                    </div>
-                @endif
             </div>
             @if($vcard->location_url && isset($url[5]))
-                <div class="m-2 ">
+                <div class="m-2 mb-10 mt-0">
                     <iframe width="100%" height="300px" src='https://maps.google.de/maps?q={{$url[5]}}/&output=embed'
                             frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
                             style="border-radius: 10px;"></iframe>
@@ -710,6 +686,18 @@
                     </div>
                 @endif
             </div>
+	        <div class="w-100 d-flex justify-content-center sticky-vcard-div">
+		        <div class="btn-group" role="group" aria-label="Basic example" >
+			        <button type="button" class="vcard-btn-group vcard6-sticky-btn rounded-0 px-2 ps-5 py-1" onclick="downloadVcard('{{ $vcard->name }}.vcf',{{ $vcard->id }})"><i class="fas fa-download fs-4"></i></button>
+			        <button type="button" class="vcard6-share vcard-btn-group vcard6-sticky-btn rounded-0 px-2 py-1"><i class="fas fa-share-alt fs-4"></i></button>
+			        @if(!empty($userSetting['enable_affiliation']))
+				        <button type="button" class="vcard-btn-group vcard6-sticky-btn rounded-0 px-2 py-1 copy-referral-btn" data-id="{{ $vcard->user->affiliate_code }}"><i class="fa-regular fa-copy fs-4"></i></button>
+			        @endif
+			        @if($vcard->enable_download_qr_code)
+			        <a type="button" class="vcard-btn-group vcard6-sticky-btn rounded-0 px-2 pe-5 py-2" id="qr-code-btn" download="qr_code.png"><i class="fa-solid fa-qrcode fs-4"></i></a>
+					@endif
+		        </div>
+	        </div>
         </div>
     </div>
 
@@ -907,17 +895,15 @@
 </script>
 <script>
     const svg = document.getElementsByTagName('svg')[0];
-    const { x, y, width, height } = svg.viewBox.baseVal;
     const blob = new Blob([svg.outerHTML], { type: 'image/svg+xml' });
     const url = URL.createObjectURL(blob);
     const image = document.createElement('img');
     image.src = url;
     image.addEventListener('load', () => {
         const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = canvas.height = {{ $vcard->qr_code_download_size }};
         const context = canvas.getContext('2d');
-        context.drawImage(image, x, y, width, height);
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
         const link = document.getElementById('qr-code-btn');
         link.href = canvas.toDataURL();
         URL.revokeObjectURL(url);
@@ -928,6 +914,7 @@
 <script src="{{ mix('assets/js/custom/helpers.js') }}"></script>
 <script src="{{ mix('assets/js/custom/custom.js') }}"></script>
 <script src="{{ mix('assets/js/vcards/vcard-view.js') }}"></script>
+<script src="{{ mix('assets/js/lightbox.js') }}"></script>
 
 </body>
 </html>
