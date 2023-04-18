@@ -22,9 +22,9 @@ class DefaultUserSeeder extends Seeder
         //admin
         $tenant = MultiTenant::create(['tenant_username' => 'admin']);
         User::create([
-            'first_name' => 'Mr.',
+            'first_name' => 'Tenant',
             'last_name' => 'Admin',
-            'email' => 'admin@vcard.com',
+            'email' => 'demo@tenant.com',
             'email_verified_at' => Carbon::now(),
             'password' => Hash::make('123456'),
             'tenant_id' => $tenant->id,
@@ -47,9 +47,9 @@ class DefaultUserSeeder extends Seeder
         //super admin
         $tenant = MultiTenant::create(['tenant_username' => 'super_admin']);
         User::create([
-            'first_name' => 'Super',
-            'last_name' => 'Admin',
-            'email' => 'sadmin@vcard.com',
+            'first_name' => 'Saeed',
+            'last_name' => 'Ahamri',
+            'email' => 'ahamris@gmail.com',
             'email_verified_at' => Carbon::now(),
             'password' => Hash::make('123456'),
             'tenant_id' => $tenant->id,
